@@ -66,6 +66,12 @@ public class SimpleObservable<T> implements EasyObservable<T> {
 						observer.EditListNames((ArrayList<String>) aObj);
 						break;
 					}
+					case ShoppingListModel.MESSAGE_ROW_POS_UPDATED:
+					{
+						observer.UpdateItemPosition((ArrayList<Item>) aObj);
+						break;
+					}
+					
 				}
 				
 			}

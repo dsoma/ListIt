@@ -44,7 +44,8 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	public View getView(final int position, View convertView, ViewGroup parent) 
 	{
 	    // Item to display
-	    final Item item = (Item) getItem( position ); 
+	    final Item i= (Item) getItem( position ); 
+	    final Item item = new Item(position+1,i.getName(), i.getQuantity(),i.isChecked());
 
 	    // The child views in each row.
 	    CheckBox checkBox;
@@ -81,8 +82,10 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 		            Item i = (Item) cb.getTag();
 		            
 		            i.setChecked( cb.isChecked() );
+		            
 		            strikeOut(textView, qtyView, cb.isChecked());
-		            Item iItem = new Item(i.getName(), i.getQuantity(),cb.isChecked());
+		            
+		            Item iItem = new Item(i.getRowId(), i.getName(), i.getQuantity(),cb.isChecked());
 		            
 		            //update database and view
 		            iActivity.UpdateCheckBox(iItem);
@@ -96,9 +99,10 @@ public class ItemListAdapter extends ArrayAdapter<Item>
     	  		{
     	  			Button delBtn = (Button) v;
 		        	Item i = (Item) delBtn.getTag();
-		        	String listItem = i.getDesc().toString();        	
-		        	int pos = delBtn.getId();
-		        	confirmDelete(listItem, position+1);        	
+		        	String listItem = i.getDesc().toString();     
+		        	int rowId = i.getRowId();
+		        	
+		        	confirmDelete(listItem, rowId);        	
 		        }
 		    });        
 	    }
@@ -116,6 +120,7 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	    	delButton = viewHolder.getButton();
 	    }
 	    
+	      
 	    // Tag the CheckBox with the item it is displaying, so that we can
 	    // access the item in onClick() when the CheckBox is toggled.
 	    checkBox.setTag( item ); 
@@ -125,6 +130,7 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	    strikeOut(textView, qtyView, item.isChecked());
 	    
 	    // delete button
+	    
 	    delButton.setTag(item);
 	    delButton.setClickable(true);
     
