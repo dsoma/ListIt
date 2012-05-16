@@ -1,4 +1,5 @@
 // File: ShoppingListActivity.java
+// Author: Ramya Machina
 
 package com.android.shoppinglist;
 
