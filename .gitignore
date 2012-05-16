@@ -1,2 +1,5 @@
 bin/*
 !.gitignore
+default.properties
+.classpath
+.project
