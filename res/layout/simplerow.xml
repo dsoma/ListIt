@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+    <ImageView android:id="@+id/icon"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:src="@drawable/grabber"
+		/>
+  
+   <CheckBox
+       android:id="@+id/checkBox"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_toRightOf="@+id/icon"
+       android:padding="12dp"
+       android:background="@drawable/checkbox_background"
+       android:button="@drawable/checkbox"
+       android:focusable="false"
+    >
+  </CheckBox>
+  <TextView
+      android:id="@+id/rowTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toLeftOf="@+id/qtyTextView"
+      android:layout_toRightOf="@+id/checkBox"
+      android:layout_alignTop="@+id/deleteButton"
+      android:maxLength="50"
+      android:paddingBottom="10dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="5dp"
+      android:scrollHorizontally="false"
+      android:textColor="@color/fg"
+      android:textStyle="bold"
+       />
+
+  <TextView
+      android:id="@+id/qtyTextView"
+      android:layout_width="@dimen/width_qty_editor"
+      android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/deleteButton"
+      android:layout_toLeftOf="@+id/deleteButton"
+      android:paddingLeft="2dp"
+      android:paddingRight="10dp"
+      android:textColor="@color/fg"
+      android:textStyle="bold"
+      android:imeOptions="actionDone"
+      >
+  </TextView> 
+       
+  <Button
+      android:id="@+id/deleteButton"
+      android:layout_width="@dimen/width_delete_button"
+      android:layout_height="@dimen/height_delete_button"
+      android:layout_alignParentRight="true"
+      android:background="@drawable/ic_delete"
+      android:clickable="true"
+      android:focusable="false"
+      android:padding="10dp" 
+      android:layout_marginTop="10dip"
+      android:layout_marginRight="5dip">
+
+  </Button> 
+  
+</RelativeLayout>
