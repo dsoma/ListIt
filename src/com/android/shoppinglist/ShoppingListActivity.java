@@ -1,3 +1,5 @@
+// File: ShoppingListActivity.java
+
 package com.android.shoppinglist;
 
 import java.util.ArrayList;
