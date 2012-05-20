@@ -9,7 +9,6 @@ import java.util.Locale;
 import android.content.Context;
 import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.listit.Item;
 import com.android.listit.SavedItem;
@@ -345,9 +344,8 @@ public class ListItModel extends SimpleObservable<ListItModel>
 			iDBHelper = new DataBaseHelper(aContext);
 		} 
 		catch (SQLiteException se) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-        } 
+		{	
+		} 
 	}
 	
 	private String getDateString()

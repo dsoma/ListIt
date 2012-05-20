@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.android.listit.Item;
 import com.android.listit.SavedItem;
@@ -72,8 +71,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	    	}			
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "[queryDBForTables] DB error");
+		{	
         } 
 		finally 
 		{
@@ -131,7 +129,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		}
 		catch (SQLiteException se ) 
 		{
-        	Log.e(getClass().getSimpleName(), "[queryDBForTables] DB error");
+        	
         } 
 		finally 
 		{
@@ -163,7 +161,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		}
 		catch (SQLiteException se ) 
 		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+        	
         } 
 		finally 
 		{
@@ -203,7 +201,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		}
 		catch (SQLiteException se ) 
 		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+        	
         } 
 		finally 
 		{
@@ -257,8 +255,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			errorCode = 0;
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+		{	
         } 
 		finally 
 		{
@@ -371,7 +368,6 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		}
 		catch (SQLiteException se ) 
 		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
         } 
 		finally 
 		{
@@ -462,9 +458,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			errorCode = 0;
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-        } 
+		{	
+		} 
 		finally 
 		{
         	if (iDB != null) 
@@ -540,9 +535,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			//c.close();
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-        } 
+		{} 
 		finally 
 		{
         	if (iDB != null) 
@@ -585,9 +578,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-        } 
+		{} 
 		finally 
 		{
         	if (iDB != null) 
@@ -637,9 +628,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-        } 
+		{} 
 		finally 
 		{
         	if (iDB != null) 
@@ -671,9 +660,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			errorCode = 0;			
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-        } 
+		{} 
 		finally 
 		{
         	if (iDB != null) 
@@ -705,9 +692,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			errorCode = 0;
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-        } 
+		{} 
 		finally 
 		{
         	if (iDB != null) 
@@ -781,9 +766,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			errorCode = 0;
 		}
 		catch (SQLiteException se ) 
-		{
-        	Log.e(getClass().getSimpleName(), "Could not create or Open the database");
-        } 
+		{} 
 		finally 
 		{
         	if (iDB != null) 

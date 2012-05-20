@@ -23,7 +23,6 @@ import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -111,7 +110,7 @@ public class TouchListView extends ListView {
     
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		Log.v("Ramya","onInterceptTouchEvent-1");
+		
 			/*if (mRemoveListener != null && mGestureDetector == null) {
 					if (mRemoveMode == FLING) {
 							mGestureDetector = new GestureDetector(getContext(), new SimpleOnGestureListener() {
@@ -140,7 +139,6 @@ public class TouchListView extends ListView {
 			if (mDragListener != null || mDropListener != null) {
 					switch (ev.getAction()) {
 							case MotionEvent.ACTION_DOWN:
-								Log.v("Ramya","onInterceptTouchEvent-2");
 									int x = (int) ev.getX();
 									int y = (int) ev.getY();
 									int itemnum = pointToPosition(x, y);
@@ -151,7 +149,6 @@ public class TouchListView extends ListView {
 									View item = (View) getChildAt(itemnum - getFirstVisiblePosition());
 									
 									if (isDraggableRow(item)) {
-										Log.v("Ramya","onInterceptTouchEvent-3");
 										mDragPoint = y - item.getTop();
 										mCoordOffset = ((int)ev.getRawY()) - y;
 										View dragger = item.findViewById(grabberId);
@@ -164,7 +161,6 @@ public class TouchListView extends ListView {
 										r.bottom=dragger.getBottom();									
 										
 										if ((r.left<x) && (x<r.right)) {
-											Log.v("Ramya","onInterceptTouchEvent-4");
 												item.setDrawingCacheEnabled(true);
 												// Create a copy of the drawing cache so that it does not get recycled
 												// by the framework when the list tries to clean up memory
@@ -327,90 +323,77 @@ public class TouchListView extends ListView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
-		Log.v("Ramya","onTouchEvent-1");
-			if (mGestureDetector != null) {
-				Log.v("Ramya","onTouchEvent-2");
-					mGestureDetector.onTouchEvent(ev);
-			}
-			if ((mDragListener != null || mDropListener != null) && mDragView != null) {
-				Log.v("Ramya","onTouchEvent-3");
-					int action = ev.getAction(); 
-					switch (action) {
-							case MotionEvent.ACTION_UP:
-							case MotionEvent.ACTION_CANCEL:
-								Log.v("Ramya","onTouchEvent-4");
-									Rect r = mTempRect;
-									mDragView.getDrawingRect(r);
-									stopDragging();
-									
-									/*if (mRemoveMode == SLIDE_RIGHT && ev.getX() > r.left+(r.width()*3/4)) {
-											if (mRemoveListener != null) {
-													mRemoveListener.remove(mFirstDragPos);
-											}
-											unExpandViews(true);
-									} else if (mRemoveMode == SLIDE_LEFT && ev.getX() < r.left+(r.width()/4)) {
-											if (mRemoveListener != null) {
-													mRemoveListener.remove(mFirstDragPos);
-											}
-											unExpandViews(true);
-									} else {*/
-										Log.v("Ramya","onTouchEvent-5");
-											if (mDropListener != null && mDragPos >= 0 && mDragPos < getCount()) {
-													mDropListener.drop(mFirstDragPos, mDragPos);
-											}
-											unExpandViews(false);
-									//}
-									break;
-									
-							case MotionEvent.ACTION_DOWN:
-							case MotionEvent.ACTION_MOVE:
-								Log.v("Ramya","onTouchEvent-6");
-									int x = (int) ev.getX();
-									int y = (int) ev.getY();
-									dragView(x, y);
-									int itemnum = getItemForPosition(y);
-									if (itemnum >= 0) {
-										Log.v("Ramya","onTouchEvent-7");
-											if (action == MotionEvent.ACTION_DOWN || itemnum != mDragPos) {
-													if (mDragListener != null) {
-														Log.v("Ramya","onTouchEvent-8");
-															mDragListener.drag(mDragPos, itemnum);
-													}
-													mDragPos = itemnum;
-													doExpansion();
-											}
-											int speed = 0;
-											adjustScrollBounds(y);
-											if (y > mLowerBound) {
-												Log.v("Ramya","onTouchEvent-9");
-													// scroll the list up a bit
-													speed = y > (mHeight + mLowerBound) / 2 ? 16 : 4;
-											} else if (y < mUpperBound) {
-												Log.v("Ramya","onTouchEvent-10");
-													// scroll the list down a bit
-													speed = y < mUpperBound / 2 ? -16 : -4;
-											}
-											if (speed != 0) {
-												Log.v("Ramya","onTouchEvent-11");
-													int ref = pointToPosition(0, mHeight / 2);
-													if (ref == AdapterView.INVALID_POSITION) {
-														Log.v("Ramya","onTouchEvent-12");
-															//we hit a divider or an invisible view, check somewhere else
-															ref = pointToPosition(0, mHeight / 2 + getDividerHeight() + 64);
-													}
-													View v = getChildAt(ref - getFirstVisiblePosition());
-													if (v!= null) {
-														Log.v("Ramya","onTouchEvent-13");
-															int pos = v.getTop();
-															setSelectionFromTop(ref, pos - speed);
-													}
-											}
-									}
-									break;
+		if (mGestureDetector != null) {
+			mGestureDetector.onTouchEvent(ev);
+		}
+		if ((mDragListener != null || mDropListener != null) && mDragView != null) {
+			int action = ev.getAction(); 
+			switch (action) {
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
+					Rect r = mTempRect;
+					mDragView.getDrawingRect(r);
+					stopDragging();
+					
+					/*if (mRemoveMode == SLIDE_RIGHT && ev.getX() > r.left+(r.width()*3/4)) {
+							if (mRemoveListener != null) {
+									mRemoveListener.remove(mFirstDragPos);
+							}
+							unExpandViews(true);
+					} else if (mRemoveMode == SLIDE_LEFT && ev.getX() < r.left+(r.width()/4)) {
+							if (mRemoveListener != null) {
+									mRemoveListener.remove(mFirstDragPos);
+							}
+							unExpandViews(true);
+					} else {*/
+						if (mDropListener != null && mDragPos >= 0 && mDragPos < getCount()) {
+								mDropListener.drop(mFirstDragPos, mDragPos);
+						}
+						unExpandViews(false);
+					//}
+					break;
+					
+			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_MOVE:
+				int x = (int) ev.getX();
+				int y = (int) ev.getY();
+				dragView(x, y);
+				int itemnum = getItemForPosition(y);
+				if (itemnum >= 0) {
+					if (action == MotionEvent.ACTION_DOWN || itemnum != mDragPos) {
+						if (mDragListener != null) {
+								mDragListener.drag(mDragPos, itemnum);
+							}
+							mDragPos = itemnum;
+							doExpansion();
 					}
-					return true;
+					int speed = 0;
+					adjustScrollBounds(y);
+					if (y > mLowerBound) {
+						// scroll the list up a bit
+						speed = y > (mHeight + mLowerBound) / 2 ? 16 : 4;
+					} else if (y < mUpperBound) {
+						// scroll the list down a bit
+						speed = y < mUpperBound / 2 ? -16 : -4;
+					}
+					if (speed != 0) {
+						int ref = pointToPosition(0, mHeight / 2);
+						if (ref == AdapterView.INVALID_POSITION) {
+							//we hit a divider or an invisible view, check somewhere else
+							ref = pointToPosition(0, mHeight / 2 + getDividerHeight() + 64);
+						}
+						View v = getChildAt(ref - getFirstVisiblePosition());
+						if (v!= null) {
+							int pos = v.getTop();
+							setSelectionFromTop(ref, pos - speed);
+						}
+					}
+				}
+				break;
 			}
-			return super.onTouchEvent(ev);
+			return true;
+		}
+		return super.onTouchEvent(ev);
 	}
 	
 	private void startDragging(Bitmap bm, int x, int y) {
