@@ -33,7 +33,6 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.android.listit.TouchListView.DropListener;
 import com.android.listit.controllers.OnControllerObserver;
 import com.android.listit.controllers.ListItController;
 import com.android.listit.vos.ModelObserver;
@@ -45,12 +44,10 @@ public class ListItActivity extends TabActivity
  						  			   OnControllerObserver
 {
     private TabHost 				iTabHost;
-	private ListItModel 		iListItModel;
-	private ListItController 	iListItController;
+	private ListItModel 			iListItModel;
+	private ListItController 		iListItController;
 	private String 					iCurrentListName;
 	private TouchListView 			iItemListView;
-	private ArrayAdapter<Item> 		iItemAdapter;
-	private ArrayList<Item> 		iItems; 
 	private AutoCompleteTextView 	iItemText;
 	private EditText 				iQuantityText;
 	private TouchListView 			iSavedListView;
@@ -61,6 +58,8 @@ public class ListItActivity extends TabActivity
 	private ArrayList<SavedItem> 		iSavedLists;
 	private String[]		 			iSuggestedWordList;
 	private ArrayAdapter<String> 		iSuggestedItemAdapter;
+	private ArrayAdapter<Item> 			iItemAdapter;
+	private ArrayList<Item> 			iItems; 
 	
 	public  DialogInterface.OnClickListener	iListNameDialogListener;
 	
@@ -69,6 +68,7 @@ public class ListItActivity extends TabActivity
 	private static final int TabId_SavedList = 1;
 	
 	@Override
+	@SuppressWarnings("unchecked")
     public void onCreate(Bundle aSavedInstanceState) 
     {
         super.onCreate(aSavedInstanceState);

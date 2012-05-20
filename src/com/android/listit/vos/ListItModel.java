@@ -1,6 +1,5 @@
- package com.android.listit.vos;
+package com.android.listit.vos;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -300,22 +299,21 @@ public class ListItModel extends SimpleObservable<ListItModel>
 			OpenDB( aContext );
 		}
 		
-		int errorCode1 = -1, errorCode2 = -1;
+		int errorCode = -1;
 		
 		if( iDBHelper != null )
 		{				
 			ArrayList<Item> itemList = iDBHelper.UpdateTableRow( aContext, aTableName, aOldPos,aNewPos );
 			
-			errorCode2 = iDBHelper.UpdateMasterTable(aContext, 'U', aTableName, getDateString(), null);
+			errorCode = iDBHelper.UpdateMasterTable(aContext, 'U', aTableName, getDateString(), null);
 			
-			if( errorCode2 == SUCCESS)
+			if( errorCode == SUCCESS)
 			{
 				notifyObservers(MESSAGE_ROW_POS_UPDATED, itemList);
 			}
 		}
 		
-		return -1;
-		
+		return errorCode;
 	}
 	
 	public int UpdateListPosition(Context aContext, String aTableName, int aOldPos, int aNewPos)

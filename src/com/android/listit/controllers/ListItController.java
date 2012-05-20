@@ -66,6 +66,7 @@ public class ListItController extends Controller
 	
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	/* Heart of the engine - State machine should be handled here */
 	public boolean handleMessage(int aMessage, Object aData) 
 	{

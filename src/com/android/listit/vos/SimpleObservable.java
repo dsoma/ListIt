@@ -29,6 +29,7 @@ public class SimpleObservable<T> implements EasyObservable<T> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void notifyObservers(final int aMessageId, Object aObj) {
 		synchronized (observers) {
 			for (ModelObserver<T> observer : observers) 

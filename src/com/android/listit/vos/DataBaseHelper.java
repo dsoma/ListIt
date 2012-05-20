@@ -627,8 +627,6 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			{
 				do 
 				{
-					String itemName = c.getString(c.getColumnIndex("item"));
-					
 					iDB.execSQL("UPDATE '" + aTableName + "' SET row='"+ rowId+"' WHERE row='"+(rowId+1)+"';" );
 					rowId = rowId + 1;
 				} while (c.moveToNext());
