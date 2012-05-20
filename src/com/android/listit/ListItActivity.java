@@ -314,7 +314,7 @@ public class ListItActivity extends TabActivity
 	        	
 	        	if(TextUtils.isEmpty(itemString))
 	        	{
-	        		Toast.makeText(getApplicationContext(), "Enter the Item Name", Toast.LENGTH_SHORT).show();
+	        		Toast.makeText(getApplicationContext(), getString(R.string.add_button_toast), Toast.LENGTH_SHORT).show();
 	        	}
 	        	else
 	        	{
@@ -341,9 +341,7 @@ public class ListItActivity extends TabActivity
 	        					qtyString = repString+"."+ Integer.toString(decimalValue);
 
 	        			}
-	        		}
-	        			
-		        			
+	        		}		        			
 	        		
 		        		Item i = new Item();
 		        		
@@ -398,7 +396,7 @@ public class ListItActivity extends TabActivity
 	        
 	        final EditText inputQty = (EditText) textEntryView.findViewById(R.id.qtyEditText);
 	        	 
-	        alert.setTitle("Edit Item"); 
+	        alert.setTitle(getString(R.string.edit_item)); 
 	        
 	        inputItem.setText(itemName);
 	        inputItem.setSelection(itemName.length());
@@ -407,7 +405,7 @@ public class ListItActivity extends TabActivity
 	        // Set an EditText view to get user input  
 	        alert.setView(textEntryView); 
 	       
-	        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() 
+	        alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() 
 	        { 
 		        public void onClick(DialogInterface dialog, int whichButton) 
 		        { 
@@ -430,12 +428,12 @@ public class ListItActivity extends TabActivity
 		        		ShowEditItemListDialog(aItem,aRowId);
 		        		iNewItemName = "";
 		        		iNewQty = "";
-		        		Toast.makeText(getApplicationContext(), "Enter the Item Name ", Toast.LENGTH_SHORT).show();
+		        		Toast.makeText(getApplicationContext(), getString(R.string.add_button_toast), Toast.LENGTH_SHORT).show();
 		        	}
 		        } 
 	        });  
 	        
-	        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() { 
+	        alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() { 
 	          public void onClick(DialogInterface dialog, int whichButton) { 
 	            // Canceled. 
 	          } 
@@ -776,14 +774,14 @@ public class ListItActivity extends TabActivity
         AlertDialog.Builder alert = new AlertDialog.Builder(ListItActivity.this);
         final EditText inputItem = (EditText) textEntryView.findViewById(R.id.saveEditText);
 	        	        	 
-        alert.setTitle("Edit List"); 
+        alert.setTitle(getString(R.string.edit_list)); 
         inputItem.setText(aListName);
         inputItem.setSelection(aListName.length());
         
         // Set an EditText view to get user input  
         alert.setView(textEntryView); 	
         
-        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() 
+        alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() 
         { 
 	        public void onClick(DialogInterface dialog, int whichButton) 
 	        { 
@@ -801,12 +799,12 @@ public class ListItActivity extends TabActivity
 	        	{
 	        		ShowEditListNameDialog(aListName);
 	        		iNewListName = "";
-	        		Toast.makeText(getApplicationContext(), "Enter the List Name", Toast.LENGTH_SHORT).show();
+	        		Toast.makeText(getApplicationContext(), getString(R.string.new_list_toast), Toast.LENGTH_SHORT).show();
 	        	}
 	        } 
         });  
         
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() { 
+        alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() { 
           public void onClick(DialogInterface dialog, int whichButton) { 
             // Canceled. 
           } 
