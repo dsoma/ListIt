@@ -230,7 +230,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			iDB.execSQL("CREATE TABLE IF NOT EXISTS '" + aTableName +
 			   "'(row INT,item VARCHAR, quantity VARCHAR, checked VARCHAR);");
 			
-			Cursor c = iDB.rawQuery("SELECT item,quantity,checked FROM '" +
+			Cursor c = iDB.rawQuery("SELECT row,item,quantity,checked FROM '" +
 					aTableName+"'", null );
 		
 			if (c != null  ) 
@@ -239,15 +239,16 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			{
 				do 
 				{
+					int rowId = c.getInt(c.getColumnIndex("row"));
 					String itemName = c.getString(c.getColumnIndex("item"));
 					//String itemQty = c.getString(c.getColumnIndex("quantity"));
 					//String itemChecked = c.getString(c.getColumnIndex("checked"));
 					
-					if(itemName.contentEquals(aItem.getName().toString()))
+					if(itemName.contentEquals(aItem.getName().toString()) &&(rowId == (aItem.getRowId())))
 					{		
 						iDB.execSQL("UPDATE '" + aTableName + "' SET item='"+ 
 					           aItem.getName().toString() + "',quantity='" + aItem.toStringQty() + "',checked='" + 
-					           aItem.isChecked() +"' WHERE item='"+aItem.getName().toString()+"';" );
+					           aItem.isChecked() +"' WHERE item='"+aItem.getName().toString()+"' AND row='"+rowId+"';" );
 					}
 				} while (c.moveToNext());
 			}
@@ -269,15 +270,15 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	}
 
 	
-	public int UpdateTableRow( Context aContext, String aTableName, int aOldPos,int aNewPos ) 
+	public ArrayList<Item> UpdateTableRow( Context aContext, String aTableName, int aOldPos,int aNewPos ) 
 	{
+		ArrayList<Item> arguments = new ArrayList<Item>();
+		
 		if ( checkDbExists() ) 
 		{
-			return 0;
-		} 
+			return arguments;
+		} 		
 		
-		int errorCode = -1;
-		ArrayList<Item> arguments = new ArrayList<Item>();
 		int rowId = 0;
 		boolean itemChecked=false;
 		Item mContent;
@@ -307,7 +308,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		    				else
 		    					itemChecked = false;
 						
-					 	iDB.execSQL("DELETE FROM '" + aTableName + "' WHERE item='"+itemName+"' AND row='"+ aOldPos+"';");
+					 	iDB.execSQL("DELETE FROM '" + aTableName + "' WHERE item='"+itemName+"' AND row='"+ (aOldPos+1)+"';");
 				
 				}
 			}
@@ -367,9 +368,6 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			}
 			
 			//c.close();
-						
-					
-			errorCode = 0;
 		}
 		catch (SQLiteException se ) 
 		{
@@ -381,7 +379,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
         		iDB.close();
         }
 		
-		return errorCode;
+		return arguments;
 	}
 
 	public int UpdateTablePosition( Context aContext, String aTableName, int aOldPos,int aNewPos ) 
@@ -512,7 +510,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			iDB.execSQL("CREATE TABLE IF NOT EXISTS '" + aTableName +
 			   "'(row INT,item VARCHAR, quantity VARCHAR, checked VARCHAR);");
 			
-			Cursor c = iDB.rawQuery("SELECT item,quantity FROM '" +
+			Cursor c = iDB.rawQuery("SELECT row,item,quantity FROM '" +
 					aTableName+"'", null );
 		
 			if (c != null  ) 
@@ -521,15 +519,17 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			{
 				do 
 				{
+					int rowId = c.getInt(c.getColumnIndex("row"));
 					String itemName = c.getString(c.getColumnIndex("item"));
 					String itemQty = c.getString(c.getColumnIndex("quantity"));
 										
 					if(itemName.contentEquals(aOldItem.getName().toString()) &&
-						itemQty.contentEquals(aOldItem.getQuantity().toString()))
+						itemQty.contentEquals(aOldItem.getQuantity().toString())&&
+						rowId==(aOldItem.getRowId()))
 					{		
 						iDB.execSQL("UPDATE '" + aTableName + "' SET item='"+ 
 								aNewItem.getName().toString() + "',quantity='"+aNewItem.getQuantity().toString()+ "' WHERE item='"+aOldItem.getName().toString()+"' AND quantity='"+
-								aOldItem.getQuantity().toString()+"';" );
+								aOldItem.getQuantity().toString()+"' AND row='"+rowId+"';" );
 					}
 				} while (c.moveToNext());
 			}
@@ -616,6 +616,25 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			
 			iDB.execSQL("DELETE FROM '" + aTableName + "' WHERE item='"+aRecordName+"' AND row='"+aPos+"';");
 			
+			Cursor c = iDB.rawQuery("SELECT row,item,quantity FROM '" +
+					aTableName+"'", null );
+			
+			int rowId = aPos;
+		
+			if (c != null ) 
+			{
+			if(c.moveToPosition(aPos-1))
+			{
+				do 
+				{
+					String itemName = c.getString(c.getColumnIndex("item"));
+					
+					iDB.execSQL("UPDATE '" + aTableName + "' SET row='"+ rowId+"' WHERE row='"+(rowId+1)+"';" );
+					rowId = rowId + 1;
+				} while (c.moveToNext());
+			}
+			}
+			
 			errorCode = 0;
 			
 		}
@@ -665,6 +684,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		
 		return errorCode;
 	}
+	
+	
 	
 	
 	//----------------MASTER TABLE----------------------------------------

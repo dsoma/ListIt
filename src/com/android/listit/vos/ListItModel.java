@@ -304,13 +304,13 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		
 		if( iDBHelper != null )
 		{				
-			errorCode1 = iDBHelper.UpdateTableRow( aContext, aTableName, aOldPos,aNewPos );
+			ArrayList<Item> itemList = iDBHelper.UpdateTableRow( aContext, aTableName, aOldPos,aNewPos );
 			
 			errorCode2 = iDBHelper.UpdateMasterTable(aContext, 'U', aTableName, getDateString(), null);
 			
-			if( errorCode1 == SUCCESS && errorCode2 == SUCCESS)
+			if( errorCode2 == SUCCESS)
 			{
-				this.notifyObservers(MESSAGE_ROW_POS_UPDATED, null);
+				notifyObservers(MESSAGE_ROW_POS_UPDATED, itemList);
 			}
 		}
 		

@@ -15,4 +15,5 @@ public interface ModelObserver<T>
 	void LoadItemsList(ArrayList<Item> aObj);
 	void EditItemList(ArrayList<Item> aObj);
 	void EditListNames(ArrayList<String> aObj);
+	void UpdateItemPosition(ArrayList<Item> aObj);
 }

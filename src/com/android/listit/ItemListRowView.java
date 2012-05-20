@@ -16,7 +16,7 @@ public class ItemListRowView
     
     public ItemListRowView() {}
    
-    public ItemListRowView( ImageView imageView,CheckBox checkBox, TextView textView, TextView qtyView,  Button delButton ) {
+    public ItemListRowView(ImageView imageView,CheckBox checkBox, TextView textView, TextView qtyView,  Button delButton ) {
     	this.checkBox = checkBox ;
     	this.textView = textView ;
         this.qtyView = qtyView;
@@ -32,8 +32,8 @@ public class ItemListRowView
     public CheckBox getCheckBox() {
         return checkBox;
 	}
-	
-    public void setCheckBox(CheckBox checkBox) {
+    
+   public void setCheckBox(CheckBox checkBox) {
 	    this.checkBox = checkBox;
     }
       

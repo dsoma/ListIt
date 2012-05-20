@@ -350,12 +350,12 @@ public class ListItActivity extends TabActivity
                                      int aPosition, long aId) 
         	{
         		Item item = iItemAdapter.getItem( aPosition );
-        		ShowEditItemListDialog(item);
+        		ShowEditItemListDialog(item, aPosition+1);
         	}
         });
    	}
    	
-   	private void ShowEditItemListDialog(final Item aItem)
+   	private void ShowEditItemListDialog(final Item aItem, final int aRowId)
    	{
    		final String itemName = aItem.getName();
 		final String quantity = aItem.getQuantity();
@@ -390,16 +390,16 @@ public class ListItActivity extends TabActivity
 			        	ArrayList<Object> arguments = new ArrayList<Object>();
 			        	arguments.add(getApplicationContext());
 			        	arguments.add(iCurrentListName);
-			        	Item oldData = new Item(itemName, quantity);
+			        	Item oldData = new Item(aRowId,itemName, quantity);
 			        	arguments.add(oldData);
-			        	Item newData = new Item(iNewItemName, iNewQty);
+			        	Item newData = new Item(aRowId, iNewItemName, iNewQty);
 			        	arguments.add(newData);
 			        	iListItController.handleMessage(ListItController.MESSAGE_EDIT_ITEM, 
 								arguments);	
 		        	}
 		        	else
 		        	{
-		        		ShowEditItemListDialog(aItem);
+		        		ShowEditItemListDialog(aItem,aRowId);
 		        		iNewItemName = "";
 		        		iNewQty = "";
 		        		Toast.makeText(getApplicationContext(), "Enter the Item Name ", Toast.LENGTH_SHORT).show();
@@ -441,10 +441,6 @@ public class ListItActivity extends TabActivity
 			{
 				if(iTabHost.getCurrentTab() ==  TabId_ItemList)
 				{
-					Item item=iItemAdapter.getItem(from);				
-					iItemAdapter.remove(item);
-					iItemAdapter.insert(item, to);
-					
 					ArrayList<Object> arguments= new ArrayList<Object>();
 					arguments.add(getApplicationContext());
 		        	arguments.add(iCurrentListName);
@@ -453,12 +449,15 @@ public class ListItActivity extends TabActivity
 					
 					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_ITEM_POS, 
 							arguments);	
+					
+					/*Item item=iItemAdapter.getItem(from);				
+					iItemAdapter.remove(item);
+					iItemAdapter.insert(item, to);*/
+					
 				}
 				else
 				{
-					SavedItem List=iSavedListAdapter.getItem(from);				
-					iSavedListAdapter.remove(List);
-					iSavedListAdapter.insert(List, to);
+					SavedItem List=iSavedListAdapter.getItem(from);	
 					
 					ArrayList<Object> arguments= new ArrayList<Object>();
 					arguments.add(getApplicationContext());
@@ -468,11 +467,22 @@ public class ListItActivity extends TabActivity
 					
 					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_LIST_POS, 
 							arguments);	
+								
+					iSavedListAdapter.remove(List);
+					iSavedListAdapter.insert(List, to);
 				}
 					
 			}
 		}
 	};
+	
+	public void UpdateItemPosition(ArrayList<Item> aListItem)
+	{
+		iItems.clear();
+		iItems.addAll(aListItem);
+		
+		iItemAdapter.notifyDataSetChanged();
+	}
 	
 	// SavedList on click
    	private void SetupSavedListOnClick()
@@ -565,6 +575,7 @@ public class ListItActivity extends TabActivity
    		
    		String oldItemName = oldItemContent.getName().toString();
 		String oldQuantity = oldItemContent.getQuantity().toString();
+		int rowId = oldItemContent.getRowId();
 		
 		String newItemName = newItemContent.getName().toString();
 		String newItemQty = newItemContent.getQuantity().toString();
@@ -577,7 +588,8 @@ public class ListItActivity extends TabActivity
 				String itemName = item.getName().toString();
 				String quantity = item.getQuantity().toString();
 				
-				if(itemName.contentEquals(oldItemName)&& quantity.contentEquals(oldQuantity))
+				if(itemName.contentEquals(oldItemName)&& quantity.contentEquals(oldQuantity)
+					&& ((i+1)==rowId)	)
 				{
 					item.setName(newItemName);
 					item.setQty(newItemQty);
@@ -744,10 +756,6 @@ public class ListItActivity extends TabActivity
 				break;
 			}
 			case ListItModel.MESSAGE_CHECKED_UPDATED:
-			{
-				break;
-			}
-			case ListItModel.MESSAGE_ROW_POS_UPDATED:
 			{
 				break;
 			}

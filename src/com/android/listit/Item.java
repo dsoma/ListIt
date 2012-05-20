@@ -7,6 +7,7 @@ public class Item
     private String iItemDesc = "";
     private String iQuantity = "";
     private boolean iChecked = false;
+    private int iRowId;
     
     public Item() 
     {	 
@@ -36,6 +37,32 @@ public class Item
 	      iQuantity = aQuantity;
 	      iChecked = aChecked;
 	}
+    
+    public Item( int aRowId, String aItemDesc, String aQuantity, boolean aChecked ) 
+    {
+    	  iRowId = aRowId;
+	      iItemDesc = aItemDesc;
+	      iQuantity = aQuantity;
+	      iChecked = aChecked;
+	}
+    
+    public Item( int aRowId, String aItemDesc, String aQuantity) 
+    {
+    	  iRowId = aRowId;
+	      iItemDesc = aItemDesc;
+	      iQuantity = aQuantity;
+	     
+	}
+    
+    public int getRowId() 
+	{
+    	return iRowId;
+    }
+    
+    public void setRowId(int aRowId) 
+	{
+    	iRowId = aRowId;
+    }
     
 	public String getDesc() 
 	{
