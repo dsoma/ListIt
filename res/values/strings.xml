@@ -24,14 +24,420 @@
     
     <!-- TODO: Add all the frequently used shopping items here. -->
     <string-array name="suggested_word_list">
+        <item>Ajwain</item>
+        <item>Almonds</item>
+        <item>Almonds Sliced</item>
+        <item>Amaranth</item>
+        <item>Amchur</item>
+        <item>Anise</item>
         <item>Apple</item>
-        <item>Banana</item>
+        <item>Apple Cider Vinegar</item>
+        <item>Applesauce</item>
+        <item>Apricot</item>
+        <item>Artichoke</item>
+        <item>Arugula</item>
+        <item>Asafoetida</item>
+        <item>Asparagus</item> 
+        <item>Avocado</item>
+        <item>Baby Food</item> 
+        <item>Bacon</item>
+        <item>Bacon Sausage</item>
+        <item>Bagel</item>
+        <item>Baking Powder</item>
+        <item>Baking Soda</item>
+        <item>Balsamic Vinegar</item>
+        <item>Bamboo Shoots</item>
+        <item>Banana</item> 
+        <item>Banana Chips</item>
+        <item>Barley</item>
+        <item>Basil</item>
+        <item>Basmati Rice</item>
+        <item>Bay leaf</item>
+        <item>BBQ Sauce</item> 
+        <item>Beans</item>
+        <item>Beef</item>
+        <item>Beer</item>
+        <item>Beets</item>
+        <item>Bell Pepper</item>
+        <item>Berries</item>
+        <item>Besan</item>
+        <item>Biriyani Masala</item>
+        <item>Bisi Bele Baath Masala</item>
+        <item>Black beans</item>
+        <item>Blackberry</item>
+        <item>Black-eyed Peas</item>
+        <item>Black Pepper</item> 
+        <item>Bleu Cheese</item>
+        <item>Blueberry</item>
+        <item>Bok Choy</item>
+        <item>Bouillon cubes</item>
+        <item>Brazil Nuts</item>
+        <item>Bread</item> 
+        <item>Bread Crumbs</item>   
+        <item>Bread Toast</item>   
+        <item>Broccoli</item>
+        <item>Broth</item>
+        <item>Brussels Sprouts</item>
+        <item>Brownie</item>
+        <item>Brownie Mix</item>
+        <item>Brown Rice</item>
+        <item>Buckwheat</item>
+        <item>Bulgar</item>
+        <item>Bun</item>
+        <item>Burger</item>
+        <item>Burrito</item>
+        <item>Butter</item>
+        <item>Cabbage</item>
+        <item>Cake</item>
+        <item>Cake Icing</item>
+        <item>Cake Mix</item>
+        <item>Candy</item>
+        <item>Canola Oil</item>
+        <item>Cantelope</item>
+        <item>Cardamom</item>
+        <item>Carrot</item>
+        <item>Cashews</item>
+        <item>Cashew Roasted</item>
+        <item>Cassava</item>
+        <item>Catfish</item>
+        <item>Cat Food</item>
+        <item>Cauliflower</item>
+        <item>Cayenne Pepper</item>
+        <item>Celery</item>
+        <item>Celery Seed</item>
+        <item>Cereal</item>
+        <item>Cereal Bar</item>
+        <item>Chaat Masala</item>
+        <item>Chai</item>
+        <item>Chakli</item>
+        <item>Champagne</item>
+        <item>Channa Dal</item>
+        <item>Chard</item>
+        <item>Cheddar Cheese</item>
+        <item>Cheese</item>
+        <item>Cherries</item>
+        <item>Chestnut</item>
+        <item>Chicken</item>
+        <item>Chickpeas</item>
+        <item>Chickpea Flour</item>
+        <item>Chilli</item>
+        <item>Chilli Powder</item>
+        <item>Chip dip</item>
+        <item>Chives</item>
+        <item>Chocolate Chips</item>
+        <item>Cilantro</item>
+        <item>Cinnamon</item>
+        <item>Clove</item>
+        <item>Club soda</item>
+        <item>Cocoa</item>
+        <item>Coconut</item>
+        <item>Coconut Chutney</item>
+        <item>Coconut Flakes</item>
+        <item>Coconut Milk</item>
+        <item>Coconut Oil</item>
         <item>Coffee</item>
+        <item>Coffee Filter</item>
+        <item>Collard greens</item>
+        <item>Cookies</item>
+        <item>Coriander</item>
+        <item>Coriander Chutney</item>
+        <item>Coriander Seeds</item>
+        <item>Corn</item>
+        <item>Corn Chips</item>
+        <item>Corn Flour</item>
+        <item>Cornmeal</item>
+        <item>Cottage Cheese</item>
+        <item>Couscous</item>
+        <item>Crab</item>
+        <item>Crackers</item>
+        <item>Cranberries</item>
+        <item>Cream Cheese</item>
+        <item>Croissant</item>
+        <item>Cucumber</item>
+        <item>Cumin</item>
+        <item>Curry Powder</item>
+        <item>Daikon</item>
+        <item>Dates</item>
+        <item>Dill</item>
+        <item>Dog Food</item>
+        <item>Donut</item>
+        <item>Dosa Instant Mix</item>
+        <item>Drum Stick</item>
+        <item>Dry Fruit</item>
+        <item>Edamame</item>
         <item>Egg</item>
+        <item>Eggplant</item>
+        <item>Electrol</item>
+        <item>Endive</item>
+        <item>English Muffin</item>
+        <item>Fava Beans</item>
+        <item>Fennel</item>
+        <item>Fennel Seeds</item>
+        <item>Fenugreek Seeds</item>
+        <item>Feta Cheese</item>
+        <item>Figs</item>
+        <item>Fish Sticks</item>
+        <item>Flax Seeds</item>
+        <item>Flour</item>
+        <item>Food Color - Red</item>
+        <item>Food Color - Yellow</item>
+        <item>Food Color - Orange</item>
+        <item>Fries</item>
+        <item>Fruits</item>
+        <item>Fruit Juice</item>
+        <item>Garam Masala</item>
+        <item>Garlic</item>
+        <item>Garlic Paste</item>
+        <item>Ghee</item>
+        <item>Gin</item>
+        <item>Ginger</item>
+        <item>Ginger Paste</item>
+        <item>Ginger and Garlic Paste</item>
+        <item>Glucose</item>
+        <item>Goat Cheese</item>
+        <item>Granola Bar</item>
+        <item>Granola Mix</item>
+        <item>Grapefruit</item>
+        <item>Grapes</item>
+        <item>Gravy</item>
+        <item>Greek Yogurt</item>
+        <item>Green Chillies</item>
+        <item>Ground Beef</item>
+        <item>Guava</item>
+        <item>Gulab Jamoon Mix</item>
+        <item>Gum</item>
+        <item>Half and Half</item>
+        <item>Ham</item>
+        <item>Harissa</item>
+        <item>Hing</item>
+        <item>Honey</item>
+        <item>Honeydew Melon</item>
+        <item>Hot Dogs</item>
+        <item>Hot Peppers</item>
+        <item>Hot Sauce</item>
+        <item>Instant Coffee Powder</item>
+        <item>Ice Cream</item>
+        <item>Jackfruit</item>
+        <item>Jaggery</item>
+        <item>Jaljeera Masala</item>
+        <item>Jam</item>
+        <item>Jasmin Rice</item>
+        <item>Jelly</item>
+        <item>Jicama</item>
+        <item>Juice</item>
+        <item>Kale</item>
+        <item>Ketchup</item>
+        <item>Kheer Mix</item>
+        <item>Kidney Beans</item>
+        <item>Kiwi</item>
+        <item>Kohlrabi</item>
+        <item>Kumquats</item>
+        <item>Lavender</item>
+        <item>Leeks</item>
+        <item>Lemon</item>
+        <item>Lemongrass</item>
+        <item>Lentils</item>
+        <item>Lettuce</item>
+        <item>Lima Beans</item>
+        <item>Lime</item>
+        <item>Lobster</item>
+        <item>Lychee</item>
+        <item>Macadamia</item>
         <item>Mango</item>
+        <item>Maple Syrup</item>
+        <item>Marjoram</item>
+        <item>Margarine</item>
+        <item>Massoor Dal</item>
+        <item>Mayonnaise</item>
+        <item>Melon</item>
+        <item>Methi</item>
+        <item>Millet</item>
         <item>Milk</item>
+        <item>Mint</item>
+        <item>Mint Chutney</item>
+        <item>Mozarella Cheese</item>
+        <item>Mung Beans</item>
+        <item>Mung Dal</item>
+        <item>Murukku</item>
+        <item>Mushroom</item>
+        <item>Muskmelon</item>
+        <item>Mussels</item>
+        <item>Mustard</item>
+        <item>Mustard Oil</item>
+        <item>Navy Beans</item>
+        <item>Nectarine</item>
+        <item>Nopale</item>
+        <item>Nutmeg</item>
+        <item>Nuts</item>
+        <item>Oatmeal</item>
+        <item>Okra</item>
+        <item>Olives</item>
+        <item>Olive Oil</item>
+        <item>Onion</item>
         <item>Orange</item>
+        <item>Oregano</item>
+        <item>Oysters</item>
+        <item>Packaged Meal</item>
+        <item>Pancake</item>
+        <item>Paneer</item>
+        <item>Panipuri Masala</item>
+        <item>Papad</item>
+        <item>Papaya</item>
+        <item>Paprika</item>
+        <item>Parmesan Cheese</item>
+        <item>Parsley</item>
+        <item>Parsnip</item>
         <item>Pasta</item>
+        <item>Pasta Sauce</item>
+        <item>Pastries</item>
+        <item>Pav Bhaji Masala</item>
+        <item>Peach</item>
+        <item>Peanuts</item>
+        <item>Peanut Butter</item>
+        <item>Pear</item>
+        <item>Peas</item>
+        <item>Pecans</item>
+        <item>Pepper</item>
+        <item>Peppermint</item>
+        <item>Pickle</item>
+        <item>Pineapple</item>
+        <item>Pine Nuts</item>
+        <item>Pinto Beans</item>
+        <item>Pita Bread</item>
+        <item>Pistachios</item>
+        <item>Pizza</item>
+        <item>Plantains</item>
+        <item>Plum</item>
+        <item>Poha</item>
+        <item>Pomegranate</item>
+        <item>Ponzu</item>
+        <item>Popcorn</item>
+        <item>Poppy Seed</item>
+        <item>Popsicle</item>        
+        <item>Pork</item>
+        <item>Potato</item>
+        <item>Potato Chips</item>
+        <item>Pretzels</item>
+        <item>Protein Bar</item>
+        <item>Provolone Cheese</item>
+        <item>Pulav Masala</item>
+        <item>Puliyogare Mix</item>
+        <item>Puliyogare Paste</item>
+        <item>Pumpkin</item>
+        <item>Pumpkin Seeds</item>
+        <item>Quince</item>
+        <item>Quinoa</item>
+        <item>Radish</item>
+        <item>Radicchio</item>
+        <item>Rasam Powder</item>
+        <item>Raspberries</item>
+        <item>Rava</item>
+        <item>Rava Idli Mix</item>
+        <item>Red Beans</item>
+        <item>Red Pepper</item>
+        <item>Red Wine</item>
+        <item>Red Wine Vinegar</item>
+        <item>Relish</item>
+        <item>Rhubarb</item>
+        <item>Rice</item>
+        <item>Rice Milk</item>
+        <item>Rice Vinegar</item>
+        <item>Ricotta Cheese</item>
+        <item>Rosemary</item>
+        <item>Rum</item>
+        <item>Rusk</item>
+        <item>Sabudaana</item>
+        <item>Saffron</item>
+        <item>Sake</item>
+        <item>Salad Dressing</item>
+        <item>Salmon</item>
+        <item>Salsa</item>
+        <item>Salt</item>
+        <item>Sambar Powder</item>
+        <item>Samosa</item>
+        <item>Samosa Chutney</item>
+        <item>Seeds</item>
+        <item>Sesame</item>
+        <item>Sesame Oil</item>
+        <item>Shallots</item>
+        <item>Shrimp</item>
+        <item>Shredded Coconut</item>
+        <item>Sliced Bread</item>
+        <item>Soda</item>
+        <item>Soda pop</item>
+        <item>Sonamassori Rice</item>
+        <item>Sorbet</item>
+        <item>Sorghum</item>
+        <item>Soy Creamer</item>
+        <item>Soy Butter</item>
+        <item>Soy Flour</item>
+        <item>Soy Margarine</item>
+        <item>Soy Milk</item>
+        <item>Soy Sauce</item>
+        <item>Soy Yogurt</item>
+        <item>Soup</item>
+        <item>Sour Cream</item>
+        <item>Spaghetti</item>
+        <item>Spearmint</item>
+        <item>Spinach</item>
+        <item>Split Peas</item>
+        <item>Sprouts</item>
+        <item>Squash</item>
+        <item>Steak Sauce</item>
+        <item>Strawberries</item>
+        <item>Sugar</item>
+        <item>Sweet Potato</item>
+        <item>Swiss Cheese</item>
+        <item>Syrup</item>
+        <item>Taco</item>
+        <item>Tahini</item>
+        <item>Tamarind</item>
+        <item>Tandoori Chicken Mix</item>
+        <item>Tapioca</item>
+        <item>Taro</item>
+        <item>Tarragon</item>
+        <item>Tea</item>
+        <item>Tea Bags</item>
+        <item>Tempeh</item>
+        <item>Thyme</item>
+        <item>Tilapia</item>
+        <item>Tinned Meats</item>
+        <item>Tofu</item>
+        <item>Tomatillo</item>
+        <item>Tomato</item>
+        <item>Tomato Sauce</item>
+        <item>Toor Dal</item>
+        <item>Tortilla</item>
+        <item>Trail Mix</item>
+        <item>Tuna</item>
+        <item>Turkey</item>
+        <item>Turmeric</item>
+        <item>Turnips</item>
+        <item>Upma Mix</item>
+        <item>Urad Dal</item>
+        <item>Vada Mix</item>
+        <item>Vangibaath Mix</item>
+        <item>Vanilla</item>
+        <item>Vanilla Extract</item>
+        <item>Vegetables</item>
+        <item>Vegetable Oil</item>
+        <item>Vinegar</item>
+        <item>Vodka</item>
+        <item>Waffle</item>
+        <item>Walnuts</item>
+        <item>Watermelon</item>
+        <item>Wheat Flour</item>
+        <item>Whey Protein</item>
+        <item>Whip Cream</item>
+        <item>Whiskey</item>
+        <item>White Beans</item>
+        <item>White Rice</item>
+        <item>White Wine</item>
+        <item>Wine</item>
+        <item>Worcestershire Sauce</item>
+        <item>Yeast</item>
+        <item>Yogurt</item>
+        <item>Zucchini</item>
     </string-array>
     
 </resources>
