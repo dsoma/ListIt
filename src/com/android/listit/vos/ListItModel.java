@@ -274,8 +274,12 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		if( iDBHelper != null )
 		{
 			ArrayList<String> ListNames = iDBHelper.editTableName( aContext, aOldItem, aNewItem );
+
+			String modifiedDate = getDateString();
 			
-			errorCode = iDBHelper.UpdateMasterTable(aContext, 'R', aOldItem, getDateString(),aNewItem);
+			ListNames.add(modifiedDate);
+			
+			errorCode = iDBHelper.UpdateMasterTable(aContext, 'R', aOldItem, modifiedDate,aNewItem);
 				
 			if(errorCode == SUCCESS)
 			{

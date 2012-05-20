@@ -149,6 +149,11 @@ public class ListItActivity extends TabActivity
             iSavedListAdapter.notifyDataSetChanged();
         }       
     }
+
+	/*	Method:		Next editior action listener for landscape mode Item list input
+		parameter:	
+		returns :	void
+	*/
 	
 	class NextOnEditorActionListener implements OnEditorActionListener {
 	   
@@ -162,6 +167,11 @@ public class ListItActivity extends TabActivity
 	        return false;
 	    }
 	}
+
+	/*	Method:		Done editior action listener for landscape mode Item list input
+		parameter:	
+		returns :	void
+	*/
 	
 	class DoneOnEditorActionListener implements OnEditorActionListener {
 		   
@@ -212,7 +222,11 @@ public class ListItActivity extends TabActivity
    	{
    		super.onDestroy();
    	}
-   	// Save the data of textview so that it retains its value on activity pause / close
+   
+	 /*	Method:		Save the data of textview so that it retains its value on activity pause / close
+		parameter:	Bundle
+		returns :	void
+	*/
   public void onSaveInstanceState(Bundle savedInstanceState)
   {
 	       
@@ -242,7 +256,10 @@ public class ListItActivity extends TabActivity
 	  super.onSaveInstanceState(savedInstanceState);
   }
   
-  //Restore saved values
+   /*	Method:		Restore saved values on application close / orientation change
+		parameter:	Bundle
+		returns :	void
+	*/
   protected void onRestoreInstanceState(Bundle savedInstanceState) 
   {
 	    super.onRestoreInstanceState(savedInstanceState); 
@@ -275,7 +292,10 @@ public class ListItActivity extends TabActivity
         }	  
   }
    	
-  // Add button click
+   /*	Method:		On click listener for Add button
+		parameter:	
+		returns :	void
+	*/
    	private void SetupAddButton()
    	{
    		// Add Button implementation        
@@ -340,7 +360,10 @@ public class ListItActivity extends TabActivity
         addButton.setOnClickListener(addButtonOnClickListener);
    	}
    	
-   	//Item List View Click
+   /*	Method:		on Click listener for an Item
+		parameter:	
+		returns :	void
+	*/
    	private void SetupItemListView()
    	{
    		// When item is tapped, toggle checked properties of CheckBox and Model.
@@ -355,6 +378,11 @@ public class ListItActivity extends TabActivity
         });
    	}
    	
+	/*	Method:		Shows edit dialog for an item
+		parameter:	Item, Item to be edited
+					int, position of the item
+		returns :	void
+	*/
    	private void ShowEditItemListDialog(final Item aItem, final int aRowId)
    	{
    		final String itemName = aItem.getName();
@@ -416,7 +444,10 @@ public class ListItActivity extends TabActivity
 	        alert.show(); 
 			}
   }
-   	// Item List Change Observer for displaying the last item in the list to the use always.
+	/*	Method:		Item List Change Observer for displaying the last item in the list to the use always
+		parameter:
+		returns :	void
+	*/
    	private void SetupItemListChangeObserver()
    	{
    		iItemAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -428,12 +459,20 @@ public class ListItActivity extends TabActivity
         });	
    	}
    	
-   	// List Item Drag and Drop listener
+   	/*	Method:		Drag and drop listener for Item list and List Set
+		parameter:
+		returns :	void
+	*/
    	private void SetupListDrag()
    	{
    		iItemListView.setDropListener(onDrop);
    		iSavedListView.setDropListener(onDrop);
    	}
+
+	/*	Method:		Update the item and List set on position on drag and drop
+		parameter:
+		returns :	void
+	*/
    	
    	private TouchListView.DropListener onDrop=new TouchListView.DropListener() {
 		public void drop(int from, int to) {
@@ -475,6 +514,10 @@ public class ListItActivity extends TabActivity
 			}
 		}
 	};
+	/*	Method:		Update the item List on position change
+		parameter:	ArrayList<Item>, new Item List
+		returns :	void
+	*/
 	
 	public void UpdateItemPosition(ArrayList<Item> aListItem)
 	{
@@ -484,7 +527,10 @@ public class ListItActivity extends TabActivity
 		iItemAdapter.notifyDataSetChanged();
 	}
 	
-	// SavedList on click
+	/*	Method:		Tap on List set
+		parameter:	
+		returns :	void
+	*/
    	private void SetupSavedListOnClick()
    	{
    		iSavedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() 
@@ -508,7 +554,10 @@ public class ListItActivity extends TabActivity
    		});
    	}
    	
-   	//Saved List on Long Press 
+   	/*	Method:		Long press on any List Set
+		parameter:	
+		returns :	void
+	*/
    	private void SetupSavedListOnLongPress()
    	{
    		iSavedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -527,7 +576,10 @@ public class ListItActivity extends TabActivity
    		
    	}
    	
-   	//New button click
+   /*	Method:		New List button click
+		parameter:	
+		returns :	void
+	*/
    	private void SetupNewListButton()
    	{
    		// New Button implementation        
@@ -566,8 +618,10 @@ public class ListItActivity extends TabActivity
 		newButton.setOnClickListener(newButtonOnClickListener);
         
    	}
-   	
-   	// call back for view modification on Editing the list
+	/*	Method:		View modification callback on any item list edit
+		parameter:	ArrayList<Item>, Old item and New item deatils.
+		returns :	void
+	*/
    	public void EditItemList(ArrayList<Item> aItemNames)
 	{
    		Item oldItemContent = aItemNames.get(0);
@@ -600,12 +654,16 @@ public class ListItActivity extends TabActivity
 			iItemAdapter.notifyDataSetChanged();
 		}
 	}
-   	
-   	// Call back for view modification on editing the Saved list
+   
+	/*	Method:		View modification callback on List set edit
+		parameter:	ArrayList<String>, Old list Set and New list set deatils.
+		returns :	void
+	*/
    public void EditListNames(ArrayList<String> aListNames)
    {
 	   String oldListName = aListNames.get(0);
   		String newListName = aListNames.get(1);
+  		String date = aListNames.get(2);
 		
 		if(!TextUtils.isEmpty(oldListName) || !TextUtils.isEmpty(newListName))
 		{	
@@ -618,6 +676,7 @@ public class ListItActivity extends TabActivity
 				if(name.contentEquals(oldListName))
 				{
 					listName.setName(newListName.toString());
+					listName.setDate(date);
 					iSavedLists.set(i, listName);
 					break;
 				}
@@ -630,7 +689,10 @@ public class ListItActivity extends TabActivity
 		}
    }
    	
-   // On tab change
+  	/*	Method:		Called by framework on Tab Change.
+		parameter:	String, tab Name.
+		returns :	void
+	*/
 	public void onTabChanged(String aTabName) 
 	{	
 		if( iTabHost.getCurrentTab() ==  TabId_SavedList )
@@ -643,7 +705,10 @@ public class ListItActivity extends TabActivity
 		}
 	}
 	
-	// List Name dialog
+	/*	Method:		Displays List Set name input dialog.
+		parameter:	
+		returns :	void
+	*/
 	private void ShowGetListNameDialog()
 	{
 		LayoutInflater factory = LayoutInflater.from(this);            
@@ -697,6 +762,11 @@ public class ListItActivity extends TabActivity
         
         alert.show(); 	
 	}
+
+	/*	Method:		Displays List Set edit dialog.
+		parameter:	String, List set Name to be edited.
+		returns :	void
+	*/
 	
 	public void ShowEditListNameDialog(final String aListName)
 	{
@@ -744,8 +814,11 @@ public class ListItActivity extends TabActivity
         
         alert.show(); 
 	}
-
-	// Callback from the model. 
+ 
+	/*	Method:		call back function from Model.
+		parameter:	int, messageId.
+		returns :	void
+	*/
 	public void ModelCallback(final int aMessageId) 
    	{
 		switch( aMessageId )
@@ -765,8 +838,10 @@ public class ListItActivity extends TabActivity
 			}
 		}
 	}
-	
-	// From OnControllerObserver
+	/*	Method:		call back function from OnControllerObserver.
+		parameter:	int, messageId.
+		returns :	void
+	*/
    	public void ControllerCallback(int aMessageId)
    	{
    		switch(aMessageId)
@@ -786,8 +861,12 @@ public class ListItActivity extends TabActivity
 				break;
 		}
    	}
-   	
-   	// From OnControllerObserver
+
+	/*	Method:		Displayes messages from OnControllerObserver.
+		parameter:	int, messageId.
+					String, Message to be displayed
+		returns :	void
+	*/
    	public void DisplayMessage(int aMessageId, String aStr)
    	{
    		switch(aMessageId)
@@ -803,7 +882,10 @@ public class ListItActivity extends TabActivity
 		}
    	}
 
-	
+	/*	Method:		Loads List Set adapter.
+		parameter:	ArrayList<SavedItem>, Lists to be deplayed in the list set.
+		returns :	void
+	*/
 	public void HandleLists(ArrayList<SavedItem> aListNames)
 	{
 		iSavedLists.clear();
@@ -811,6 +893,11 @@ public class ListItActivity extends TabActivity
 		
 		iSavedListAdapter.notifyDataSetChanged();
 	}
+
+	/*	Method:		Loads Item list adapter.
+		parameter:	ArrayList<Item>, Items to be deplayed in the list.
+		returns :	void
+	*/
 	
 	public void LoadItemsList(ArrayList<Item> aItemNames)
 	{
@@ -821,6 +908,12 @@ public class ListItActivity extends TabActivity
 		iTabHost.setCurrentTab(TabId_ItemList);
 		updateTitle(iCurrentListName);
 	}
+
+	/*	Method:		Delete a item from database.
+		parameter:	String, Item to be deleted
+					int, position of the item
+		returns :	void
+	*/
 	
 	public void deleteItem(final String listItem, int itemPos)
 	{
@@ -838,6 +931,11 @@ public class ListItActivity extends TabActivity
 		}
 		
 	}
+
+	/*	Method:		Observer callback to delete an item from item list adapter.
+		parameter:	ArrayList<Object>, with item to be deleted and position.
+		returns :	void
+	*/
 	
 	public void DeleteItemFromList(ArrayList<Object> aListItem)
 	{
@@ -860,7 +958,10 @@ public class ListItActivity extends TabActivity
 			}
 		}
 	}
-	
+	/*	Method:		Delete the list set from database.
+		parameter:	String
+		returns :	void
+	*/
 	
 	public void DeleteList(String aList)
 	{
@@ -876,6 +977,11 @@ public class ListItActivity extends TabActivity
 		}
 		
 	}
+
+	/*	Method:		Observer callback function to update the list set adapter on delete button press.
+		parameter:	String
+		returns :	void
+	*/
 	public void DeleteSavedList(String aListName)
 	{
 		if(!TextUtils.isEmpty(aListName))
@@ -901,6 +1007,11 @@ public class ListItActivity extends TabActivity
 			}
 		}
 	}
+
+	/*	Method:		Updates the title Depending on the list created
+		parameter:	String
+		returns :	void
+	*/
 	private void updateTitle(String aTitle)
 	{
 		if(!TextUtils.isEmpty(aTitle))
@@ -908,6 +1019,11 @@ public class ListItActivity extends TabActivity
 		else
 			setTitle(getApplicationContext().getString(R.string.app_name));
 	}
+
+	/*	Method:		Observer callback to get the input from user
+		parameter:	NULL
+		returns :	void
+	*/
 	
 	private void GetNewItemFromUser()
 	{
@@ -959,6 +1075,9 @@ public class ListItActivity extends TabActivity
         iQuantityText.setText("");
 		}
 	}
+	/* Method to update the checkBox in Item List
+		parameter: Item contains the row details checked
+		returns : void*/
 	
 	public void UpdateCheckBox(Item aItem)
 	{
@@ -971,6 +1090,8 @@ public class ListItActivity extends TabActivity
 		iListItController.handleMessage(ListItController.MESSAGE_UPDATE_CHECKED, 
 												arguments);
 	}
+
+
 	
 public Object onRetainNonConfigurationInstance() {
 	ArrayList<Object> arguments = new ArrayList<Object>();

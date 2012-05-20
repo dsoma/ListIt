@@ -67,7 +67,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
     				tableNames.add(rowItem);
     				
     			} while (c.moveToNext());
-    			//c.close();
+    			c.close();
 	    	}			
 		}
 		catch (SQLiteException se ) 
@@ -125,7 +125,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	    			} while (c.moveToNext());
 		    	}			
 			}
-			//c.close();
+			c.close();
 		}
 		catch (SQLiteException se ) 
 		{
@@ -198,6 +198,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			            aItem.getName().toString() + "','" + aItem.toStringQty() + "','" + aItem.isChecked() +"');" );
 			
 			errorCode = 0;
+			
+			c.close();
 		}
 		catch (SQLiteException se ) 
 		{
@@ -251,7 +253,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 				} while (c.moveToNext());
 			}
 			}
-			//c.close();		
+			c.close();		
 			errorCode = 0;
 		}
 		catch (SQLiteException se ) 
@@ -364,7 +366,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 				}
 			}
 			
-			//c.close();
+			c.close();
 		}
 		catch (SQLiteException se ) 
 		{
@@ -453,7 +455,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 				}
 			}
 			
-			//c.close();
+			c.close();
 					
 			errorCode = 0;
 		}
@@ -532,7 +534,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 					
 			ItemAndQty.add(aOldItem);
 			ItemAndQty.add(aNewItem);
-			//c.close();
+			c.close();
 		}
 		catch (SQLiteException se ) 
 		{} 
@@ -625,6 +627,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			}
 			
 			errorCode = 0;
+			c.close();
 			
 		}
 		catch (SQLiteException se ) 
@@ -744,7 +747,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 								listName.toString() + "','" + listDate.toString() + "');" );		
 						}
 					}
-					//c.close();
+					c.close();
 					break;
 				}
 				case 'I':
