@@ -1,4 +1,4 @@
-package com.android.shoppinglist;
+package com.android.listit;
 
 public class SavedItem 
 {

@@ -1,4 +1,4 @@
- package com.android.shoppinglist.vos;
+ package com.android.listit.vos;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,10 +12,10 @@ import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.shoppinglist.Item;
-import com.android.shoppinglist.SavedItem;
+import com.android.listit.Item;
+import com.android.listit.SavedItem;
 
-public class ShoppingListModel extends SimpleObservable<ShoppingListModel>
+public class ListItModel extends SimpleObservable<ListItModel>
 {
 	private DataBaseHelper	iDBHelper;
 
@@ -33,7 +33,7 @@ public class ShoppingListModel extends SimpleObservable<ShoppingListModel>
 	public static final int MESSAGE_LIST_EDITED = 9;
 	public static final int MESSAGE_LIST_POS_UPDATED = 10;
 	
-	public ShoppingListModel() 
+	public ListItModel() 
 	{	
 	}
 	

@@ -1,4 +1,4 @@
-package com.android.shoppinglist.vos;
+package com.android.listit.vos;
 
 import java.util.ArrayList;
 
@@ -9,8 +9,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.android.shoppinglist.Item;
-import com.android.shoppinglist.SavedItem;
+import com.android.listit.Item;
+import com.android.listit.SavedItem;
 
 public class DataBaseHelper extends SQLiteOpenHelper 
 {

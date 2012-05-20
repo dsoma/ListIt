@@ -1,4 +1,4 @@
-package com.android.shoppinglist;
+package com.android.listit;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;

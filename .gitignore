@@ -3,3 +3,4 @@ bin/*
 default.properties
 .classpath
 .project
+project.properties

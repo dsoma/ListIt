@@ -1,6 +1,6 @@
-package com.android.shoppinglist.controllers;
+package com.android.listit.controllers;
 
-import com.android.shoppinglist.controllers.OnControllerObserver;
+import com.android.listit.controllers.OnControllerObserver;
 
 import java.util.ArrayList;
 import java.util.List;

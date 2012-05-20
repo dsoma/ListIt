@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.android.shoppinglist;
+package com.android.listit;
 
 import android.content.Context;
 import android.content.res.TypedArray;

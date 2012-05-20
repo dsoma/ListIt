@@ -1,4 +1,4 @@
-package com.android.shoppinglist;
+package com.android.listit;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 {
   
 	private LayoutInflater inflater;
-	private ShoppingListActivity iActivity;
+	private ListItActivity iActivity;
 	
 	/* Colors Used - Although used inside resources, setTextColor()
 	 * doesn't work properly with the resource color. So sync up every time 
@@ -30,7 +30,7 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	private static final int foregroundColor = whiteColor - backgroundColor; //0xFFD45700;
 	private static final int strikeoutColor  = 0xFF676767;
   
-	public ItemListAdapter( ShoppingListActivity aActivity, List<Item> ItemList ) 
+	public ItemListAdapter( ListItActivity aActivity, List<Item> ItemList ) 
 	{
 	    super( aActivity, R.layout.simplerow, R.id.rowTextView, ItemList );
 	    

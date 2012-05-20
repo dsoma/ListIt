@@ -1,8 +1,8 @@
-// File: ShoppingListActivity.java
+// File: ListItActivity.java
 // Author: Ramya Machina
 // App: ListIt
 
-package com.android.shoppinglist;
+package com.android.listit;
 
 import java.util.ArrayList;
 import java.lang.Object;
@@ -33,19 +33,20 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.android.shoppinglist.controllers.OnControllerObserver;
-import com.android.shoppinglist.controllers.ShoppingListController;
-import com.android.shoppinglist.vos.ModelObserver;
-import com.android.shoppinglist.vos.ShoppingListModel;
+import com.android.listit.TouchListView.DropListener;
+import com.android.listit.controllers.OnControllerObserver;
+import com.android.listit.controllers.ListItController;
+import com.android.listit.vos.ModelObserver;
+import com.android.listit.vos.ListItModel;
 
-public class ShoppingListActivity extends TabActivity 
- 						  		  implements OnTabChangeListener,
- 						  		  			 ModelObserver<ShoppingListModel>,
- 						  			 		 OnControllerObserver
+public class ListItActivity extends TabActivity 
+ 						    implements OnTabChangeListener,
+ 						  		  	   ModelObserver<ListItModel>,
+ 						  			   OnControllerObserver
 {
     private TabHost 				iTabHost;
-	private ShoppingListModel 		iShoppingListModel;
-	private ShoppingListController 	iShoppingListController;
+	private ListItModel 		iListItModel;
+	private ListItController 	iListItController;
 	private String 					iCurrentListName;
 	private TouchListView 			iItemListView;
 	private ArrayAdapter<Item> 		iItemAdapter;
@@ -74,15 +75,15 @@ public class ShoppingListActivity extends TabActivity
         setContentView(R.layout.main);
         
         // Create the model and register the observer
-        iShoppingListModel = new ShoppingListModel();
-        iShoppingListModel.addObserver(this);
+        iListItModel = new ListItModel();
+        iListItModel.addObserver(this);
         
         // Create a controller and add the model. 
-        iShoppingListController = new ShoppingListController(iShoppingListModel);
+        iListItController = new ListItController(iListItModel);
         
         // Register the view with the controller.
-        iShoppingListController.addHandler(this);
-        iShoppingListController.setCurrentView(this);
+        iListItController.addHandler(this);
+        iListItController.setCurrentView(this);
         
         iCurrentListName = "";
         iDuplicateListName="";
@@ -174,7 +175,7 @@ public class ShoppingListActivity extends TabActivity
 	    }
 	}
 	
-	public void onChange(ShoppingListModel model) 
+	public void onChange(ListItModel model) 
    	{
 	}
    	
@@ -330,7 +331,7 @@ public class ShoppingListActivity extends TabActivity
 			        	arguments.add(qtyString);
 			        	arguments.add(i.isChecked());
 		        	
-					iShoppingListController.handleMessage(ShoppingListController.MESSAGE_ADD_ITEM, arguments);
+					iListItController.handleMessage(ListItController.MESSAGE_ADD_ITEM, arguments);
 					iItemText.requestFocus();
 				}
 			}
@@ -360,10 +361,10 @@ public class ShoppingListActivity extends TabActivity
 		final String quantity = aItem.getQuantity();
 		if(!(TextUtils.isEmpty(itemName)))
 		{
-			LayoutInflater factory = LayoutInflater.from(ShoppingListActivity.this);            
+			LayoutInflater factory = LayoutInflater.from(ListItActivity.this);            
 	        final View textEntryView = factory.inflate(R.layout.edit_dialog, null);
 
-	        AlertDialog.Builder alert = new AlertDialog.Builder(ShoppingListActivity.this);
+	        AlertDialog.Builder alert = new AlertDialog.Builder(ListItActivity.this);
 	        final AutoCompleteTextView inputItem = (AutoCompleteTextView) textEntryView.findViewById(R.id.itemEditText);
 	        inputItem.setAdapter(iSuggestedItemAdapter);
 	        
@@ -393,7 +394,7 @@ public class ShoppingListActivity extends TabActivity
 			        	arguments.add(oldData);
 			        	Item newData = new Item(iNewItemName, iNewQty);
 			        	arguments.add(newData);
-			        	iShoppingListController.handleMessage(ShoppingListController.MESSAGE_EDIT_ITEM, 
+			        	iListItController.handleMessage(ListItController.MESSAGE_EDIT_ITEM, 
 								arguments);	
 		        	}
 		        	else
@@ -450,7 +451,7 @@ public class ShoppingListActivity extends TabActivity
 					arguments.add(from);
 					arguments.add(to);
 					
-					iShoppingListController.handleMessage(ShoppingListController.MESSAGE_UPDATE_ITEM_POS, 
+					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_ITEM_POS, 
 							arguments);	
 				}
 				else
@@ -465,7 +466,7 @@ public class ShoppingListActivity extends TabActivity
 					arguments.add(from);
 					arguments.add(to);
 					
-					iShoppingListController.handleMessage(ShoppingListController.MESSAGE_UPDATE_LIST_POS, 
+					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_LIST_POS, 
 							arguments);	
 				}
 					
@@ -490,7 +491,7 @@ public class ShoppingListActivity extends TabActivity
 	        	arguments.add(getApplicationContext());
 	        	arguments.add(iCurrentListName);
 	        	
-				iShoppingListController.handleMessage(ShoppingListController.MESSAGE_LOAD_ITEM, 
+				iListItController.handleMessage(ListItController.MESSAGE_LOAD_ITEM, 
 														arguments);				
 							
    			}
@@ -548,7 +549,7 @@ public class ShoppingListActivity extends TabActivity
 		        	arguments.add(iQuantityText.getText().toString());
 		        	arguments.add(i.isChecked());
 	        	}
-	        	iShoppingListController.handleMessage(ShoppingListController.MESSAGE_ADD_ITEM, 
+	        	iListItController.handleMessage(ListItController.MESSAGE_ADD_ITEM, 
 	        												arguments);					
 			}
 		};
@@ -625,7 +626,7 @@ public class ShoppingListActivity extends TabActivity
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(iTabHost.getApplicationWindowToken(), 0);
 
-			iShoppingListController.handleMessage(ShoppingListController.MESSAGE_LOAD_LIST, 
+			iListItController.handleMessage(ListItController.MESSAGE_LOAD_LIST, 
 					 							  getApplicationContext());
 		}
 	}
@@ -664,7 +665,7 @@ public class ShoppingListActivity extends TabActivity
 			        	arguments.add(iQuantityText.getText().toString());
 			        	arguments.add(i.isChecked());
 		        	}
-		        	iShoppingListController.handleMessage(ShoppingListController.MESSAGE_SET_LIST_NAME, 
+		        	iListItController.handleMessage(ListItController.MESSAGE_SET_LIST_NAME, 
 		        										  arguments);	
 	        	}
 	        	else
@@ -687,10 +688,10 @@ public class ShoppingListActivity extends TabActivity
 	
 	public void ShowEditListNameDialog(final String aListName)
 	{
-		LayoutInflater factory = LayoutInflater.from(ShoppingListActivity.this);            
+		LayoutInflater factory = LayoutInflater.from(ListItActivity.this);            
         final View textEntryView = factory.inflate(R.layout.custom_dialog, null);
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(ShoppingListActivity.this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(ListItActivity.this);
         final EditText inputItem = (EditText) textEntryView.findViewById(R.id.saveEditText);
 	        	        	 
         alert.setTitle("Edit List"); 
@@ -711,7 +712,7 @@ public class ShoppingListActivity extends TabActivity
 		        	arguments.add(getApplicationContext());
 		        	arguments.add(aListName);
 		        	arguments.add(iNewListName);
-		        	iShoppingListController.handleMessage(ShoppingListController.MESSAGE_EDIT_LIST, 
+		        	iListItController.handleMessage(ListItController.MESSAGE_EDIT_LIST, 
 							arguments);	
 	        	}
 	        	else
@@ -737,20 +738,20 @@ public class ShoppingListActivity extends TabActivity
    	{
 		switch( aMessageId )
 		{
-			case ShoppingListModel.MESSAGE_LIST_CREATED:
+			case ListItModel.MESSAGE_LIST_CREATED:
 			{
 				updateTitle(iCurrentListName);
 				break;
 			}
-			case ShoppingListModel.MESSAGE_CHECKED_UPDATED:
+			case ListItModel.MESSAGE_CHECKED_UPDATED:
 			{
 				break;
 			}
-			case ShoppingListModel.MESSAGE_ROW_POS_UPDATED:
+			case ListItModel.MESSAGE_ROW_POS_UPDATED:
 			{
 				break;
 			}
-			case ShoppingListModel.MESSAGE_LIST_POS_UPDATED:
+			case ListItModel.MESSAGE_LIST_POS_UPDATED:
 			{
 				break;
 			}
@@ -783,7 +784,7 @@ public class ShoppingListActivity extends TabActivity
    	{
    		switch(aMessageId)
 		{
-			case ShoppingListController.DUPLICATE_LIST:
+			case ListItController.DUPLICATE_LIST:
 			{
 				Toast.makeText(getApplicationContext(), getString(R.string.duplicate_list), 
 						       Toast.LENGTH_SHORT).show();
@@ -824,7 +825,7 @@ public class ShoppingListActivity extends TabActivity
         	arguments.add(listItem);
         	arguments.add(itemPos);
         	
-			iShoppingListController.handleMessage(ShoppingListController.MESSAGE_DELETE_ITEM, 
+			iListItController.handleMessage(ListItController.MESSAGE_DELETE_ITEM, 
 													arguments);
 		}
 		
@@ -862,7 +863,7 @@ public class ShoppingListActivity extends TabActivity
         	arguments.add(getApplicationContext());
         	arguments.add(aList);
         	
-			iShoppingListController.handleMessage(ShoppingListController.MESSAGE_DELETE_LIST, 
+			iListItController.handleMessage(ListItController.MESSAGE_DELETE_LIST, 
 													arguments);
 		}
 		
@@ -959,7 +960,7 @@ public class ShoppingListActivity extends TabActivity
     	arguments.add(iCurrentListName);
     	arguments.add(aItem);
     	
-		iShoppingListController.handleMessage(ShoppingListController.MESSAGE_UPDATE_CHECKED, 
+		iListItController.handleMessage(ListItController.MESSAGE_UPDATE_CHECKED, 
 												arguments);
 	}
 	

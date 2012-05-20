@@ -1,6 +1,8 @@
-package com.android.shoppinglist;
+package com.android.listit;
 
 import java.util.ArrayList;
+
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -17,9 +19,9 @@ import android.widget.Toast;
 public class SavedListAdapter extends ArrayAdapter<SavedItem> 
 {
 	private LayoutInflater 	iInflater;
-	private ShoppingListActivity iActivity;
+	private ListItActivity iActivity;
   
-	public SavedListAdapter( ShoppingListActivity aActivity, ArrayList<SavedItem> aListNames ) 
+	public SavedListAdapter( ListItActivity aActivity, ArrayList<SavedItem> aListNames ) 
 	{
 	    super( aActivity, R.layout.rowbuttonlayout, R.id.listTextView, aListNames );
 	    

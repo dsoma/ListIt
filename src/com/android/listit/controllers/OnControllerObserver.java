@@ -1,4 +1,4 @@
-package com.android.shoppinglist.controllers;
+package com.android.listit.controllers;
 
 public interface OnControllerObserver 
 {

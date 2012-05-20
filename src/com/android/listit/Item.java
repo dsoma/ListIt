@@ -1,4 +1,4 @@
-package com.android.shoppinglist;
+package com.android.listit;
 
 /* This class acts as a datastructure to hold the Item List Tab*/
 

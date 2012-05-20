@@ -1,4 +1,4 @@
-package com.android.shoppinglist.vos;
+package com.android.listit.vos;
 
 
 public interface EasyObservable<T> {

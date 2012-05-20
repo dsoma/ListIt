@@ -1,13 +1,13 @@
-package com.android.shoppinglist.controllers;
+package com.android.listit.controllers;
 
 import java.util.ArrayList;
 
 import android.content.Context;
 
-import com.android.shoppinglist.Item;
-import com.android.shoppinglist.vos.ShoppingListModel;
+import com.android.listit.Item;
+import com.android.listit.vos.ListItModel;
 
-public class ShoppingListController extends Controller
+public class ListItController extends Controller
 {
 	/* All the messages that the view sends to the controller */
 	public static final int MESSAGE_ADD_ITEM = 1;
@@ -43,11 +43,11 @@ public class ShoppingListController extends Controller
 		UpdatingListPos
 	}
 	
-	private ShoppingListModel		iModel;
+	private ListItModel		iModel;
 	private State					iState;
 	private OnControllerObserver	iCurrentView;
 	
-	public ShoppingListController( ShoppingListModel aModel )
+	public ListItController( ListItModel aModel )
 	{
 		iModel = aModel;
 		iState = State.Idle;
