@@ -353,7 +353,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		Date today = Calendar.getInstance(Locale.getDefault()).getTime();
 
 	    // (2) create our date "formatter" (the date format we want)
-	    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy \n HH:mm");
+	    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy\nHH:mm");
 
 	    // (3) create a new String using the date format we want
 	    String dateString = formatter.format(today);
