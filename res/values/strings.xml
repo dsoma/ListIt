@@ -25,6 +25,7 @@
     <string name="new_list_toast">Enter a list name</string>
     <string name="edit_item">Edit Item</string>
     <string name="edit_list">Edit List</string> 
+   	<string name="invalid_qty_toast">Invalid quantity</string>    
     <string name="copyright">Copyright Ramya Machina, 2012. All rights Reserved. </string>
     
     <!-- Hints -->
@@ -34,11 +35,14 @@
     
     <!-- TODO: Add all the frequently used shopping items here. -->
     <string-array name="suggested_word_list">
+        <item>Air Freshener</item>
         <item>Ajwain</item>
+        <item>All Purpose Flour</item>
         <item>Almonds</item>
         <item>Almonds Sliced</item>
+        <item>Aluminum Foil</item>
         <item>Amaranth</item>
-        <item>Amchur</item>
+        <item>Amchur Powder</item>
         <item>Anise</item>
         <item>Apple</item>
         <item>Apple Cider Vinegar</item>
@@ -52,6 +56,7 @@
         <item>Baby Food</item> 
         <item>Bacon</item>
         <item>Bacon Sausage</item>
+        <item>Bag</item>
         <item>Bagel</item>
         <item>Baking Powder</item>
         <item>Baking Soda</item>
@@ -59,9 +64,13 @@
         <item>Bamboo Shoots</item>
         <item>Banana</item> 
         <item>Banana Chips</item>
+        <item>Bangle</item>
+        <item>Bar Soaps</item>
         <item>Barley</item>
         <item>Basil</item>
         <item>Basmati Rice</item>
+        <item>Bathroom Tissues</item>
+        <item>Batteries</item>
         <item>Bay leaf</item>
         <item>BBQ Sauce</item> 
         <item>Beans</item>
@@ -69,6 +78,7 @@
         <item>Beer</item>
         <item>Beets</item>
         <item>Bell Pepper</item>
+        <item>Belt</item>
         <item>Berries</item>
         <item>Besan</item>
         <item>Biriyani Masala</item>
@@ -77,10 +87,19 @@
         <item>Blackberry</item>
         <item>Black-eyed Peas</item>
         <item>Black Pepper</item> 
+        <item>Black Salt</item>
+        <item>Bleach</item>
         <item>Bleu Cheese</item>
         <item>Blueberry</item>
+        <item>Blush</item>
+        <item>Blush Brush</item>
         <item>Bok Choy</item>
+        <item>Body Lotion</item>
+        <item>Body Spray</item>
+        <item>Body Wash</item>
         <item>Bouillon cubes</item>
+        <item>Bottle</item>
+        <item>Bracelet</item>
         <item>Brazil Nuts</item>
         <item>Bread</item> 
         <item>Bread Crumbs</item>   
@@ -101,10 +120,12 @@
         <item>Cake</item>
         <item>Cake Icing</item>
         <item>Cake Mix</item>
+        <item>Candles</item>
         <item>Candy</item>
         <item>Canola Oil</item>
         <item>Cantelope</item>
         <item>Cardamom</item>
+        <item>Cardamom Powder</item>
         <item>Carrot</item>
         <item>Cashews</item>
         <item>Cashew Roasted</item>
@@ -119,6 +140,7 @@
         <item>Cereal Bar</item>
         <item>Chaat Masala</item>
         <item>Chai</item>
+        <item>Chain</item>
         <item>Chakli</item>
         <item>Champagne</item>
         <item>Channa Dal</item>
@@ -128,6 +150,7 @@
         <item>Cherries</item>
         <item>Chestnut</item>
         <item>Chicken</item>
+        <item>Chicken Breast</item>
         <item>Chickpeas</item>
         <item>Chickpea Flour</item>
         <item>Chilli</item>
@@ -137,6 +160,7 @@
         <item>Chocolate Chips</item>
         <item>Cilantro</item>
         <item>Cinnamon</item>
+        <item>Cleanser</item>
         <item>Clove</item>
         <item>Club soda</item>
         <item>Cocoa</item>
@@ -148,14 +172,22 @@
         <item>Coffee</item>
         <item>Coffee Filter</item>
         <item>Collard greens</item>
+        <item>Comb</item>
+        <item>Concealer</item>
+        <item>Concealer Brush</item>
+        <item>Conditioner</item>
         <item>Cookies</item>
         <item>Coriander</item>
         <item>Coriander Chutney</item>
         <item>Coriander Seeds</item>
+        <item>Coriander Powder</item>
         <item>Corn</item>
         <item>Corn Chips</item>
         <item>Corn Flour</item>
         <item>Cornmeal</item>
+        <item>Cosmetic Set</item>
+        <item>Cosmetic Case</item>
+        <item>Cosmetic Pencils</item>
         <item>Cottage Cheese</item>
         <item>Couscous</item>
         <item>Crab</item>
@@ -164,45 +196,65 @@
         <item>Cream Cheese</item>
         <item>Croissant</item>
         <item>Cucumber</item>
-        <item>Cumin</item>
+        <item>Cumin Seeds</item>
+        <item>Cumin Powder</item>
+        <item>Curry Leaf</item>
         <item>Curry Powder</item>
         <item>Daikon</item>
         <item>Dates</item>
+        <item>Diapers</item>
         <item>Dill</item>
+        <item>Dishwasher Detergent</item>
         <item>Dog Food</item>
         <item>Donut</item>
         <item>Dosa Instant Mix</item>
         <item>Drum Stick</item>
         <item>Dry Fruit</item>
+        <item>Earrings</item>
         <item>Edamame</item>
         <item>Egg</item>
         <item>Eggplant</item>
         <item>Electrol</item>
         <item>Endive</item>
         <item>English Muffin</item>
+        <item>Eyelash Curler</item>
+        <item>Eyelash Brush</item>
+        <item>Eyeliner</item>
+        <item>Eye Lashes</item>
+        <item>Eye Pencil</item>
+        <item>Eye Shadow</item>
+        <item>Fabric Refresher</item>
+        <item>Fabric Softener</item>
+        <item>Face Wash</item>
+        <item>Facial Tissue</item>
         <item>Fava Beans</item>
         <item>Fennel</item>
         <item>Fennel Seeds</item>
         <item>Fenugreek Seeds</item>
         <item>Feta Cheese</item>
         <item>Figs</item>
+        <item>Fish</item>
         <item>Fish Sticks</item>
         <item>Flax Seeds</item>
         <item>Flour</item>
         <item>Food Color - Red</item>
         <item>Food Color - Yellow</item>
         <item>Food Color - Orange</item>
+        <item>Foundation Makeup</item>
+        <item>Foundation Sponge</item>
         <item>Fries</item>
         <item>Fruits</item>
         <item>Fruit Juice</item>
         <item>Garam Masala</item>
         <item>Garlic</item>
         <item>Garlic Paste</item>
+        <item>Gel</item>
         <item>Ghee</item>
         <item>Gin</item>
         <item>Ginger</item>
         <item>Ginger Paste</item>
         <item>Ginger and Garlic Paste</item>
+        <item>Gloves</item>
         <item>Glucose</item>
         <item>Goat Cheese</item>
         <item>Granola Bar</item>
@@ -213,12 +265,22 @@
         <item>Greek Yogurt</item>
         <item>Green Chillies</item>
         <item>Ground Beef</item>
+        <item>Groundnut</item>
         <item>Guava</item>
         <item>Gulab Jamoon Mix</item>
         <item>Gum</item>
+        <item>Hair Clip</item>
+        <item>Hair Color</item>
+        <item>Hair Dryer</item>
+        <item>Hair Oil</item>
+        <item>Hair Spray</item>
         <item>Half and Half</item>
         <item>Ham</item>
+        <item>Hand Bag</item>
+        <item>Hand Lotion</item>
+        <item>Hand Soap</item>
         <item>Harissa</item>
+        <item>Hat</item>
         <item>Hing</item>
         <item>Honey</item>
         <item>Honeydew Melon</item>
@@ -235,6 +297,9 @@
         <item>Jelly</item>
         <item>Jicama</item>
         <item>Juice</item>
+        <item>Jewelry</item>
+        <item>Kabuli Chana</item>
+        <item>Kala Jeera</item>
         <item>Kale</item>
         <item>Ketchup</item>
         <item>Kheer Mix</item>
@@ -242,22 +307,36 @@
         <item>Kiwi</item>
         <item>Kohlrabi</item>
         <item>Kumquats</item>
+        <item>Laundry Detergent</item>
         <item>Lavender</item>
         <item>Leeks</item>
         <item>Lemon</item>
         <item>Lemongrass</item>
         <item>Lentils</item>
         <item>Lettuce</item>
+        <item>Light Bulbs</item>
         <item>Lima Beans</item>
         <item>Lime</item>
-        <item>Lobster</item>
+        <item>Lip Balm</item>
+        <item>Lipgloss</item>
+        <item>Lipstick</item>
+        <item>Lip Pencil</item>
+        <item>Lip Shine</item>
+        <item>Liquid Dish Detergent</item>
         <item>Lychee</item>
+        <item>Lobster</item>        
         <item>Macadamia</item>
+        <item>Maida</item>
+        <item>Makeup Brushes</item>
+        <item>Makeup Palette</item>
+        <item>Makeup Kit</item>
         <item>Mango</item>
+        <item>Manicure Set</item>
         <item>Maple Syrup</item>
         <item>Marjoram</item>
         <item>Margarine</item>
         <item>Massoor Dal</item>
+        <item>Mascara</item>
         <item>Mayonnaise</item>
         <item>Melon</item>
         <item>Methi</item>
@@ -265,16 +344,25 @@
         <item>Milk</item>
         <item>Mint</item>
         <item>Mint Chutney</item>
+        <item>Mirror</item>
+        <item>Moisturizer</item>
+        <item>Moisture Cream</item>
+        <item>Moong Beans</item>
+        <item>Moong Dal</item>
         <item>Mozarella Cheese</item>
-        <item>Mung Beans</item>
-        <item>Mung Dal</item>
         <item>Murukku</item>
         <item>Mushroom</item>
         <item>Muskmelon</item>
         <item>Mussels</item>
         <item>Mustard</item>
         <item>Mustard Oil</item>
+        <item>Nail Color</item>
+        <item>Nail Color Remover</item>
+        <item>Nail Polish</item>
+        <item>Nail Polish Remover</item>
+        <item>Napkins</item>
         <item>Navy Beans</item>
+        <item>Necklace</item>
         <item>Nectarine</item>
         <item>Nopale</item>
         <item>Nutmeg</item>
@@ -293,6 +381,7 @@
         <item>Panipuri Masala</item>
         <item>Papad</item>
         <item>Papaya</item>
+        <item>Papper Towels</item>
         <item>Paprika</item>
         <item>Parmesan Cheese</item>
         <item>Parsley</item>
@@ -307,8 +396,11 @@
         <item>Pear</item>
         <item>Peas</item>
         <item>Pecans</item>
+        <item>Pencil Sharpener</item>
         <item>Pepper</item>
         <item>Peppermint</item>
+        <item>Perfume</item>
+        <item>Pendant</item>
         <item>Pickle</item>
         <item>Pineapple</item>
         <item>Pine Nuts</item>
@@ -317,6 +409,7 @@
         <item>Pistachios</item>
         <item>Pizza</item>
         <item>Plantains</item>
+        <item>Plastic Wraps</item>
         <item>Plum</item>
         <item>Poha</item>
         <item>Pomegranate</item>
@@ -327,7 +420,11 @@
         <item>Pork</item>
         <item>Potato</item>
         <item>Potato Chips</item>
+        <item>Pouch</item>
+        <item>Powder</item>
+        <item>Powder Brush</item>
         <item>Pretzels</item>
+        <item>Primer</item>
         <item>Protein Bar</item>
         <item>Provolone Cheese</item>
         <item>Pulav Masala</item>
@@ -335,20 +432,27 @@
         <item>Puliyogare Paste</item>
         <item>Pumpkin</item>
         <item>Pumpkin Seeds</item>
+        <item>Purse</item>
         <item>Quince</item>
         <item>Quinoa</item>
         <item>Radish</item>
         <item>Radicchio</item>
+        <item>Ragi Flour</item>
         <item>Rasam Powder</item>
+        <item>Rajma</item>
         <item>Raspberries</item>
         <item>Rava</item>
         <item>Rava Idli Mix</item>
+        <item>Razor</item>
         <item>Red Beans</item>
+        <item>Red Chilli</item>
+        <item>Kabuli Chilli Powder</item>
         <item>Red Pepper</item>
         <item>Red Wine</item>
         <item>Red Wine Vinegar</item>
         <item>Relish</item>
         <item>Rhubarb</item>
+        <item>Ribbons</item>
         <item>Rice</item>
         <item>Rice Milk</item>
         <item>Rice Vinegar</item>
@@ -366,16 +470,24 @@
         <item>Sambar Powder</item>
         <item>Samosa</item>
         <item>Samosa Chutney</item>
+        <item>Scissors</item>
+        <item>Scrub Sponges</item>
         <item>Seeds</item>
         <item>Sesame</item>
         <item>Sesame Oil</item>
+        <item>Shadow Palette</item>
         <item>Shallots</item>
+        <item>Shampoo</item>
+        <item>Shaving Kit</item>
+        <item>Shoes</item>
         <item>Shrimp</item>
         <item>Shredded Coconut</item>
         <item>Sliced Bread</item>
+        <item>Socks</item>
         <item>Soda</item>
         <item>Soda pop</item>
         <item>Sonamassori Rice</item>
+        <item>Sooji Flour</item>
         <item>Sorbet</item>
         <item>Sorghum</item>
         <item>Soy Creamer</item>
@@ -394,8 +506,12 @@
         <item>Sprouts</item>
         <item>Squash</item>
         <item>Steak Sauce</item>
+        <item>Straightener</item>
         <item>Strawberries</item>
+        <item>Storage Bags</item>
         <item>Sugar</item>
+        <item>Sunglasses</item>
+        <item>Sunscreen Lotion</item>
         <item>Sweet Potato</item>
         <item>Swiss Cheese</item>
         <item>Syrup</item>
@@ -416,13 +532,19 @@
         <item>Tomatillo</item>
         <item>Tomato</item>
         <item>Tomato Sauce</item>
+        <item>Toner</item>
         <item>Toor Dal</item>
         <item>Tortilla</item>
+        <item>Toothbrush</item>
+        <item>Toothpaste</item>
+        <item>Toys</item>
         <item>Trail Mix</item>
+        <item>Trash Bags</item>
         <item>Tuna</item>
         <item>Turkey</item>
         <item>Turmeric</item>
         <item>Turnips</item>
+        <item>Tweezer</item>
         <item>Upma Mix</item>
         <item>Urad Dal</item>
         <item>Vada Mix</item>
@@ -435,6 +557,9 @@
         <item>Vodka</item>
         <item>Waffle</item>
         <item>Walnuts</item>
+        <item>Wallets</item>
+        <item>Watch</item>
+        <item>Water</item>
         <item>Watermelon</item>
         <item>Wheat Flour</item>
         <item>Whey Protein</item>
