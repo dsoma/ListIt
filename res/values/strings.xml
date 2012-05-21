@@ -10,7 +10,7 @@
     <string name="list_set_tab_name">List Set</string>
     <string name="duplicate_list">Duplicate list name. Re-enter!</string>
     <string name="list_name_display">List Name</string>
-    <string name="give_name">Give a name to the list</string>
+    <string name="give_name">Enter a name</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="added_to_list">Added to the list</string>
@@ -21,7 +21,16 @@
     <string name="no">No</string>
     <string name="deleted">Deleted</string>
     <string name="date">date</string>
+    <string name="add_button_toast">Enter an item name</string>
+    <string name="new_list_toast">Enter a list name</string>
+    <string name="edit_item">Edit Item</string>
+    <string name="edit_list">Edit List</string> 
     <string name="copyright">Copyright Ramya Machina, 2012. All rights Reserved. </string>
+    
+    <!-- Hints -->
+    <string name="itemEditHint">Add item</string>
+    <string name="qtyEditHint">Qty</string>
+    <string name="saveListHint">Example: Grocery list</string>
     
     <!-- TODO: Add all the frequently used shopping items here. -->
     <string-array name="suggested_word_list">

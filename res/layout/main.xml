@@ -40,13 +40,14 @@
                 android:gravity="center"
                 android:tileMode="repeat" >
 
+                <!-- CURRENTLY ROW 1 IS NOT USED -->
                 <!-- ROW 1 : All text labels -->
                 
                 <!-- NOTE: Here all the text labels align at the bottom to the "New" Text -->
                 <!-- "New" and "Add" align to the edges of the screen but the other labels place between them -->
                 
                 <!-- Text Label: "New" -->
-                
+                <!-- 
                 <TextView
                     android:id="@+id/TextView01"
                     android:layout_width="wrap_content"
@@ -59,9 +60,9 @@
                     android:text="@string/newList"
                     android:textColor="@color/fg"
                     android:textStyle="bold" />
-                
+                -->
                 <!-- Text Label: "Item" -->
-                
+                <!-- 
                 <TextView
                     android:id="@+id/textViewItem"
                     android:layout_width="wrap_content"
@@ -77,9 +78,9 @@
                     android:text="@string/item"
                     android:textColor="@color/fg"
                     android:textStyle="bold" />
-                
+                 -->
                 <!-- Text Label: "Qty" -->
-                
+                <!-- 
                 <TextView
                     android:id="@+id/textViewQty"
                     android:layout_width="wrap_content"
@@ -96,9 +97,9 @@
                     android:text="@string/quantity"
                     android:textColor="@color/fg"
                     android:textStyle="bold" />
-                
+                 -->
                 <!-- Text Label: "Add" -->
-                
+                <!-- 
                 <TextView
                     android:id="@+id/addText"
                     android:layout_width="wrap_content"
@@ -114,7 +115,8 @@
                     android:text="@string/add"
                     android:textColor="@color/fg"
                     android:textStyle="bold" />
-                
+                 -->
+                 
                 <!-- ROW 2 : Button; AutoComplete; NumberEditor; Button -->
                 <!-- NOTE: Here the buttons are below the text labels and their top and bottom 
                      SHOULD align to the editor boxes. (Because editor boxes should take whatever
@@ -124,17 +126,14 @@
                 
                 <Button
                     android:id="@+id/buttonNew"
-                    android:layout_width="wrap_content"
+                    android:layout_width="45dp"
                     android:layout_height="wrap_content"
-                    
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignRight="@+id/TextView01"
-                    android:layout_below="@+id/TextView01"
-                    
                     android:layout_alignBottom="@+id/editTextItem"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
                     android:layout_alignTop="@+id/editTextItem"
-                    
-                    android:background="@drawable/ic_button_new" />
+                    android:background="@drawable/ic_button_new"
+                     />
                 
                 <!-- AutoComplete Text Editor -->
                 
@@ -142,12 +141,11 @@
                     android:id="@+id/editTextItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    
-                    android:layout_below="@+id/textViewItem"
+                    android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@+id/editTextQty"
                     android:layout_toRightOf="@+id/buttonNew"
-                    
                     android:ems="10"
+                    android:hint="@string/itemEditHint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:lines="1"
@@ -165,10 +163,11 @@
                     android:layout_width="@dimen/width_qty_editor"
                     android:layout_height="wrap_content"
                     
-                    android:layout_below="@+id/textViewQty"
                     android:layout_toLeftOf="@+id/buttonAdd"
                     android:layout_alignBottom="@+id/editTextItem"
+                    android:layout_alignTop="@+id/editTextItem"
                     
+                    android:hint="@string/qtyEditHint"
                     android:ems="10"
                     android:imeOptions="actionDone"
                     android:inputType="numberDecimal"
@@ -179,15 +178,15 @@
                 
                 <Button
                     android:id="@+id/buttonAdd"
-                    android:layout_width="wrap_content"
+                    android:layout_width="45dp"
                     android:layout_height="wrap_content"
                     
-                    android:layout_alignParentRight="true"
-                    android:layout_alignLeft="@+id/addText"
                     android:layout_alignBottom="@+id/editTextQty"
+                    android:layout_alignParentRight="true"
                     android:layout_alignTop="@+id/editTextQty"
                     
-                    android:background="@drawable/ic_button_add" />                
+                    android:background="@drawable/ic_button_add"
+                    android:padding="9dp" />
 
             </RelativeLayout>
             
