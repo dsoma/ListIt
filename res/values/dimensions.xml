@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
-        <dimen name="width_qty_editor">60dp</dimen>
+        <dimen name="width_qty_editor">80dp</dimen>
         <dimen name="width_delete_button">20dip</dimen>
         <dimen name="height_delete_button">20dip</dimen>
     </resources>
