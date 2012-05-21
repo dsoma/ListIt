@@ -6,6 +6,7 @@ package com.android.listit;
 
 import java.util.ArrayList;
 import java.lang.Object;
+import java.math.BigDecimal;
 
 import android.app.AlertDialog;
 import android.app.TabActivity;
@@ -316,38 +317,22 @@ public class ListItActivity extends TabActivity
 	        	{
 	        		Toast.makeText(getApplicationContext(), getString(R.string.add_button_toast), Toast.LENGTH_SHORT).show();
 	        	}
-	        	else
-	        	{
-	        		if(qtyString.length()!=0)
-	        		{
-	        			String[] splitWords =  qtyString.split("\\.");
-	        			if(splitWords.length > 2)
-	        			{
-	        				Toast.makeText(getApplicationContext(),"Invalid Quantity", Toast.LENGTH_SHORT).show();
-	        				iQuantityText.requestFocus();
-	        			}
-	        			else if(splitWords.length==1)
-	        			{
-	        				String repString = splitWords[0].replaceFirst("^0+(?!$)", "");
-	        				qtyString = repString;
-	        			}
-	        			else
-	        			{
-	        				String repString = splitWords[0].replaceFirst("^0+(?!$)", "");
-	        				int decimalValue = Integer.parseInt(splitWords[1]);
-	        				if(decimalValue==0)
-	        					qtyString = repString;
-	        				else
-	        					qtyString = repString+"."+ Integer.toString(decimalValue);
-
-	        			}
-	        		}		        			
+	        	else if( !ValidateQuantity(qtyString) )
+        		{
+        			Toast.makeText(getApplicationContext(),getString(R.string.invalid_qty_toast), 
+        						   Toast.LENGTH_SHORT).show();
+    				iQuantityText.requestFocus();
+    				return;
+        		}
+        		else
+        		{
+        			qtyString = StripOffZeros(qtyString);
+        			
+	        		Item i = new Item();
 	        		
-		        		Item i = new Item();
-		        		
-			        	arguments.add(itemString);
-			        	arguments.add(qtyString);
-			        	arguments.add(i.isChecked());
+		        	arguments.add(itemString);
+		        	arguments.add(qtyString);
+		        	arguments.add(i.isChecked());
 		        	
 					iListItController.handleMessage(ListItController.MESSAGE_ADD_ITEM, arguments);
 					iItemText.requestFocus();
@@ -385,63 +370,83 @@ public class ListItActivity extends TabActivity
    	{
    		final String itemName = aItem.getName();
 		final String quantity = aItem.getQuantity();
-		if(!(TextUtils.isEmpty(itemName)))
+		
+		if( (TextUtils.isEmpty(itemName)) )
 		{
-			LayoutInflater factory = LayoutInflater.from(ListItActivity.this);            
-	        final View textEntryView = factory.inflate(R.layout.edit_dialog, null);
+			return;
+		}
+			
+		LayoutInflater factory = LayoutInflater.from(ListItActivity.this);            
+        final View textEntryView = factory.inflate(R.layout.edit_dialog, null);
 
-	        AlertDialog.Builder alert = new AlertDialog.Builder(ListItActivity.this);
-	        final AutoCompleteTextView inputItem = (AutoCompleteTextView) textEntryView.findViewById(R.id.itemEditText);
-	        inputItem.setAdapter(iSuggestedItemAdapter);
-	        
-	        final EditText inputQty = (EditText) textEntryView.findViewById(R.id.qtyEditText);
-	        	 
-	        alert.setTitle(getString(R.string.edit_item)); 
-	        
-	        inputItem.setText(itemName);
-	        inputItem.setSelection(itemName.length());
-	        inputQty.setText(quantity);
-	        
-	        // Set an EditText view to get user input  
-	        alert.setView(textEntryView); 
-	       
-	        alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() 
+        AlertDialog.Builder alert = new AlertDialog.Builder(ListItActivity.this);
+        final AutoCompleteTextView inputItem = (AutoCompleteTextView) textEntryView.findViewById(R.id.itemEditText);
+        inputItem.setAdapter(iSuggestedItemAdapter);
+        
+        final EditText inputQty = (EditText) textEntryView.findViewById(R.id.qtyEditText);
+        	 
+        alert.setTitle(getString(R.string.edit_item)); 
+        
+        inputItem.setText(itemName);
+        inputItem.setSelection(itemName.length());
+        inputQty.setText(quantity);
+        
+        // Set an EditText view to get user input  
+        alert.setView(textEntryView); 
+       
+        alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() 
+        { 
+	        public void onClick(DialogInterface dialog, int whichButton) 
 	        { 
-		        public void onClick(DialogInterface dialog, int whichButton) 
-		        { 
-		        	String iNewItemName = 	inputItem.getText().toString().trim();
-		        	String iNewQty = 		inputQty.getText().toString();
-		        	if(!TextUtils.isEmpty(iNewItemName))
-		        	{
-			        	ArrayList<Object> arguments = new ArrayList<Object>();
-			        	arguments.add(getApplicationContext());
-			        	arguments.add(iCurrentListName);
-			        	Item oldData = new Item(aRowId,itemName, quantity);
-			        	arguments.add(oldData);
-			        	Item newData = new Item(aRowId, iNewItemName, iNewQty);
-			        	arguments.add(newData);
-			        	iListItController.handleMessage(ListItController.MESSAGE_EDIT_ITEM, 
-								arguments);	
-		        	}
-		        	else
-		        	{
-		        		ShowEditItemListDialog(aItem,aRowId);
-		        		iNewItemName = "";
-		        		iNewQty = "";
-		        		Toast.makeText(getApplicationContext(), getString(R.string.add_button_toast), Toast.LENGTH_SHORT).show();
-		        	}
-		        } 
-	        });  
-	        
-	        alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() { 
-	          public void onClick(DialogInterface dialog, int whichButton) { 
-	            // Canceled. 
-	          } 
-	        }); 
-	        
-	        alert.show(); 
-			}
-  }
+	        	String iNewItemName = inputItem.getText().toString().trim();
+	        	String iNewQty      = inputQty.getText().toString();
+	        	boolean emptyText   = TextUtils.isEmpty(iNewItemName);
+	        	boolean invalidQty  = !ValidateQuantity(iNewQty);
+	        	
+	        	// Valid case
+	        	if( !emptyText && !invalidQty )
+	        	{
+	        		ArrayList<Object> arguments = new ArrayList<Object>();
+		        	arguments.add(getApplicationContext());
+		        	arguments.add(iCurrentListName);
+		        	Item oldData = new Item(aRowId, itemName, quantity);
+		        	arguments.add(oldData);
+		        	iNewQty = StripOffZeros(iNewQty);
+		        	Item newData = new Item(aRowId, iNewItemName, iNewQty);
+		        	arguments.add(newData);
+		        	iListItController.handleMessage(ListItController.MESSAGE_EDIT_ITEM, 
+													arguments);	
+		        	return;
+	        	}
+	        	
+	        	// Invalid case.
+	        	String  message = "";
+	        	
+	        	if( emptyText )
+	        	{
+	        		message = getString(R.string.add_button_toast);
+	        	}
+	        	else if( invalidQty )
+	        	{
+	        		message = getString(R.string.invalid_qty_toast);
+	        	}
+        	
+	        	ShowEditItemListDialog(aItem,aRowId);
+        		iNewItemName = "";
+        		iNewQty = "";
+        		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+	        } 
+        });  
+        
+        alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() { 
+          public void onClick(DialogInterface dialog, int whichButton) { 
+            // Canceled. 
+          } 
+        }); 
+        
+        alert.show(); 
+	}
+
 	/*	Method:		Item List Change Observer for displaying the last item in the list to the use always
 		parameter:
 		returns :	void
@@ -659,7 +664,7 @@ public class ListItActivity extends TabActivity
 	*/
    public void EditListNames(ArrayList<String> aListNames)
    {
-	   String oldListName = aListNames.get(0);
+	    String oldListName = aListNames.get(0);
   		String newListName = aListNames.get(1);
   		String date = aListNames.get(2);
 		
@@ -1036,43 +1041,32 @@ public class ListItActivity extends TabActivity
 		}
 		else
 		{
-			if(qtyString.length()!=0)
+			// If invalid quantity format, then ask again!
+			if( !ValidateQuantity( qtyString ) )
 			{
-				String[] splitWords =  qtyString.split("\\.");
-				if(splitWords.length > 2)
-				{
-					Toast.makeText(getApplicationContext(),"Invalid Quantity", Toast.LENGTH_SHORT).show();
-					iQuantityText.requestFocus();
-				}
-				else if(splitWords.length==1)
-    			{
-    				String repString = splitWords[0].replaceFirst("^0+(?!$)", "");
-    				qtyString = repString;
-    			}
-    			else
-    			{
-    				String repString = splitWords[0].replaceFirst("^0+(?!$)", "");
-    				int decimalValue = Integer.parseInt(splitWords[1]);
-    				if(decimalValue==0)
-    					qtyString = repString;
-    				else
-    					qtyString = repString+"."+ Integer.toString(decimalValue);
-    			}
-				
+				Toast.makeText(getApplicationContext(),"Invalid Quantity", Toast.LENGTH_SHORT).show();
+				iQuantityText.requestFocus();
+				return;
+			}
+			else 
+			{
+				qtyString = StripOffZeros(qtyString);
+			}
 		}
 		
-		
+		// Now, everything is good, add the item. 
 		Item i = new Item( iItemText.getText().toString(), 
-							qtyString.toString());		
+							qtyString.toString() );		
 		iItems.add(i);
 		iItemAdapter.notifyDataSetChanged();
-		Toast.makeText(getApplicationContext(), getString(R.string.added_to_list) +" "+ iCurrentListName, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), getString(R.string.added_to_list) +" "+ iCurrentListName, 
+				       Toast.LENGTH_SHORT).show();
 		
 		// Now reset the editors
 		iItemText.setText("");
-        iQuantityText.setText("");
-		}
+        iQuantityText.setText(""); 
 	}
+
 	/* Method to update the checkBox in Item List
 		parameter: Item contains the row details checked
 		returns : void*/
@@ -1091,13 +1085,52 @@ public class ListItActivity extends TabActivity
 
 
 	
-public Object onRetainNonConfigurationInstance() {
-	ArrayList<Object> arguments = new ArrayList<Object>();
-	arguments.add(iItems);
-	arguments.add(iSavedLists);
-	 
-    return arguments ;
-  }
+	public Object onRetainNonConfigurationInstance() {
+		ArrayList<Object> arguments = new ArrayList<Object>();
+		arguments.add(iItems);
+		arguments.add(iSavedLists);
+		 
+	    return arguments ;
+	}
+	
+	private String StripOffZeros( String aValue ) 
+	{
+		Double d = Double.parseDouble(aValue);
+		
+		return Double.toString( d );
+	}
+	
+	private boolean ValidateQuantity( String aQuantityStr )
+	{
+		if( aQuantityStr.length() > 0 )
+		{
+			// If the number contains more than 2 dots, then invalid. 
+			String[] splitWords =  aQuantityStr.split("\\.");
+			
+			if(splitWords.length > 2)
+			{
+				return false;
+			}
+			
+			double dValue = 0;
+			
+			// Parse the double, if invalid, catch the exception and return invalid. 
+			try {
+				dValue = Double.parseDouble(aQuantityStr);
+			}
+			catch(Exception e) {
+				return false;
+			}
+			
+			// If -ve, then it doesn't make sense in our case, so invalid. 
+			if( dValue < 0 )
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
 
 }

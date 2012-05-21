@@ -43,7 +43,7 @@ public class ListItController extends Controller
 		UpdatingListPos
 	}
 	
-	private ListItModel		iModel;
+	private ListItModel				iModel;
 	private State					iState;
 	private OnControllerObserver	iCurrentView;
 	
@@ -61,7 +61,6 @@ public class ListItController extends Controller
 	@Override
 	public void dispose() {
 		super.dispose();
-		
 	}
 	
 	
