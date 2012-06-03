@@ -7,13 +7,13 @@ public class Item
     private String iItemDesc = "";
     private String iQuantity = "";
     private boolean iChecked = false;
-    private int iRowId;
+    private int iRowId; // Row Id is 1-based and not 0-based. 
     
     public Item() 
     {	 
     }
     
-    public Item( String aItemDesc ) 
+    /*public Item( String aItemDesc ) 
     {
     	iItemDesc = aItemDesc;
     }
@@ -36,7 +36,7 @@ public class Item
 	      iItemDesc = aItemDesc;
 	      iQuantity = aQuantity;
 	      iChecked = aChecked;
-	}
+	}*/
     
     public Item( int aRowId, String aItemDesc, String aQuantity, boolean aChecked ) 
     {
@@ -51,8 +51,15 @@ public class Item
     	  iRowId = aRowId;
 	      iItemDesc = aItemDesc;
 	      iQuantity = aQuantity;
-	     
 	}
+    
+    public Item( Item aItem )
+    {
+    	iRowId    = aItem.iRowId;
+    	iItemDesc = aItem.iItemDesc;
+    	iQuantity = aItem.iQuantity;
+    	iChecked  = aItem.iChecked;
+    }
     
     public int getRowId() 
 	{
