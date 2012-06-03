@@ -8,7 +8,7 @@ import com.android.listit.SavedItem;
 public interface ModelObserver<T> 
 {
 	void onChange(T model);
-	void ModelCallback(int aMessageId);
+	void ModelCallback(final int aMessageId, final Object aMessageData);
 	void HandleLists(ArrayList<SavedItem> aListNames);
 	void DeleteItemFromList(ArrayList<Object> aListItem);
 	void DeleteSavedList(String aListName);
@@ -16,4 +16,5 @@ public interface ModelObserver<T>
 	void EditItemList(ArrayList<Item> aObj);
 	void EditListNames(ArrayList<String> aObj);
 	void UpdateItemPosition(ArrayList<Item> aObj);
+	void UpdateItemChecked(Item aItem);
 }

@@ -12,11 +12,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 /** Custom adapter for displaying an array of objects. */
 public class ItemListAdapter extends ArrayAdapter<Item> 
-{
-  
+{ 
 	private LayoutInflater inflater;
 	private ListItActivity iActivity;
 	
@@ -25,27 +23,28 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	 * you change the color in the resource
 	 */
 	
-	private static final int backgroundColor = 0x002C89A0;
-	private static final int whiteColor 	 = 0xFFFFFFFF;
-	private static final int foregroundColor = whiteColor - backgroundColor; //0xFFD45700;
-	private static final int strikeoutColor  = 0xFF676767;
-  
+	public static final int backgroundColor = 0x002C89A0;
+	public static final int whiteColor 	    = 0xFFFFFFFF;
+	public static final int foregroundColor = whiteColor - backgroundColor; //0xFFD45700;
+	public static final int strikeoutColor  = 0xFF676767;
+	
 	public ItemListAdapter( ListItActivity aActivity, List<Item> ItemList ) 
 	{
 	    super( aActivity, R.layout.simplerow, R.id.rowTextView, ItemList );
 	    
 	    // Cache the LayoutInflate to avoid asking for a new one each time.
 	    iActivity = aActivity; 
-	    inflater = LayoutInflater.from(iActivity) ;
-	       	
+	    inflater = LayoutInflater.from(iActivity);
 	}
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) 
 	{
 	    // Item to display
-	    final Item i= (Item) getItem( position ); 
-	    final Item item = new Item(position+1,i.getName(), i.getQuantity(),i.isChecked());
+		final Item item = new Item( (Item) getItem( position ) );
+		
+		// NOTE: position indexing in database is 1-based. But adapter array indexing is 0-based. 
+	    item.setRowId( position + 1 );
 
 	    // The child views in each row.
 	    CheckBox checkBox;
@@ -68,27 +67,20 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	    	delButton = (Button)   convertView.findViewById( R.id.deleteButton);     
       
 	    	// Optimization: Tag the row with it's child views, so we don't have to 
-	    	// call findViewById() later when we reuse the row.	    	
+	    	// call findViewById() later when we reuse the row.	
+	    	convertView.setTag( new ItemListRowView(dragView, checkBox, textView, qtyView,delButton) );
 	    	
-    	  	
-	    	convertView.setTag( new ItemListRowView(dragView, checkBox, textView, qtyView,delButton) );    	  
-    	  	//CheckBox on click listner
+    	  	//CheckBox on click listener
 	  		checkBox.setOnClickListener( new View.OnClickListener() 
 	  		{
 	  			public void onClick(View v) 
 	  			{
-		            CheckBox cb = (CheckBox) v ;
-		           		            
-		            Item i = (Item) cb.getTag();
-		            
-		            i.setChecked( cb.isChecked() );
-		            
-		            strikeOut(textView, qtyView, cb.isChecked());
-		            
-		            Item iItem = new Item(i.getRowId(), i.getName(), i.getQuantity(),cb.isChecked());
+		            CheckBox cb = (CheckBox) v;
+		            Item item = (Item) cb.getTag();
+		            item.setChecked( cb.isChecked() );
 		            
 		            //update database and view
-		            iActivity.UpdateCheckBox(iItem);
+		            iActivity.UpdateCheckBox(item);
 	  			}
 	  		});    	  	   
       
@@ -119,7 +111,6 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	    	qtyView =   viewHolder.getQtyView();
 	    	delButton = viewHolder.getButton();
 	    }
-	    
 	      
 	    // Tag the CheckBox with the item it is displaying, so that we can
 	    // access the item in onClick() when the CheckBox is toggled.
@@ -130,7 +121,6 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	    strikeOut(textView, qtyView, item.isChecked());
 	    
 	    // delete button
-	    
 	    delButton.setTag(item);
 	    delButton.setClickable(true);
     
@@ -146,7 +136,7 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 		 iActivity.deleteItem(listItem, itemPos);   	
 	}
 	
-	private void strikeOut(TextView aTV, TextView aQV, boolean aShouldStrikeOut)
+	public void strikeOut(TextView aTV, TextView aQV, boolean aShouldStrikeOut)
 	{
 		if( aShouldStrikeOut )
 		{

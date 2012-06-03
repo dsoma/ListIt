@@ -87,7 +87,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		return -1;
 	}
 	
-	public int UpdateCheckBox(Context aContext, String aTableName,Item aItem)
+	public int UpdateCheckBox(Context aContext, String aTableName, Item aItem)
 	{
 		if( TextUtils.isEmpty(aTableName) )
 			return -1;
@@ -106,7 +106,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 			
 			if( errorCode1 == SUCCESS && errorCode2 == SUCCESS )
 			{
-				this.notifyObservers(MESSAGE_CHECKED_UPDATED, null);
+				this.notifyObservers(MESSAGE_CHECKED_UPDATED, aItem);
 			}
 		}
 		
@@ -283,7 +283,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 				
 			if(errorCode == SUCCESS)
 			{
-				notifyObservers(MESSAGE_LIST_EDITED,ListNames);
+				notifyObservers(MESSAGE_LIST_EDITED, ListNames);
 				
 				return SUCCESS;	
 			}

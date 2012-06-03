@@ -23,34 +23,12 @@ public class ListItController extends Controller
 	public static final int MESSAGE_EDIT_LIST = 11;
 	public static final int MESSAGE_UPDATE_LIST_POS = 12;
 	
-	/* All the ids of the messages that the view could display on the screen */
-	public static final int DUPLICATE_LIST = 1;
-	
-	/* States that the controller can be in */
-	private enum State 
-	{
-		Idle,
-		AddingList,
-		AddingItem,
-		LoadingList,
-		DeletingItem,
-		DeletingList,
-		LoadingItem,
-		UpdatingChecked,
-		EditingItem,
-		EditingList,
-		UpdatingItemPos,
-		UpdatingListPos
-	}
-	
 	private ListItModel				iModel;
-	private State					iState;
 	private OnControllerObserver	iCurrentView;
 	
 	public ListItController( ListItModel aModel )
 	{
 		iModel = aModel;
-		iState = State.Idle;
 	}
 	
 	public void setCurrentView( OnControllerObserver aView )
@@ -73,172 +51,148 @@ public class ListItController extends Controller
 		{
 			case  MESSAGE_ADD_ITEM:
 			{
-			
 				// If there is no list, then create a list first. 
 				// Otherwise, just add an item. 
 				
 				if(((ArrayList<Object>)aData).get(1)=="")
 				{
-					iState = State.AddingList;
 					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_LIST_NAME);
 				}
 				else
 				{
-					iState = State.AddingItem;
-					
 					ArrayList<Object> arguments = (ArrayList<Object>)aData;
 					if((arguments.size())>2)
 					{
-						Item i = new Item((String) arguments.get(2), (String) arguments.get(3), (Boolean) arguments.get(4));
+						Item i = new Item((Integer) arguments.get(5), (String) arguments.get(2), 
+								          (String) arguments.get(3), (Boolean) arguments.get(4));
 						iModel.InsertItem((Context) arguments.get(0), (String) arguments.get(1),i);
 					}
-					iState = State.Idle;	
 					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_ITEM);
 				}
 				
 				break;
 			}
 			
+			case MESSAGE_ADD_LIST:
+			{
+				iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_LIST_NAME);
+				break;
+			}
+			
 			case MESSAGE_SET_LIST_NAME:
 			{
-				if( iState == State.AddingList )
+				boolean status = true;
+				ArrayList<Object> arguments = (ArrayList<Object>) aData;
+				Boolean duplicateListFound = iModel.CheckDuplicateLists((Context) arguments.get(0), (String) arguments.get(1));
+				
+				// Unique name, so create a list and prompt for new items. 
+				if (!duplicateListFound)
 				{
-					ArrayList<Object> arguments = (ArrayList<Object>) aData;
-					Boolean listFound = iModel.CheckDuplicateLists((Context) arguments.get(0), (String) arguments.get(1));
-					if (!listFound)
+					iModel.CreateList( (Context) arguments.get(0), (String) arguments.get(1));
+					if((arguments.size())>3)
 					{
-						iModel.CreateList( (Context) arguments.get(0), (String) arguments.get(1));
-						iState = State.AddingItem;	
-						if((arguments.size())>3)
-						{
-							Item i = new Item((String) arguments.get(2), (String) arguments.get(3), (Boolean) arguments.get(4));
-							iModel.InsertItem((Context) arguments.get(0), (String) arguments.get(1),i);
-						}
+						Item i = new Item((Integer) arguments.get(5), (String) arguments.get(2), 
+										  (String) arguments.get(3), (Boolean) arguments.get(4));
 						
-						iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_ITEM);																									
+						iModel.InsertItem((Context) arguments.get(0), (String) arguments.get(1), i);
 					}
-					else
-					{
-						iCurrentView.DisplayMessage(DUPLICATE_LIST, null);
-						iState = State.AddingList;
-						listFound = false;
-						iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_LIST_NAME);
-					}
+					
+					// Notify to clear the current list items first. 
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_CLEAR_LIST);
+					
+					// Notify to update the UI by adding new item to the array. 
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_ITEM);	
+					status = true;
 				}
-				break;
+				// Duplicate name, so notify the observer to handle it. 
+				else
+				{
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_HANDLE_DUPLICATE_LIST_NAME);
+					status = false;
+				}
+				
+				return status;
 			}
 			case MESSAGE_LOAD_LIST:
 			{
-				iState = State.LoadingList;
-				
 				iModel.LoadSavedLists( (Context) aData );
-				
-				iState = State.Idle;
 				break;
 			}
 			case MESSAGE_DELETE_ITEM:
 			{
-				iState = State.DeletingItem;
-				
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				
 				iModel.DeleteItem((Context) arguments.get(0), (String) arguments.get(1), (String) arguments.get(2), (Integer) arguments.get(3));
-				
-				iState = State.Idle;
 				break;
 			}
 			case MESSAGE_DELETE_LIST:
 			{
-				iState = State.DeletingList;
-				
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				
 				iModel.DeleteList((Context) arguments.get(0), (String) arguments.get(1));
-				
-				iState = State.Idle;
 				
 				break;
 			}
 			case MESSAGE_LOAD_ITEM:
 			{
-				iState = State.LoadingItem;
-				
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				
 				iModel.LoadSavedListItems( (Context) arguments.get(0),(String) arguments.get(1) );
-				
-				iState = State.Idle;
 				
 				break;
 			}
 			
 			case MESSAGE_UPDATE_CHECKED:
 			{
-				iState = State.UpdatingChecked;
-				
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				
 				iModel.UpdateCheckBox( (Context) arguments.get(0),(String) arguments.get(1),(Item)arguments.get(2));
-				
-				iState = State.Idle;
 				
 				break;
 			}
 			case MESSAGE_EDIT_ITEM:
 			{
-				iState = State.EditingItem;
-				
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 								
 				iModel.EditItem( (Context) arguments.get(0),(String) arguments.get(1),(Item)arguments.get(2), (Item)arguments.get(3));
-				
-				iState = State.Idle;
 				
 				break;
 			}
 			case MESSAGE_EDIT_LIST:
 			{
-				iState = State.EditingList;
-				
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				
-				Boolean listFound = iModel.CheckDuplicateLists((Context) arguments.get(0), (String) arguments.get(2));
+				Boolean duplicateListFound = iModel.CheckDuplicateLists((Context) arguments.get(0), (String) arguments.get(2));
 				
-				if (!listFound)
+				boolean status = true;
+				
+				// If unique name is provided, change the name in the database. 
+				if (!duplicateListFound)
 				{
 					iModel.EditList( (Context) arguments.get(0),(String) arguments.get(1),(String)arguments.get(2));
 				}
+				// If duplicate name is provided, notify the observer to handle it. 
 				else
 				{
-					iCurrentView.DisplayMessage(DUPLICATE_LIST,(String) arguments.get(1));
-					listFound = false;
-					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_EDIT_LIST_NAME);
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_HANDLE_DUPLICATE_EDIT_LIST);
+					status = false;
 				}
-				iState = State.Idle;
 				
-				break;
+				return status;
 			}
 			case MESSAGE_UPDATE_ITEM_POS:
 			{
-				iState = State.UpdatingItemPos;
-				
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				
 				iModel.UpdateItemPosition( (Context) arguments.get(0),(String) arguments.get(1),(Integer)arguments.get(2), (Integer)arguments.get(3));
-				
-				iState = State.Idle;
 				
 				break;
 			}
 			case MESSAGE_UPDATE_LIST_POS:
 			{
-				iState = State.UpdatingListPos;
-				
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				
 				iModel.UpdateListPosition( (Context) arguments.get(0),(String)arguments.get(1), (Integer)arguments.get(2), (Integer)arguments.get(3));
-				
-				iState = State.Idle;
 				
 				break;
 			}

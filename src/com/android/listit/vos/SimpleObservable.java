@@ -30,13 +30,14 @@ public class SimpleObservable<T> implements EasyObservable<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void notifyObservers(final int aMessageId, Object aObj) {
+	protected void notifyObservers(final int aMessageId, final Object aObj) {
 		synchronized (observers) {
 			for (ModelObserver<T> observer : observers) 
 			{
 				switch( aMessageId )
 				{
-					default: observer.ModelCallback(aMessageId); break;
+					default: observer.ModelCallback(aMessageId, aObj); break;
+					
 					case ListItModel.MESSAGE_LISTS_LOADED: 
 					{
 						observer.HandleLists( (ArrayList<SavedItem>) aObj );
@@ -70,6 +71,11 @@ public class SimpleObservable<T> implements EasyObservable<T> {
 					case ListItModel.MESSAGE_ROW_POS_UPDATED:
 					{
 						observer.UpdateItemPosition((ArrayList<Item>) aObj);
+						break;
+					}
+					case ListItModel.MESSAGE_CHECKED_UPDATED:
+					{
+						observer.UpdateItemChecked( (Item) aObj );
 						break;
 					}
 					
