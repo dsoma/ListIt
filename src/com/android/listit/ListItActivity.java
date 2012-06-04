@@ -1151,7 +1151,12 @@ public class ListItActivity extends TabActivity
 		if( aValue.length() > 0 )
 		{
 			Double d = Double.parseDouble(aValue);
-			return Double.toString( d );
+			String s = Double.toString( d );
+			if( s.contains("E") )
+			{
+				s = ConvertExponentDoubleToString(s);
+			}
+			return s;
 		}
 		
 		return aValue;
@@ -1194,6 +1199,32 @@ public class ListItActivity extends TabActivity
 		if( TextUtils.isEmpty(aItemText.trim()) )
 			return false;
 		return true;
+	}
+	
+	private String ConvertExponentDoubleToString(String aNumber)
+	{
+		String resultStr = "";
+		
+		String[] parts = aNumber.split("E");
+		String[] leftParts = (parts[0]).split("\\.");
+		String num = "";
+		if( leftParts.length > 0 )
+			num = leftParts[0] + leftParts[1];
+		
+		Integer exp = Integer.parseInt( parts[1] );
+		int s = Integer.signum( exp.intValue() );
+		if( s < 0 ) 
+		{
+			resultStr = "0.";
+			exp = exp * -1;
+			for(int i = 1; i < exp.intValue(); i++)
+			{
+				resultStr += "0";
+			}
+			resultStr += num;
+		}
+		
+		return resultStr;
 	}
 }
 
