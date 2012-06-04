@@ -1,6 +1,6 @@
 package com.android.listit;
 
-/* This class acts as a datastructure to hold the Item List Tab*/
+/* This class acts as a data structure to hold the Item List Tab*/
 
 public class Item 
 {
@@ -12,31 +12,6 @@ public class Item
     public Item() 
     {	 
     }
-    
-    /*public Item( String aItemDesc ) 
-    {
-    	iItemDesc = aItemDesc;
-    }
-    
-    public Item( String aItemDesc, String aQuantity ) 
-    {
-	      iItemDesc = aItemDesc;
-	      iQuantity = aQuantity;
-	}
-    
-    public Item( String aItemDesc, String aQuantity, int aChecked ) 
-    {
-	      iItemDesc = aItemDesc;
-	      iQuantity = aQuantity;
-	      iChecked = (aChecked != 0 ) ? true : false;
-	}
-    
-    public Item( String aItemDesc, String aQuantity, boolean aChecked ) 
-    {
-	      iItemDesc = aItemDesc;
-	      iQuantity = aQuantity;
-	      iChecked = aChecked;
-	}*/
     
     public Item( int aRowId, String aItemDesc, String aQuantity, boolean aChecked ) 
     {

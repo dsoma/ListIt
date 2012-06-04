@@ -277,7 +277,10 @@ public class ListItActivity extends TabActivity
 	        		arguments.add(itemString);
 		        	arguments.add(qtyString);
 		        	arguments.add(false);
-		        	arguments.add(iItems.size());
+		        	
+		        	// Item hasn't yet been added to the list. 
+		        	// So size() would return one less. 
+		        	arguments.add(iItems.size() + 1);
 		        	
 					iListItController.handleMessage(ListItController.MESSAGE_ADD_ITEM, arguments);
 					iItemText.requestFocus();
@@ -718,7 +721,10 @@ public class ListItActivity extends TabActivity
 			        	arguments.add(iItemText.getText().toString());
 			        	arguments.add(qtyTextStr);
 			        	arguments.add(false);
-			        	arguments.add(iItems.size());
+			        	
+			        	// Item hasn't yet been added to the list. 
+			        	// So size() would return one less. 
+			        	arguments.add(iItems.size() + 1);
 		        	}
 		        	
 		        	// If the list name is found to be duplicate, then we should not 
