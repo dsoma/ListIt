@@ -54,7 +54,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 			
 			if( errorCode1 == SUCCESS && errorCode2==SUCCESS )
 			{
-				this.notifyObservers(MESSAGE_LIST_CREATED, null);
+				this.notifyObservers(MESSAGE_LIST_CREATED, aListName);
 			}
 		}
 		
@@ -80,7 +80,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 			
 			if( errorCode1 == SUCCESS && errorCode2 ==SUCCESS)
 			{
-				this.notifyObservers(MESSAGE_LIST_CREATED, null);
+				this.notifyObservers(MESSAGE_LIST_CREATED, aTableName);
 			}
 		}
 		

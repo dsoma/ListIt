@@ -844,7 +844,11 @@ public class ListItActivity extends TabActivity
 		{
 			case ListItModel.MESSAGE_LIST_CREATED:
 			{
-				updateTitle(iSavedData.iCurrentListName);
+				if(aMessageData != null)
+					updateTitle((String) aMessageData);
+				else
+					updateTitle("");
+				
 				break;
 			}
 			case ListItModel.MESSAGE_LIST_POS_UPDATED:
@@ -858,7 +862,7 @@ public class ListItActivity extends TabActivity
 		parameter:	int, messageId.
 		returns :	void
 	*/
-   	public void ControllerCallback(int aMessageId)
+   	public void ControllerCallback(int aMessageId, Object aData)
    	{
    		switch(aMessageId)
 		{
@@ -867,9 +871,11 @@ public class ListItActivity extends TabActivity
 				ShowGetListNameDialog();
 				break;
 			}
-			case MESSAGE_GET_ITEM:
-			{	        	
-				GetNewItemFromUser();
+			case MESSAGE_ADD_ITEM_TO_VIEW:
+			{
+				if( aData != null )
+					AddItemInView( (Item) aData );
+				
 				break;
 			}
 			case MESSAGE_EDIT_LIST_NAME:
@@ -901,6 +907,12 @@ public class ListItActivity extends TabActivity
 					iItems.clear();
 					iItemAdapter.notifyDataSetChanged();
 				}
+				break;
+			}
+			case MESSAGE_UPDATE_TITLE:
+			{
+				if( aData != null )
+					updateTitle( (String) aData );
 				break;
 			}
 		}
@@ -1063,50 +1075,17 @@ public class ListItActivity extends TabActivity
 	private void updateTitle(String aTitle)
 	{
 		if(!TextUtils.isEmpty(aTitle))
-			setTitle(getApplicationContext().getString(R.string.app_name)+" : " + aTitle);
+			this.setTitle(getApplicationContext().getString(R.string.app_name)+" : " + aTitle);
 		else
 			setTitle(getApplicationContext().getString(R.string.app_name));
 	}
 
-	/*	Method:		Observer callback to get the input from user
-		parameter:	NULL
-		returns :	void
-	*/
-	
-	private void GetNewItemFromUser()
+	public void AddItemInView(Item aNewItem)
 	{
-		// If Item is not entered, do not add an item entry.
-		// Force the user to add an item text. 
-		String qtyString = iQuantityText.getText().toString().trim();
-		
-		if( !ValidateItem(iItemText.getText().toString()) )
-		{
-			Toast.makeText(getApplicationContext(), getString(R.string.itemname), Toast.LENGTH_SHORT).show();
-			return;
-		}
-		else
-		{
-			// If invalid quantity format, then ask again!
-			if( !ValidateQuantity( qtyString ) )
-			{
-				Toast.makeText(getApplicationContext(), getString(R.string.invalid_qty_toast), Toast.LENGTH_SHORT).show();
-				iQuantityText.requestFocus();
-				return;
-			}
-			else 
-			{
-				qtyString = StripOffZeros(qtyString);
-			}
-		}
-		
-		// Now, everything is good, add the item. 
-		Item i = new Item( iItems.size(), 
-						   iItemText.getText().toString(), 
-						   qtyString.toString() );		
-		iItems.add(i);
+		iItems.add(aNewItem);
 		iItemAdapter.notifyDataSetChanged();
 		Toast.makeText(getApplicationContext(), getString(R.string.added_to_list) /*+" "+ iSavedData.iCurrentListName*/, 
-				       Toast.LENGTH_SHORT).show();
+			           Toast.LENGTH_SHORT).show();
 		
 		// Now reset the editors
 		iItemText.setText("");

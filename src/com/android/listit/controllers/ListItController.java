@@ -56,7 +56,7 @@ public class ListItController extends Controller
 				
 				if(((ArrayList<Object>)aData).get(1)=="")
 				{
-					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_LIST_NAME);
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_LIST_NAME, null);
 				}
 				else
 				{
@@ -65,9 +65,11 @@ public class ListItController extends Controller
 					{
 						Item i = new Item((Integer) arguments.get(5), (String) arguments.get(2), 
 								          (String) arguments.get(3), (Boolean) arguments.get(4));
+						
 						iModel.InsertItem((Context) arguments.get(0), (String) arguments.get(1),i);
+						
+						iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_ADD_ITEM_TO_VIEW, i);
 					}
-					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_ITEM);
 				}
 				
 				break;
@@ -75,7 +77,7 @@ public class ListItController extends Controller
 			
 			case MESSAGE_ADD_LIST:
 			{
-				iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_LIST_NAME);
+				iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_LIST_NAME, null);
 				break;
 			}
 			
@@ -83,31 +85,38 @@ public class ListItController extends Controller
 			{
 				boolean status = true;
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
-				Boolean duplicateListFound = iModel.CheckDuplicateLists((Context) arguments.get(0), (String) arguments.get(1));
+				String listName = (String) arguments.get(1);
+				Boolean duplicateListFound = iModel.CheckDuplicateLists((Context) arguments.get(0), listName);
 				
 				// Unique name, so create a list and prompt for new items. 
 				if (!duplicateListFound)
 				{
 					iModel.CreateList( (Context) arguments.get(0), (String) arguments.get(1));
-					if((arguments.size())>3)
+					
+					// Notify to clear the current list items first. 
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_CLEAR_LIST, null);
+					
+					// Notify to update the title of the current list to this new list
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_UPDATE_TITLE, listName);
+					
+					// If the item was sent along with the message, add it to the database. 
+					if( arguments.size() > 2 )
 					{
 						Item i = new Item((Integer) arguments.get(5), (String) arguments.get(2), 
 										  (String) arguments.get(3), (Boolean) arguments.get(4));
 						
 						iModel.InsertItem((Context) arguments.get(0), (String) arguments.get(1), i);
+						
+						// Notify to update the UI by adding new item to the array. 
+						iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_ADD_ITEM_TO_VIEW, i);	
 					}
 					
-					// Notify to clear the current list items first. 
-					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_CLEAR_LIST);
-					
-					// Notify to update the UI by adding new item to the array. 
-					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_GET_ITEM);	
 					status = true;
 				}
 				// Duplicate name, so notify the observer to handle it. 
 				else
 				{
-					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_HANDLE_DUPLICATE_LIST_NAME);
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_HANDLE_DUPLICATE_LIST_NAME, listName);
 					status = false;
 				}
 				
@@ -161,20 +170,23 @@ public class ListItController extends Controller
 			case MESSAGE_EDIT_LIST:
 			{
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
+				Context c = (Context) arguments.get(0);
+				String oldListName = (String) arguments.get(1);
+				String newListName = (String) arguments.get(2);
 				
-				Boolean duplicateListFound = iModel.CheckDuplicateLists((Context) arguments.get(0), (String) arguments.get(2));
+				Boolean duplicateListFound = iModel.CheckDuplicateLists(c, newListName);
 				
 				boolean status = true;
 				
 				// If unique name is provided, change the name in the database. 
 				if (!duplicateListFound)
 				{
-					iModel.EditList( (Context) arguments.get(0),(String) arguments.get(1),(String)arguments.get(2));
+					iModel.EditList( c, oldListName, newListName );
 				}
 				// If duplicate name is provided, notify the observer to handle it. 
 				else
 				{
-					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_HANDLE_DUPLICATE_EDIT_LIST);
+					iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_HANDLE_DUPLICATE_EDIT_LIST, newListName);
 					status = false;
 				}
 				
