@@ -13,7 +13,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +43,9 @@ import com.android.listit.vos.ModelObserver;
 public class ListItActivity extends TabActivity 
  						    implements OnTabChangeListener,
  						  		  	   ModelObserver<ListItModel>,
- 						  			   OnControllerObserver
+ 						  			   OnControllerObserver, 
+									   TextWatcher
+ 						  			   
 {
     private TabHost 					iTabHost;
 	private ListItModel 				iListItModel;
@@ -72,6 +76,16 @@ public class ListItActivity extends TabActivity
 	
 	/* All the ids of the messages that the view could display on the screen */
 	public static final int DUPLICATE_LIST = 1;
+	public static final int ENTER_ITEM = 2;
+	public static final int ADD_TO_LIST = 3;
+	public static final int INVALID_QUANTITY = 4;
+	public static final int NAME_A_LIST = 5;
+	public static final int LIST_NAME = 6;
+	
+	/*	Method:		onCreate method of an activity
+		parameter:	
+		returns :	void
+	 */
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -122,6 +136,7 @@ public class ListItActivity extends TabActivity
         
         iQuantityText = (EditText) findViewById(R.id.editTextQty);
         iQuantityText.setOnEditorActionListener(new DoneOnEditorActionListener());
+ 		iQuantityText.addTextChangedListener(this);
         
         // If it is the creation because of non-configuration changes, 
     	// then let us create everything from the beginning. 
@@ -167,49 +182,27 @@ public class ListItActivity extends TabActivity
         updateTitle( iSavedData.iCurrentListName );
     }
 
-	/*	Method:		Next editor action listener for landscape mode Item list input
-		parameter:	
-		returns :	void
-	*/
 	
-	class NextOnEditorActionListener implements OnEditorActionListener {
-	   
-	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-	        if (actionId == EditorInfo.IME_ACTION_NEXT) {
-	            InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-	            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-	            iQuantityText.requestFocus();
-	            return true;	
-	        }
-	        return false;
-	    }
-	}
-
-	/*	Method:		Done editior action listener for landscape mode Item list input
-		parameter:	
-		returns :	void
-	*/
-	
-	class DoneOnEditorActionListener implements OnEditorActionListener {
-		   
-	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-	        if (actionId == EditorInfo.IME_ACTION_DONE) {
-	            InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-	            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-	            return true;	
-	        }
-	        return false;
-	    }
-	}
 	
 	public void onChange(ListItModel model) 
    	{
+	
 	}
+	/*	Method:		onStart method of an activity 
+	 				called when the activity is about to become visible
+		parameter:	
+		returns :	void
+	 */
    	
    	protected void onStart() 
    	{
     	super.onStart();
     }
+   	/*	Method:		onResume method of an activity
+   	 				called when the activity has become visible
+		parameter:	
+		returns :	void
+   	 */
    	
    	public void onResume()
    	{
@@ -223,23 +216,10 @@ public class ListItActivity extends TabActivity
    		SetupSavedListOnLongPress();
    		SetupNewListButton();
    	}
-
-   	public void onPause()
-   	{
-   		super.onPause();
-   	}
-   	
-   	public void onStop()
-   	{
-   		super.onStop();
-   	}
-   	
-   	public void onDestroy()
-   	{
-   		super.onDestroy();
-   	}
-   
-   /*	Method:		On click listener for Add button
+   	   
+   /*	Method:		Handles Add button click event.
+					Checks for emptiness of an item edit Text and validates quantity.
+					If everything OK, updates the database.Otherwise, display toasts
 		parameter:	
 		returns :	void
 	*/
@@ -261,12 +241,14 @@ public class ListItActivity extends TabActivity
 	        	
 	        	if( !ValidateItem(itemString) )
 	        	{
-	        		Toast.makeText(getApplicationContext(), getString(R.string.add_button_toast), Toast.LENGTH_SHORT).show();
+	        		DisplayMessage(ENTER_ITEM);
+	        		//Toast.makeText(getApplicationContext(), getString(R.string.add_button_toast), Toast.LENGTH_SHORT).show();
 	        	}
 	        	else if( !ValidateQuantity(qtyString) )
         		{
-        			Toast.makeText(getApplicationContext(),getString(R.string.invalid_qty_toast), 
-        						   Toast.LENGTH_SHORT).show();
+	        		DisplayMessage(INVALID_QUANTITY);
+        			//Toast.makeText(getApplicationContext(),getString(R.string.invalid_qty_toast), 
+        			//			   Toast.LENGTH_SHORT).show();
     				iQuantityText.requestFocus();
     				return;
         		}
@@ -291,7 +273,8 @@ public class ListItActivity extends TabActivity
         addButton.setOnClickListener(addButtonOnClickListener);
    	}
    	
-   /*	Method:		on Click listener for an Item
+   /*	Method:		Handles click event on any item in a List View.
+					Edits an item displaying edit dialog.
 		parameter:	
 		returns :	void
 	*/
@@ -323,9 +306,11 @@ public class ListItActivity extends TabActivity
 	*/
    	private void SetupItemListChangeObserver()
    	{
-   		iItemAdapter.registerDataSetObserver(new DataSetObserver() {
+   		iItemAdapter.registerDataSetObserver(new DataSetObserver() 
+		{
             @Override
-            public void onChanged() {
+            public void onChanged() 
+			{
                 super.onChanged();
                 iItemListView.setSelection(iItemAdapter.getCount() - 1);    
             }
@@ -341,6 +326,200 @@ public class ListItActivity extends TabActivity
    		iItemListView.setDropListener(onDrop);
    		iSavedListView.setDropListener(onDrop);
    	}
+	
+	/*	Method:		Handles click event on any List in a List Set.
+					Opens the list of items in a list reading from database.
+		parameter:	
+		returns :	void
+	*/
+   	private void SetupSavedListOnClick()
+   	{
+   		iSavedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() 
+   		{
+   			public void onItemClick( AdapterView<?> aParent, View aItem, 
+   									 int aPosition,long aId ) 
+   			{
+   				if( aPosition < 0 || aPosition >= iSavedLists.size() )
+   					return;
+   				
+   				iSavedData.iCurrentListName = iSavedListAdapter.getItem(aPosition).getName();
+   											
+				ArrayList<Object> arguments = new ArrayList<Object>();
+				
+	        	arguments.add(getApplicationContext());
+	        	arguments.add(iSavedData.iCurrentListName);
+	        	
+				iListItController.handleMessage(ListItController.MESSAGE_LOAD_ITEM, 
+												arguments);				
+							
+   			}
+   		});
+   	}
+   	
+   	/*	Method:		Handles long press event on any List in a List Set.
+					Edits a list displaying dialog.
+					Updates the database with new edited name.
+		parameter:	
+		returns :	void
+	*/
+   	private void SetupSavedListOnLongPress()
+   	{
+   		iSavedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() 
+   		{
+			public boolean onItemLongClick(AdapterView<?> aParent, View aItem,
+										   int aPosition, long aId) 
+			{
+				if( aPosition < 0 || aPosition >= iSavedLists.size() )
+   					return false;
+				
+				SavedItem list = iSavedListAdapter.getItem(aPosition);
+				final String listName = list.getName();
+   				
+				ShowEditListNameDialog(aPosition, listName);
+				return true;
+			}
+		});
+   	}
+   	
+   /*	Method:		Handles click event on New List button.
+					Creates a new List for adding items.
+					
+		returns :	void
+	*/
+   	private void SetupNewListButton()
+   	{
+   		Button newButton = (Button) findViewById(R.id.buttonNew);
+   		
+        View.OnClickListener newButtonOnClickListener = new OnClickListener() 
+        {	
+			public void onClick(View v) 
+			{
+				ArrayList<Object> arguments = new ArrayList<Object>();
+				iListItController.handleMessage(ListItController.MESSAGE_ADD_LIST, 
+	        									arguments);					
+			}
+		};
+		
+		newButton.setOnClickListener(newButtonOnClickListener);
+   	}
+   	
+	/*	Method:		Callback on editing any item in a list.
+					Model callback to modify the View on database modification.
+		parameter:	ArrayList<Item>, Old item and New item details.
+		returns :	void
+	*/
+   	public void EditItemList(ArrayList<Item> aItemNames)
+	{	
+   		Item oldItemContent = aItemNames.get(0);
+   		Item newItemContent = aItemNames.get(1);
+   		
+   		String oldItemName = oldItemContent.getName().toString();
+		int position = oldItemContent.getRowId() - 1;
+		
+		String newItemName = newItemContent.getName().toString();
+		String newItemQty = newItemContent.getQuantity().toString();
+		
+		if( !TextUtils.isEmpty(oldItemName) && 
+			!TextUtils.isEmpty(newItemName) && 
+			position >= 0 && position < iItems.size() )
+		{	
+			iItems.get( position ).setName( newItemName );
+			iItems.get( position ).setQty( newItemQty );
+			iItemAdapter.notifyDataSetChanged();
+		}
+	}
+   
+	/*	Method:		Callback on editing a list from List Set.
+					Model callback to modify the View on database modification.
+		parameter:	ArrayList<String>, Old list Set and New list set details.
+		returns :	void
+	*/
+   public void EditListNames(ArrayList<String> aListNames)
+   {
+	   if( aListNames.size() <= 0 )
+	   {
+		   return;
+	   }
+	   
+	    String oldListName = aListNames.get(0);
+  		String newListName = aListNames.get(1);
+  		String date = aListNames.get(2);
+  		
+  		int position = iSavedData.iCurrentItemPosition;
+		
+		if( !TextUtils.isEmpty(oldListName) && 
+			!TextUtils.isEmpty(newListName) && 
+			position >= 0 && position < iSavedLists.size() )
+		{	
+			SavedItem listName = iSavedLists.get( position );
+			listName.setName(newListName.toString());
+			listName.setDate(date);
+			iSavedLists.set(position, listName);
+				
+		}
+		if(oldListName.contentEquals(iSavedData.iCurrentListName))
+		{
+			updateTitle(newListName);
+			iSavedData.iCurrentListName = newListName;
+		}
+		
+		iSavedListAdapter.notifyDataSetChanged();
+   }
+   	
+  	/*	Method:		Called by Android framework on Tab Change.
+		parameter:	String, tab Name.
+		returns :	void
+	*/
+	public void onTabChanged(String aTabName) 
+	{	
+		if( iTabHost.getCurrentTab() ==  TabId_SavedList )
+		{
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(iTabHost.getApplicationWindowToken(), 0);
+
+			iListItController.handleMessage(ListItController.MESSAGE_LOAD_LIST, 
+					 							  getApplicationContext());
+		}
+	}
+	
+	/*	Method:		Displays Dialog on creation of New List.
+		parameter:	
+		returns :	void
+	*/
+	private void ShowGetListNameDialog()
+	{
+		if( iSavedData != null ) 
+		{
+    		iSavedData.iCurrentDialogId = DIALOG_NEW_LIST;
+    		iSavedData.iListNameDialogEditStr = "";
+    	}
+		
+		showDialog(DIALOG_NEW_LIST);
+	}
+	
+	/*	Method:		Handels edit dialog for edition of a list name..
+		parameter:	String, List set Name to be edited.
+		returns :	void
+	*/
+	
+	public void ShowEditListNameDialog(int aPosition, final String aListName)
+	{
+		if( iSavedData != null )
+		{
+			iSavedData.iEditingListOldName = aListName;
+			iSavedData.iListNameDialogEditStr = aListName;
+			iSavedData.iCurrentDialogId = DIALOG_EDIT_LISTNAME;
+			iSavedData.iCurrentItemPosition = aPosition;
+		}
+		
+		showDialog(DIALOG_EDIT_LISTNAME);
+	}
+	
+	/*	Method:		Callback for creating dialogs.
+					Invoked when showDialog() is called. 
+		parameter:
+		returns :	Dialog
+	*/
    	
    	protected Dialog onCreateDialog(int aDialogId) 
    	{
@@ -375,6 +554,11 @@ public class ListItActivity extends TabActivity
    		
    		return dialog;
    	}
+	
+	/*	Method:		Provides an opportunity to prepare a managed dialog before it is being shown.
+		parameter:
+		returns :	void
+	*/
    	
    	protected void onPrepareDialog(int aDialogId, Dialog aDialog)
    	{
@@ -390,6 +574,13 @@ public class ListItActivity extends TabActivity
 			inputItem.setAdapter(iSuggestedItemAdapter);
 		}
    	}
+	
+	/*	Method:		Invokes custom dialog for editing an Item.
+					Called from CreateDialog().
+					Updates the database with new edited item.
+		parameter:
+		returns :	void
+	*/
    	
    	private Dialog CreateEditItemDialog()
    	{
@@ -438,18 +629,19 @@ public class ListItActivity extends TabActivity
 					 	}
 		 	
 					 	// Invalid case.
-					 	String  message = "";
 					 	
 					 	if( !validItem )
 					 	{
-					 		message = getString(R.string.add_button_toast);
+					 		//message = getString(R.string.add_button_toast);
+					 		  DisplayMessage(ENTER_ITEM);
 					 	}
 					 	else if( !validQty )
 					 	{
-					 		message = getString(R.string.invalid_qty_toast);
+					 		//message = getString(R.string.invalid_qty_toast);
+					 		DisplayMessage(INVALID_QUANTITY);
 					 	}
 			
-					 	Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+					 	//Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 					 	
 					 	removeDialog(DIALOG_EDIT_ITEM);
 					 	showDialog(DIALOG_EDIT_ITEM);
@@ -464,224 +656,13 @@ public class ListItActivity extends TabActivity
 				})
 				.create();
    	}
-   	
-   	/*	Method:		Update the item and List set on position on drag and drop
+	
+	/*	Method:		Invokes custom dialog for creation of a new list.
+					Called from CreateDialog().
+					Updates the database with newly created list name.
 		parameter:
 		returns :	void
 	*/
-   	private TouchListView.DropListener onDrop = new TouchListView.DropListener() 
-   	{
-		public void drop(int from, int to) 
-		{
-			if( from != to )
-			{
-				if(iTabHost.getCurrentTab() == TabId_ItemList)
-				{
-					ArrayList<Object> arguments= new ArrayList<Object>();
-					arguments.add(getApplicationContext());
-		        	arguments.add(iSavedData.iCurrentListName);
-					arguments.add(from);
-					arguments.add(to);
-					
-					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_ITEM_POS, 
-							arguments);
-				}
-				else
-				{
-					SavedItem List=iSavedListAdapter.getItem(from);	
-					
-					ArrayList<Object> arguments= new ArrayList<Object>();
-					arguments.add(getApplicationContext());
-					arguments.add(List.getName());
-					arguments.add(from);
-					arguments.add(to);
-					
-					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_LIST_POS, 
-							arguments);	
-								
-					iSavedListAdapter.remove(List);
-					iSavedListAdapter.insert(List, to);
-				}	
-			}
-		}
-	};
-   	
-	/*	Method:		Update the item List on position change
-		parameter:	ArrayList<Item>, new Item List
-		returns :	void
-	*/
-	
-	public void UpdateItemPosition(ArrayList<Item> aListItem)
-	{
-		iItems.clear();
-		iItems.addAll(aListItem);
-		
-		iItemAdapter.notifyDataSetChanged();
-	}
-	
-	/*	Method:		Tap on List set
-		parameter:	
-		returns :	void
-	*/
-   	private void SetupSavedListOnClick()
-   	{
-   		iSavedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() 
-   		{
-   			public void onItemClick( AdapterView<?> aParent, View aItem, 
-   									 int aPosition,long aId ) 
-   			{
-   				if( aPosition < 0 || aPosition >= iSavedLists.size() )
-   					return;
-   				
-   				iSavedData.iCurrentListName = iSavedListAdapter.getItem(aPosition).getName();
-   											
-				ArrayList<Object> arguments = new ArrayList<Object>();
-				
-	        	arguments.add(getApplicationContext());
-	        	arguments.add(iSavedData.iCurrentListName);
-	        	
-				iListItController.handleMessage(ListItController.MESSAGE_LOAD_ITEM, 
-												arguments);				
-							
-   			}
-   		});
-   	}
-   	
-   	/*	Method:		Long press on any List Set
-		parameter:	
-		returns :	void
-	*/
-   	private void SetupSavedListOnLongPress()
-   	{
-   		iSavedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() 
-   		{
-			public boolean onItemLongClick(AdapterView<?> aParent, View aItem,
-										   int aPosition, long aId) 
-			{
-				if( aPosition < 0 || aPosition >= iSavedLists.size() )
-   					return false;
-				
-				SavedItem list = iSavedListAdapter.getItem(aPosition);
-				final String listName = list.getName();
-   				
-				ShowEditListNameDialog(aPosition, listName);
-				return true;
-			}
-		});
-   	}
-   	
-   /*	Method:		New List button click
-		parameter:	
-		returns :	void
-	*/
-   	private void SetupNewListButton()
-   	{
-   		Button newButton = (Button) findViewById(R.id.buttonNew);
-   		
-        View.OnClickListener newButtonOnClickListener = new OnClickListener() 
-        {	
-			public void onClick(View v) 
-			{
-				ArrayList<Object> arguments = new ArrayList<Object>();
-				iListItController.handleMessage(ListItController.MESSAGE_ADD_LIST, 
-	        									arguments);					
-			}
-		};
-		
-		newButton.setOnClickListener(newButtonOnClickListener);
-   	}
-   	
-	/*	Method:		View modification callback on any item list edit
-		parameter:	ArrayList<Item>, Old item and New item details.
-		returns :	void
-	*/
-   	public void EditItemList(ArrayList<Item> aItemNames)
-	{	
-   		Item oldItemContent = aItemNames.get(0);
-   		Item newItemContent = aItemNames.get(1);
-   		
-   		String oldItemName = oldItemContent.getName().toString();
-		int position = oldItemContent.getRowId() - 1;
-		
-		String newItemName = newItemContent.getName().toString();
-		String newItemQty = newItemContent.getQuantity().toString();
-		
-		if( !TextUtils.isEmpty(oldItemName) && 
-			!TextUtils.isEmpty(newItemName) && 
-			position >= 0 && position < iItems.size() )
-		{	
-			iItems.get( position ).setName( newItemName );
-			iItems.get( position ).setQty( newItemQty );
-			iItemAdapter.notifyDataSetChanged();
-		}
-	}
-   
-	/*	Method:		View modification callback from the model to edit the list name
-		parameter:	ArrayList<String>, Old list Set and New list set details.
-		returns :	void
-	*/
-   public void EditListNames(ArrayList<String> aListNames)
-   {
-	   if( aListNames.size() <= 0 )
-	   {
-		   return;
-	   }
-	   
-	    String oldListName = aListNames.get(0);
-  		String newListName = aListNames.get(1);
-  		String date = aListNames.get(2);
-  		
-  		int position = iSavedData.iCurrentItemPosition;
-		
-		if( !TextUtils.isEmpty(oldListName) && 
-			!TextUtils.isEmpty(newListName) && 
-			position >= 0 && position < iSavedLists.size() )
-		{	
-			SavedItem listName = iSavedLists.get( position );
-			listName.setName(newListName.toString());
-			listName.setDate(date);
-			iSavedLists.set(position, listName);
-				
-		}
-		if(oldListName.contentEquals(iSavedData.iCurrentListName))
-		{
-			updateTitle(newListName);
-			iSavedData.iCurrentListName = newListName;
-		}
-		
-		iSavedListAdapter.notifyDataSetChanged();
-   }
-   	
-  	/*	Method:		Called by framework on Tab Change.
-		parameter:	String, tab Name.
-		returns :	void
-	*/
-	public void onTabChanged(String aTabName) 
-	{	
-		if( iTabHost.getCurrentTab() ==  TabId_SavedList )
-		{
-			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(iTabHost.getApplicationWindowToken(), 0);
-
-			iListItController.handleMessage(ListItController.MESSAGE_LOAD_LIST, 
-					 							  getApplicationContext());
-		}
-	}
-	
-	/*	Method:		Displays List Set name input dialog.
-		parameter:	
-		returns :	void
-	*/
-	private void ShowGetListNameDialog()
-	{
-		if( iSavedData != null ) 
-		{
-    		iSavedData.iCurrentDialogId = DIALOG_NEW_LIST;
-    		iSavedData.iListNameDialogEditStr = "";
-    	}
-		
-		showDialog(DIALOG_NEW_LIST);
-	}
 	
 	private Dialog CreateListNameInputDialog()
 	{
@@ -740,7 +721,8 @@ public class ListItActivity extends TabActivity
 	        	else
 	        	{
 	        		// Empty string is input; so re-display the dialog. 
-	        		Toast.makeText(getApplicationContext(), getString(R.string.give_name), Toast.LENGTH_SHORT).show();
+	        		DisplayMessage(NAME_A_LIST);
+	        		//Toast.makeText(getApplicationContext(), getString(R.string.give_name), Toast.LENGTH_SHORT).show();
 	        		
 	        		removeDialog(DIALOG_NEW_LIST);
 	        		showDialog(DIALOG_NEW_LIST);
@@ -757,6 +739,10 @@ public class ListItActivity extends TabActivity
 	    .create();
 	}
 	
+	/*	Method:		Invokes custom dialog for editing a list from list set.
+					Called from CreateDialog().
+		
+	*/
 	private Dialog CreateListNameEditDialog()
 	{
 		Context mContext = getApplicationContext();
@@ -787,6 +773,7 @@ public class ListItActivity extends TabActivity
 		        	arguments.add(getApplicationContext());
 		        	arguments.add(iSavedData.iEditingListOldName);
 		        	arguments.add(newListName);
+		        	arguments.add(iSavedData.iCurrentItemPosition);
 		        	
 		        	// If the list name is found to be duplicate, then we should not 
 		        	// clear the data as we need to use them to re-display the dialog. 
@@ -800,7 +787,8 @@ public class ListItActivity extends TabActivity
 	        	else
 	        	{
 	        		// Empty string is input; so re-display the dialog. 
-	        		Toast.makeText(getApplicationContext(), getString(R.string.new_list_toast), Toast.LENGTH_SHORT).show();
+	        		DisplayMessage(LIST_NAME);
+	        		//Toast.makeText(getApplicationContext(), getString(R.string.new_list_toast), Toast.LENGTH_SHORT).show();
 	        		
 	        		removeDialog(DIALOG_EDIT_LISTNAME);
 	        		showDialog(DIALOG_EDIT_LISTNAME);
@@ -816,26 +804,123 @@ public class ListItActivity extends TabActivity
    	    })
 	    .create();
 	}
-
-	/*	Method:		Displays List Set edit dialog.
-		parameter:	String, List set Name to be edited.
+	
+	/*	Method:		Drop listener for an Item or a list.
+					Updates the database with new position of an item / list
+	*/
+   	private TouchListView.DropListener onDrop = new TouchListView.DropListener() 
+   	{
+		public void drop(int from, int to) 
+		{
+			if( from != to )
+			{
+				if(iTabHost.getCurrentTab() == TabId_ItemList)
+				{
+					ArrayList<Object> arguments= new ArrayList<Object>();
+					arguments.add(getApplicationContext());
+		        	arguments.add(iSavedData.iCurrentListName);
+					arguments.add(from);
+					arguments.add(to);
+					
+					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_ITEM_POS, 
+							arguments);
+				}
+				else
+				{
+					SavedItem List=iSavedListAdapter.getItem(from);	
+					
+					ArrayList<Object> arguments= new ArrayList<Object>();
+					arguments.add(getApplicationContext());
+					arguments.add(List.getName());
+					arguments.add(from);
+					arguments.add(to);
+					
+					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_LIST_POS, 
+							arguments);	
+								
+					iSavedListAdapter.remove(List);
+					iSavedListAdapter.insert(List, to);
+				}	
+			}
+		}
+	};
+	
+	/*	Method:		Handles the checkbox click.
+					Invoked by the view adapter since the click event is captured in the view.
+					Updates the database on check / uncheck.
+		
 		returns :	void
 	*/
 	
-	public void ShowEditListNameDialog(int aPosition, final String aListName)
+	public void UpdateCheckBox(Item aItem)
 	{
-		if( iSavedData != null )
-		{
-			iSavedData.iEditingListOldName = aListName;
-			iSavedData.iListNameDialogEditStr = aListName;
-			iSavedData.iCurrentDialogId = DIALOG_EDIT_LISTNAME;
-			iSavedData.iCurrentItemPosition = aPosition;
-		}
+		ArrayList<Object> arguments = new ArrayList<Object>();
 		
-		showDialog(DIALOG_EDIT_LISTNAME);
+    	arguments.add(getApplicationContext());
+    	arguments.add(iSavedData.iCurrentListName);
+    	arguments.add(aItem);
+    	
+		iListItController.handleMessage(ListItController.MESSAGE_UPDATE_CHECKED, 
+										arguments);
 	}
 	
-	/*	Method:		call back function from Model.
+	/*	Method:		Deletes a list from database.
+		parameter:	String
+		returns :	void
+	*/
+	public void DeleteList(String aList)
+	{
+		if( iTabHost.getCurrentTab() ==  TabId_SavedList)
+		{
+			ArrayList<Object> arguments = new ArrayList<Object>();
+			
+        	arguments.add(getApplicationContext());
+        	arguments.add(aList);
+        	
+			iListItController.handleMessage(ListItController.MESSAGE_DELETE_LIST, 
+													arguments);
+		}
+		
+	}
+	
+	/*	Method:		Deletes an item from database.
+					Called when delete buton of an item is pressed.
+					Called from view adapter class since the click event belongs to a particular item.
+		parameter:	String, Item to be deleted
+					int, position of the item
+		returns :	void
+	*/
+	
+	public void deleteItem(final String listItem, int itemPos)
+	{
+		if( iTabHost.getCurrentTab() ==  TabId_ItemList)
+		{
+			ArrayList<Object> arguments = new ArrayList<Object>();
+			
+        	arguments.add(getApplicationContext());
+        	arguments.add(iSavedData.iCurrentListName);
+        	arguments.add(listItem);
+        	arguments.add(itemPos);
+        	
+			iListItController.handleMessage(ListItController.MESSAGE_DELETE_ITEM, 
+											arguments);
+		}
+	}
+	
+	/*	Method:		Updates the title Depending on the list created
+		parameter:	String
+		returns :	void
+	*/
+	private void updateTitle(String aTitle)
+	{
+		if(!TextUtils.isEmpty(aTitle))
+			this.setTitle(getApplicationContext().getString(R.string.app_name)+" : " + aTitle);
+		else
+			setTitle(getApplicationContext().getString(R.string.app_name));
+	}
+	
+	/*	Method:		Callbacks to update UI.
+					Called from Model to update the view.
 		parameter:	int, messageId.
 		returns :	void
 	*/
@@ -881,6 +966,8 @@ public class ListItActivity extends TabActivity
 			{
 				if( aData != null )
 					AddItemInView( (Item) aData );
+				else
+					DisplayMessage(ENTER_ITEM);
 				
 				break;
 			}
@@ -923,14 +1010,8 @@ public class ListItActivity extends TabActivity
 			}
 		}
    	}
-   	
-   	public void UpdateItemChecked(Item aItem)
-   	{
-   		iItems.get( aItem.getRowId() - 1 ).setChecked( aItem.isChecked() );
-		iItemAdapter.notifyDataSetChanged();
-   	}
-
-	/*	Method:		Displays messages from OnControllerObserver.
+	
+	/*	Method:		Displays Toasts on the screen depending on the messageId.
 		parameter:	int, messageId.
 					String, Message to be displayed
 		returns :	void
@@ -945,10 +1026,39 @@ public class ListItActivity extends TabActivity
 						       Toast.LENGTH_SHORT).show();
 				break;
 			}
+			case ENTER_ITEM:
+			{
+				Toast.makeText(getApplicationContext(), getString(R.string.itemname), 
+					       Toast.LENGTH_SHORT).show();
+				break;
+			}
+			case ADD_TO_LIST:
+			{
+				Toast.makeText(getApplicationContext(), getString(R.string.added_to_list) /*+" "+ iSavedData.iCurrentListName*/, 
+				           Toast.LENGTH_SHORT).show();
+				break;
+			}
+			case INVALID_QUANTITY:
+			{
+				Toast.makeText(getApplicationContext(),getString(R.string.invalid_qty_toast), 
+						   Toast.LENGTH_SHORT).show();
+				break;
+			}
+			case NAME_A_LIST:
+			{
+				Toast.makeText(getApplicationContext(), getString(R.string.give_name), Toast.LENGTH_SHORT).show();
+				break;
+			}
+			case LIST_NAME:
+			{
+				Toast.makeText(getApplicationContext(), getString(R.string.new_list_toast), Toast.LENGTH_SHORT).show();
+				break;
+			}
 		}
    	}
 
-	/*	Method:		Loads List Set adapter.
+	/*	Method:		Loads all List Sets on tab change.
+					Called from Model to update the View after reading the list names from database.
 		parameter:	ArrayList<SavedItem>, Lists to be displayed in the list set.
 		returns :	void
 	*/
@@ -960,7 +1070,8 @@ public class ListItActivity extends TabActivity
 		iSavedListAdapter.notifyDataSetChanged();
 	}
 
-	/*	Method:		Loads Item list adapter.
+	/*	Method:		Loads all items from a list on clicking any list from list set.
+					Called from Model to update the View after reading the item names from database.
 		parameter:	ArrayList<Item>, Items to be displayed in the list.
 		returns :	void
 	*/
@@ -975,29 +1086,8 @@ public class ListItActivity extends TabActivity
 		updateTitle(iSavedData.iCurrentListName);
 	}
 
-	/*	Method:		Delete a item from database.
-		parameter:	String, Item to be deleted
-					int, position of the item
-		returns :	void
-	*/
-	
-	public void deleteItem(final String listItem, int itemPos)
-	{
-		if( iTabHost.getCurrentTab() ==  TabId_ItemList)
-		{
-			ArrayList<Object> arguments = new ArrayList<Object>();
-			
-        	arguments.add(getApplicationContext());
-        	arguments.add(iSavedData.iCurrentListName);
-        	arguments.add(listItem);
-        	arguments.add(itemPos);
-        	
-			iListItController.handleMessage(ListItController.MESSAGE_DELETE_ITEM, 
-											arguments);
-		}
-	}
-
 	/*	Method:		Observer callback to delete an item from item list adapter.
+					Invoked by Model to modify the view.
 		parameter:	ArrayList<Object>, with item to be deleted and position.
 		returns :	void
 	*/
@@ -1023,27 +1113,9 @@ public class ListItActivity extends TabActivity
 			}
 		}
 	}
-	
-	/*	Method:		Delete the list set from database.
-		parameter:	String
-		returns :	void
-	*/
-	public void DeleteList(String aList)
-	{
-		if( iTabHost.getCurrentTab() ==  TabId_SavedList)
-		{
-			ArrayList<Object> arguments = new ArrayList<Object>();
-			
-        	arguments.add(getApplicationContext());
-        	arguments.add(aList);
-        	
-			iListItController.handleMessage(ListItController.MESSAGE_DELETE_LIST, 
-													arguments);
-		}
-		
-	}
 
-	/*	Method:		Observer callback function to update the list set adapter on delete button press.
+	/*	Method:		Observer callback function to update the list set adapter on pressing delete button of a list.
+					Invoked by Model to update the view. 
 		parameter:	String
 		returns :	void
 	*/
@@ -1074,46 +1146,55 @@ public class ListItActivity extends TabActivity
 		}
 	}
 
-	/*	Method:		Updates the title Depending on the list created
-		parameter:	String
+	/*	Method:		Callback method to add an item to the list.
+					Model callback to update the View/UI.
+		
 		returns :	void
 	*/
-	private void updateTitle(String aTitle)
-	{
-		if(!TextUtils.isEmpty(aTitle))
-			this.setTitle(getApplicationContext().getString(R.string.app_name)+" : " + aTitle);
-		else
-			setTitle(getApplicationContext().getString(R.string.app_name));
-	}
-
 	public void AddItemInView(Item aNewItem)
 	{
 		iItems.add(aNewItem);
 		iItemAdapter.notifyDataSetChanged();
-		Toast.makeText(getApplicationContext(), getString(R.string.added_to_list) /*+" "+ iSavedData.iCurrentListName*/, 
-			           Toast.LENGTH_SHORT).show();
+		DisplayMessage(ADD_TO_LIST);
+		//Toast.makeText(getApplicationContext(), getString(R.string.added_to_list) /*+" "+ iSavedData.iCurrentListName*/, 
+			          // Toast.LENGTH_SHORT).show();
 		
 		// Now reset the editors
 		iItemText.setText("");
         iQuantityText.setText(""); 
 	}
-
-	/* Method to update the checkBox in Item List
-		parameter: Item contains the row details checked
-		returns : void*/
 	
-	public void UpdateCheckBox(Item aItem)
+	/*	Method:		Updates an item with its new position.
+					Model callback to update UI after modification in the database.
+					
+		parameter:	ArrayList<Item>, all the items from list
+		returns :	void
+	*/
+	
+	public void UpdateItemPosition(ArrayList<Item> aListItem)
 	{
-		ArrayList<Object> arguments = new ArrayList<Object>();
+		iItems.clear();
+		iItems.addAll(aListItem);
 		
-    	arguments.add(getApplicationContext());
-    	arguments.add(iSavedData.iCurrentListName);
-    	arguments.add(aItem);
-    	
-		iListItController.handleMessage(ListItController.MESSAGE_UPDATE_CHECKED, 
-										arguments);
+		iItemAdapter.notifyDataSetChanged();
 	}
 	
+	/*	Method:		Updates an item on clicking the check box.
+					Called from Model to update the View once the database modifications are success.
+		parameter:
+		returns :	void
+	*/
+   	
+   	public void UpdateItemChecked(Item aItem)
+   	{
+   		iItems.get( aItem.getRowId() - 1 ).setChecked( aItem.isChecked() );
+		iItemAdapter.notifyDataSetChanged();
+   	}
+	
+	/*	Method:		Retains the value of an object on runtime configuration change.
+		
+		returns :	Object
+	*/
 	public Object onRetainNonConfigurationInstance() 
 	{
 		final ArrayList<Object> savedData = new ArrayList<Object>();
@@ -1131,6 +1212,11 @@ public class ListItActivity extends TabActivity
 	    return savedData;
 	}
 	
+	/*	Method:		Stripoff extra zeros in quantity field
+		
+		returns :	String
+	*/
+	
 	private String StripOffZeros( String aValue ) 
 	{
 		if( aValue.length() > 0 )
@@ -1146,6 +1232,11 @@ public class ListItActivity extends TabActivity
 		
 		return aValue;
 	}
+	
+	/*	Method:		Validates the quantity field by removing unwanted zeros.
+		
+		returns :	boolean
+	*/
 	
 	private boolean ValidateQuantity( String aQuantityStr )
 	{
@@ -1179,12 +1270,21 @@ public class ListItActivity extends TabActivity
 		return true;
 	}
 	
+	/*	Method:		Validates Item text for emptyness.
+		
+		returns :	boolean
+	*/
+	
 	private boolean ValidateItem(String aItemText)
 	{
 		if( TextUtils.isEmpty(aItemText.trim()) )
 			return false;
 		return true;
 	}
+	
+	/*	Method:		Converts exponent value to double in quantity field.
+		returns :	String
+	*/
 	
 	private String ConvertExponentDoubleToString(String aNumber)
 	{
@@ -1211,6 +1311,106 @@ public class ListItActivity extends TabActivity
 		
 		return resultStr;
 	}
+	
+	@Override
+	public void afterTextChanged(Editable s) 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) 
+	{
+		// This implementaion is done to avoid the truncation of digits
+		//	when specified number to digits are allowed in an edit text.
+		if(iQuantityText.isFocused())
+		{
+			if(s.charAt(start)=='.' && count==1)
+			{				
+				iQuantityText.setText("0.");
+				count = count + 1;
+				iQuantityText.setSelection(count);
+			}
+		}
+		
+	}
+	
+	/*	Nested class for Next editor action listener for landscape mode of an item	 */
+
+	class NextOnEditorActionListener implements OnEditorActionListener {
+	   
+	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+	        if (actionId == EditorInfo.IME_ACTION_NEXT) {
+	        	// Hide the softkey pad
+	            InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+	            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+	            
+	            // Move the focus to Quantity edit text
+	            iQuantityText.requestFocus();
+	            return true;	
+	        }
+	        
+	        return false;
+	    }
+	}
+
+/*	Nested class for Done editor action listener for landscape mode of an item */
+
+	class DoneOnEditorActionListener implements OnEditorActionListener {
+		   
+	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+	        if (actionId == EditorInfo.IME_ACTION_DONE) {
+	        	// Hide the softkey pad
+	            InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+	            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+	            
+	            return true;	
+	        	}
+	        	return false;
+	    	}
+	    
+	}	
+	
+	/*	Method:		onPause method of an activity
+					called when another activity is taking focus
+
+		returns :	void
+	*/
+
+   	public void onPause()
+   	{
+   		super.onPause();
+   	}
+	
+	/*	Method:		onStop method of an activity
+					called when the activity is no longer visible
+
+		returns :	void
+	*/
+   	
+   	public void onStop()
+   	{
+   		super.onStop();
+   	}
+	
+	/*	Method:		onDestroy method of an activity
+					called when the activity is about to be destroyed
+
+		returns :	void
+	*/
+   	
+   	public void onDestroy()
+   	{
+   		super.onDestroy();
+   	}
+
 }
 
 

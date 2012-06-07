@@ -113,9 +113,9 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		return -1;
 	}
 	
-	public boolean CheckDuplicateLists(Context aContext, String aListName)
+	public int CheckDuplicateLists(Context aContext, String aListName)
 	{
-		boolean listFound = false;
+		int listFound = -1;
 		if( iDBHelper == null )
 		{
 			OpenDB( aContext );
@@ -132,7 +132,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 				
 				if((listName.toLowerCase().trim()).contentEquals(aListName.toLowerCase().trim()))
 				{
-					listFound = true;
+					listFound = i;
 					break;
 				}
 			}

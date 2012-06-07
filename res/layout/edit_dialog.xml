@@ -38,7 +38,8 @@
     android:maxLines="1"
     android:minLines="1"
     android:hint="@string/itemEditHint"
-    android:typeface="normal">
+    android:typeface="normal"
+    android:imeOptions="actionNext">
     </AutoCompleteTextView>
     <EditText  
     android:layout_width="wrap_content"
@@ -52,6 +53,6 @@
     android:paddingRight="100dp"
     android:hint="@string/qtyEditHint"
     android:inputType="numberDecimal"
-    >
+    android:imeOptions="actionDone">
     </EditText>
 </RelativeLayout>

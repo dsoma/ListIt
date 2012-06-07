@@ -86,10 +86,10 @@ public class ListItController extends Controller
 				boolean status = true;
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				String listName = (String) arguments.get(1);
-				Boolean duplicateListFound = iModel.CheckDuplicateLists((Context) arguments.get(0), listName);
+				int duplicateListFound = iModel.CheckDuplicateLists((Context) arguments.get(0), listName);
 				
 				// Unique name, so create a list and prompt for new items. 
-				if (!duplicateListFound)
+				if (duplicateListFound == -1)
 				{
 					iModel.CreateList( (Context) arguments.get(0), (String) arguments.get(1));
 					
@@ -109,6 +109,11 @@ public class ListItController extends Controller
 						
 						// Notify to update the UI by adding new item to the array. 
 						iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_ADD_ITEM_TO_VIEW, i);	
+					}
+					else
+					{
+						// Notify to update the UI by adding new item to the array. 
+						iCurrentView.ControllerCallback(OnControllerObserver.MESSAGE_ADD_ITEM_TO_VIEW, null);
 					}
 					
 					status = true;
@@ -173,13 +178,20 @@ public class ListItController extends Controller
 				Context c = (Context) arguments.get(0);
 				String oldListName = (String) arguments.get(1);
 				String newListName = (String) arguments.get(2);
+				int position = (Integer)arguments.get(3);
 				
-				Boolean duplicateListFound = iModel.CheckDuplicateLists(c, newListName);
+				int duplicateListFound = iModel.CheckDuplicateLists(c, newListName);
 				
 				boolean status = true;
 				
+				// If edit a list with the same name and Press OK, discard the message 'Duplicate'.
+				// Dialog should not reappear.
+				
+				if (position == duplicateListFound)
+					return status;
+				
 				// If unique name is provided, change the name in the database. 
-				if (!duplicateListFound)
+				if (duplicateListFound == -1 )
 				{
 					iModel.EditList( c, oldListName, newListName );
 				}
