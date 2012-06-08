@@ -210,7 +210,6 @@ public class ListItActivity extends TabActivity
    		
    		SetupAddButton();
    		SetupItemListView();
-   		SetupItemListChangeObserver();
    		SetupListDrag();
    		SetupSavedListOnClick();
    		SetupSavedListOnLongPress();
@@ -300,22 +299,7 @@ public class ListItActivity extends TabActivity
         });
    	}
    	
-	/*	Method:		Item List Change Observer for displaying the last item in the list to the use always
-		parameter:
-		returns :	void
-	*/
-   	private void SetupItemListChangeObserver()
-   	{
-   		iItemAdapter.registerDataSetObserver(new DataSetObserver() 
-		{
-            @Override
-            public void onChanged() 
-			{
-                super.onChanged();
-                iItemListView.setSelection(iItemAdapter.getCount() - 1);    
-            }
-        });	
-   	}
+	
    	
    	/*	Method:		Drag and drop listener for Item list and List Set
 		parameter:
@@ -1162,6 +1146,11 @@ public class ListItActivity extends TabActivity
 		// Now reset the editors
 		iItemText.setText("");
         iQuantityText.setText(""); 
+        
+        // We should show the recently added item (which is at the end) always. 
+        // So make list view to scroll to the end. 
+        
+        iItemListView.setSelection(iItemAdapter.getCount() - 1); 
 	}
 	
 	/*	Method:		Updates an item with its new position.
