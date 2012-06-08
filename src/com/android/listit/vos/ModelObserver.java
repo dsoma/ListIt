@@ -11,7 +11,7 @@ public interface ModelObserver<T>
 	void ModelCallback(final int aMessageId, final Object aMessageData);
 	void HandleLists(ArrayList<SavedItem> aListNames);
 	void DeleteItemFromList(ArrayList<Object> aListItem);
-	void DeleteSavedList(String aListName);
+	void DeleteSavedList(ArrayList<Object> aData);
 	void LoadItemsList(ArrayList<Item> aObj);
 	void EditItemList(ArrayList<Item> aObj);
 	void EditListNames(ArrayList<String> aObj);

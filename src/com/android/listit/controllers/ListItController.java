@@ -22,6 +22,7 @@ public class ListItController extends Controller
 	public static final int MESSAGE_UPDATE_ITEM_POS = 10;
 	public static final int MESSAGE_EDIT_LIST = 11;
 	public static final int MESSAGE_UPDATE_LIST_POS = 12;
+	public static final int MESSAGE_GET_LIST_COUNT = 13;
 	
 	private ListItModel				iModel;
 	private OnControllerObserver	iCurrentView;
@@ -143,7 +144,9 @@ public class ListItController extends Controller
 			{
 				ArrayList<Object> arguments = (ArrayList<Object>) aData;
 				
-				iModel.DeleteList((Context) arguments.get(0), (String) arguments.get(1));
+				iModel.DeleteList((Context) arguments.get(0), 
+						 		  (Integer) arguments.get(1),
+						          (String) arguments.get(2));
 				
 				break;
 			}
@@ -222,5 +225,13 @@ public class ListItController extends Controller
 			}
 		}
 		return true;
+	}
+	
+	public int GetListCount(Context aContext)
+	{
+		if( iModel == null || aContext == null )
+			return 0;
+		
+		return iModel.GetListCount( (Context) aContext );
 	}
 }

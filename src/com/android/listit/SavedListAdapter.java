@@ -2,9 +2,6 @@ package com.android.listit;
 
 import java.util.ArrayList;
 
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 /** Custom adapter for displaying an array of objects. */
 public class SavedListAdapter extends ArrayAdapter<SavedItem> 
 {
 	private LayoutInflater 	iInflater;
-	private ListItActivity iActivity;
-  
+	private ListItActivity  iActivity;
+	
 	public SavedListAdapter( ListItActivity aActivity, ArrayList<SavedItem> aListNames ) 
 	{
 	    super( aActivity, R.layout.rowbuttonlayout, R.id.listTextView, aListNames );
@@ -31,15 +27,15 @@ public class SavedListAdapter extends ArrayAdapter<SavedItem>
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) 
+	public View getView(final int position, View convertView, ViewGroup parent) 
 	{
-		final SavedItem listName = (SavedItem) getItem( position ); 
+		final SavedItem listItem = (SavedItem) getItem( position ); 
 		
 	    // The child views in each row.
 		Button 			delButton;
 	    ImageView 		dragView;	    
-	    final TextView listNameView; 
-	    final TextView dateView;
+	    final TextView  listNameView; 
+	    final TextView  dateView;
 	    
 	    // Create a new row view
 	    if ( convertView == null ) 
@@ -63,11 +59,74 @@ public class SavedListAdapter extends ArrayAdapter<SavedItem>
 	    	{
 	    		public void onClick(View v) 
 	    		{
-		            Button delBtn = (Button) v;
-		            SavedItem listItem = (SavedItem)delBtn.getTag();
-		            confirmDelete(listItem.getName().toString());
+	    			Button deleteButton = (Button) v;
+	    			if( deleteButton != null && deleteButton.getTag() != null )
+	    			{
+	    				int itemPosition = ((SavedItem) deleteButton.getTag()).getId();
+	    				iActivity.deleteListConfirmDialog( itemPosition );
+	    			}
 	    		}      	
-	    	});        
+	    	}); 
+	    	
+	    	// If listNameView or dateView is long pressed, then user intends to edit the item. 
+	    	listNameView.setOnLongClickListener( new View.OnLongClickListener() 
+	    	{
+				@Override
+				public boolean onLongClick(View v) 
+				{
+					TextView listNameView = (TextView) v;
+	    			if( listNameView != null && listNameView.getTag() != null )
+	    			{
+	    				int itemPosition = ((SavedItem) listNameView.getTag()).getId();
+	    				return iActivity.onSavedListLongClick(itemPosition);
+	    			}
+					return false;
+				}
+			});
+	    	
+	    	dateView.setOnLongClickListener( new View.OnLongClickListener() 
+	    	{
+				@Override
+				public boolean onLongClick(View v) 
+				{
+					TextView dateView = (TextView) v;
+	    			if( dateView != null && dateView.getTag() != null )
+	    			{
+	    				int itemPosition = ((SavedItem) dateView.getTag()).getId();
+	    				return iActivity.onSavedListLongClick(itemPosition);
+	    			}
+					return false;
+				}
+			});
+	    	
+	    	// If listNameView or dateView is pressed, then user intends to load the list. 
+	    	listNameView.setOnClickListener( new View.OnClickListener() 
+	    	{
+				@Override
+				public void onClick(View v) 
+				{
+					TextView listNameView = (TextView) v;
+	    			if( listNameView != null && listNameView.getTag() != null )
+	    			{
+	    				int itemPosition = ((SavedItem) listNameView.getTag()).getId();
+	    				iActivity.onSavedListClick(itemPosition);
+	    			}
+				}
+			});
+	    	
+	    	dateView.setOnClickListener( new View.OnClickListener() 
+	    	{
+				@Override
+				public void onClick(View v) 
+				{
+					TextView dateView = (TextView) v;
+	    			if( dateView != null && dateView.getTag() != null )
+	    			{
+	    				int itemPosition = ((SavedItem) dateView.getTag()).getId();
+	    				iActivity.onSavedListClick(itemPosition);
+	    			}
+				}
+			});
 	    }
 	    // Reuse existing row view
 	    else 
@@ -81,44 +140,18 @@ public class SavedListAdapter extends ArrayAdapter<SavedItem>
 	    	dragView =  	rowView.getImageView();
 	    }
 
-	    delButton.setTag(listName);
+	    delButton.setTag(listItem);
 	    delButton.setClickable(true);
 	    
-	    listNameView.setText( listName.getName() );
-	    dateView.setText(listName.getDate());
-	    dragView.setTag(listName);
+	    listNameView.setText(listItem.getName() );
+	    listNameView.setTag(listItem);
+	    
+	    dateView.setText(listItem.getDate());
+	    dateView.setTag(listItem);
+	    
+	    dragView.setTag(listItem);
 	    
 	    return convertView;
 	}
-  
- private void confirmDelete(final String aList)
- {    
-      AlertDialog.Builder alert = new AlertDialog.Builder(iActivity);
-      	 
-      alert.setTitle(getContext().getString(R.string.delete)); 
-      alert.setMessage(getContext().getString(R.string.sure)); 
-      
-       alert.setPositiveButton(getContext().getString(R.string.yes), new DialogInterface.OnClickListener() 
-       { 
-	      public void onClick(DialogInterface dialog, int whichButton) 
-	      {
-	    	  if(iActivity!=null) 
-	    	  {
-	    		  iActivity.DeleteList(aList);   	
-	    		  Toast.makeText(iActivity, getContext().getString(R.string.deleted), Toast.LENGTH_SHORT).show(); 
-	    	  }
-      } 
-      }); 
-      alert.setNegativeButton(getContext().getString(R.string.no), new DialogInterface.OnClickListener() 
-      { 
-        public void onClick(DialogInterface dialog, int whichButton) 
-        { 
-          // Canceled. 
-        } 
-      }); 
-      alert.show(); 	
-	  
-  }
-  
 }
 

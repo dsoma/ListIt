@@ -50,7 +50,7 @@ public class SimpleObservable<T> implements EasyObservable<T> {
 					}
 					case ListItModel.MESSAGE_LIST_DELETED:
 					{
-						observer.DeleteSavedList((String) aObj);
+						observer.DeleteSavedList((ArrayList<Object>) aObj);
 						break;
 					}
 					case ListItModel.MESSAGE_ITEMS_LOADED:
@@ -78,7 +78,6 @@ public class SimpleObservable<T> implements EasyObservable<T> {
 						observer.UpdateItemChecked( (Item) aObj );
 						break;
 					}
-					
 				}
 				
 			}

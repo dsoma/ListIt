@@ -210,7 +210,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		return -1;
 	}
 	
-	public int DeleteList(Context aContext, String aListName)
+	public int DeleteList(Context aContext, Integer aListNamePosition, String aName)
 	{
 		if( iDBHelper == null )
 		{
@@ -221,13 +221,17 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		
 		if( iDBHelper != null )
 		{
-			errorCode1 = iDBHelper.deleteTable( aContext, aListName );
+			errorCode1 = iDBHelper.deleteTable( aContext, aName );
 			
-			errorCode2 = iDBHelper.UpdateMasterTable(aContext, 'D', aListName, null, null);
+			errorCode2 = iDBHelper.UpdateMasterTable(aContext, 'D', aName, null, null);
 			
 			if( errorCode1 == SUCCESS && errorCode2 == SUCCESS)
 			{
-				notifyObservers(MESSAGE_LIST_DELETED,aListName);
+				ArrayList<Object> data = new ArrayList<Object>();
+				data.add(aName);
+				data.add(aListNamePosition);
+				
+				notifyObservers(MESSAGE_LIST_DELETED, data);
 				
 				return SUCCESS;
 			}
@@ -326,21 +330,32 @@ public class ListItModel extends SimpleObservable<ListItModel>
 			OpenDB( aContext );
 		}
 		
-		int errorCode1 = -1;
+		if( iDBHelper != null )
+		{				
+			ArrayList<SavedItem> itemList = iDBHelper.UpdateTablePosition( aContext, aTableName, 
+																		   aOldPos, aNewPos );
+						
+			this.notifyObservers(MESSAGE_LIST_POS_UPDATED, itemList);
+		}
+		
+		return 0;
+	}
+	
+	public int GetListCount(Context aContext)
+	{
+		if( iDBHelper == null )
+		{
+			OpenDB( aContext );
+		}
 		
 		if( iDBHelper != null )
 		{				
-			errorCode1 = iDBHelper.UpdateTablePosition( aContext, aTableName, aOldPos,aNewPos );
-						
-			if( errorCode1 == SUCCESS )
-			{
-				this.notifyObservers(MESSAGE_LIST_POS_UPDATED, null);
-			}
+			return iDBHelper.GetListCount( aContext );
 		}
 		
-		return -1;
-		
+		return 0;
 	}
+	
 	private void OpenDB(Context aContext)
 	{
 		try 
@@ -349,6 +364,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		} 
 		catch (SQLiteException se) 
 		{	
+			// TODO
 		} 
 	}
 	

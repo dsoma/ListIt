@@ -96,7 +96,36 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 		        	
 		        	confirmDelete(listItem, rowId);        	
 		        }
-		    });        
+		    });   
+    	  	
+    	  	// If itemText or qtyText is pressed, then user intends to edit the item. 
+    	  	textView.setOnClickListener( new View.OnClickListener() 
+	    	{
+				@Override
+				public void onClick(View v) 
+				{
+					TextView textView = (TextView) v;
+	    			if( textView != null && textView.getTag() != null )
+	    			{
+	    				int itemPosition = ((Item) textView.getTag()).getRowId();
+	    				iActivity.onItemClick(itemPosition - 1);
+	    			}
+				}
+			});
+	    	
+	    	qtyView.setOnClickListener( new View.OnClickListener() 
+	    	{
+				@Override
+				public void onClick(View v) 
+				{
+					TextView qtyView = (TextView) v;
+	    			if( qtyView != null && qtyView.getTag() != null )
+	    			{
+	    				int itemPosition = ((Item) qtyView.getTag()).getRowId();
+	    				iActivity.onItemClick(itemPosition - 1);
+	    			}
+				}
+			});
 	    }
 	    
 	    // Reuse existing row view
@@ -125,7 +154,11 @@ public class ItemListAdapter extends ArrayAdapter<Item>
 	    delButton.setClickable(true);
     
 	    textView.setText( item.getDesc() ); 
+	    textView.setTag(item);
+	    
 	    qtyView.setText( item.getQuantity() );
+	    qtyView.setTag(item);
+	    
 	    dragView.setTag(item);
 	    
 	    return convertView;

@@ -4,21 +4,23 @@ public class SavedItem
 {
     private String iItemDesc = "";
     private String iDate = "";
-    
+    private int    iId = -1; 
     
     public SavedItem() 
     {	 
     }
     
-    public SavedItem( String aItemDesc ) 
+    public SavedItem( int aId, String aItemDesc ) 
     {
     	iItemDesc = aItemDesc;
+    	iId = aId;
     }
     
-    public SavedItem( String aItemDesc, String aDate ) 
+    public SavedItem( int aId, String aItemDesc, String aDate ) 
     {
 	      iItemDesc = aItemDesc;
 	      iDate = aDate;
+	      iId = aId;
 	}
        
     
@@ -40,4 +42,9 @@ public class SavedItem
     {
 	      return iDate;
 	}  
+    
+    public int getId()
+    {
+    	return iId;
+    }
 }

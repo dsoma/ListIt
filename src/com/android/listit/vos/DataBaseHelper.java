@@ -47,7 +47,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	{
 		ArrayList<SavedItem> tableNames = new ArrayList<SavedItem>();
 		
-		if (checkDbExists()) 
+		if ( !checkDbExists() ) 
 		{
 			return tableNames;
 		} 
@@ -64,7 +64,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
     			{
     				String tName = c.getString(c.getColumnIndex("name"));
     				String tDate  = c.getString(c.getColumnIndex("date"));
-    				SavedItem rowItem = new SavedItem(tName, tDate);
+    				SavedItem rowItem = new SavedItem(c.getPosition(), tName, tDate);
     				tableNames.add(rowItem);
     				
     			} while (c.moveToNext());
@@ -74,11 +74,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		catch (SQLiteException se ) 
 		{	
         } 
-		finally 
-		{
-			if (iDB != null) 
-        		iDB.close();
-		}
+		if (iDB != null) 
+       		iDB.close();
 		
 		return tableNames;		
 	}
@@ -87,7 +84,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	{
 		ArrayList<Item> entries = new ArrayList<Item>();
 		
-		if (checkDbExists()) 
+		if ( !checkDbExists() ) 
 		{
 			return entries;
 		} 
@@ -131,11 +128,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		{
         	
         } 
-		finally 
-		{
-			if (iDB != null) 
-        		iDB.close();
-		}
+		if (iDB != null) 
+       		iDB.close();
 		
 		return entries;		
 	}
@@ -163,18 +157,15 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		{
         	
         } 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return errorCode;
 	}
 	
 	public int InsertRecord(Context aContext, String aTableName, Item aItem) 
 	{
-		if ( checkDbExists() ) 
+		if ( !checkDbExists() ) 
 		{
 			return 0;
 		} 
@@ -205,18 +196,15 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		{
         	
         } 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return errorCode;
 	}
 
 	public int UpdateRecord(Context aContext, String aTableName, Item aItem) 
 	{
-		if ( checkDbExists() ) 
+		if ( !checkDbExists() ) 
 		{
 			return 0;
 		} 
@@ -259,11 +247,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		catch (SQLiteException se ) 
 		{	
         } 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return errorCode;
 	}
@@ -272,7 +257,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	{
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
-		if ( checkDbExists() ) 
+		if ( !checkDbExists() ) 
 		{
 			return itemList;
 		} 		
@@ -386,111 +371,159 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		catch (SQLiteException se ) 
 		{
         } 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return itemList;
 	}
-
-	public int UpdateTablePosition( Context aContext, String aTableName, int aOldPos,int aNewPos ) 
+	
+	public ArrayList<SavedItem> UpdateTablePosition(Context aContext, String aTableName, 
+			 								   int aOldPos, int aNewPos)
 	{
-		if ( checkDbExists() ) 
+		ArrayList<SavedItem> itemList = new ArrayList<SavedItem>();
+		
+		if ( !checkDbExists() ) 
 		{
-			return 0;
+			return itemList;
 		} 
 		
-		int errorCode = -1;
-		ArrayList<SavedItem> arguments = new ArrayList<SavedItem>();
-		int rowId = 0;
-		SavedItem mContent;
 		String tableName = null, tableDate = null;
 		
 		try 
 		{
 			iDB = currentContext.openOrCreateDatabase(DBName, 0, null);
 				
-			Cursor c = iDB.rawQuery("SELECT NAME, DATE FROM MASTER", null) ;
-		
-			if (c != null  ) 
+			Cursor c = iDB.rawQuery("SELECT NAME, DATE FROM MASTER", null);
+			
+			// First, find and delete the item from the old position. 
+			if (c != null && c.moveToFirst())
 			{
-				if(c.moveToFirst())
-				{
-						c.moveToPosition(aOldPos);
-						 tableName = c.getString(c.getColumnIndex("name"));
-						 tableDate = c.getString(c.getColumnIndex("date"));
-						
-						iDB.execSQL("DELETE FROM MASTER WHERE NAME='"+tableName+"';");
-				}
-			}
-			c = iDB.rawQuery("SELECT NAME, DATE FROM MASTER", null) ;
-			if (c != null  ) 
-			{
-				if(c.moveToFirst())
-				{
-					//put it into vector before deleting all the entries from MASTER
-					do
-					{
-						if(rowId==aNewPos)
-						{
-							mContent = new SavedItem(tableName,tableDate);
-							arguments.add(mContent);
-							rowId = rowId+1;
-						}
-						
-							String tName = c.getString(c.getColumnIndex("name"));
-							String tDate = c.getString(c.getColumnIndex("date"));
-							mContent = new SavedItem(tName,tDate);
-							
-							arguments.add(mContent);
-							rowId = rowId+1;
-						
-					}while(c.moveToNext());
+				c.moveToPosition(aOldPos);
+				
+				tableName = c.getString(c.getColumnIndex("name"));
+				tableDate = c.getString(c.getColumnIndex("date"));
 					
-					if(rowId==aNewPos)
-					{
-						mContent = new SavedItem(tableName,tableDate);
-						arguments.add(mContent);
-						rowId = rowId+1;
-					}
-					iDB.execSQL("DELETE FROM 'MASTER'");
-						
-					for(int i=0;i<arguments.size();i++)
-					{
-						SavedItem tObject = arguments.get(i);
-						String tName = tObject.getName().toString();
-						String tDate = tObject.getDate().toString();
-						
-				 		iDB.execSQL("INSERT INTO MASTER Values('"+ 
-				 				tName + "','" + tDate + "');" );
-				 	}
-				}
+				iDB.execSQL("DELETE FROM MASTER WHERE NAME='"+tableName+"';");
 			}
 			
+			// Reset the cursor to the table head. 
+			c = iDB.rawQuery("SELECT NAME, DATE FROM MASTER", null);
+			
+			if( c == null )
+			{
+				if (iDB != null) 
+	        		iDB.close();
+				return itemList;
+			}
+			
+			int totalEntries = c.getCount();
+			
+			if( totalEntries <= 0 )
+			{
+				c.close();
+				if (iDB != null) 
+	        		iDB.close();
+				return itemList;
+			}
+			
+			int currentPosition = 0, dBPosition = 0;
+			
+			// Copy all the lists in the database to an array and also 
+			// insert the one that we dragged and dropped into its correct position
+			
+			for(; dBPosition < totalEntries; currentPosition++)
+			{
+				// If we reached new position, let us insert the listItem in the array.
+				if( currentPosition == aNewPos )
+				{
+					SavedItem i = new SavedItem( currentPosition, tableName, tableDate);
+					itemList.add(i);
+					continue;
+				}
+				
+				// Otherwise, lets just copy the item from DB to itemList. 
+				boolean reachable = c.moveToPosition(dBPosition);
+				dBPosition++;
+				
+				if( !reachable )
+				{	
+					continue;
+				}
+				
+				String name = c.getString(c.getColumnIndex("name"));
+				String date = c.getString(c.getColumnIndex("date"));
+				itemList.add( new SavedItem(currentPosition, name, date) );
+			}
+			
+			// We did not find the position - means we are inserting at the end. 
+			if( currentPosition == dBPosition )
+			{
+				itemList.add( new SavedItem( currentPosition, tableName, tableDate) );
+			}
+			
+			// Now clear the database because we will add all the items from the array to DB. 
+			iDB.execSQL("DELETE FROM 'MASTER'");
+			
+			// Insert the records into the table again. (from itemList)
+			for(int i = 0; i < itemList.size(); i++)
+			{
+				SavedItem tObject = itemList.get(i);
+				String tName = tObject.getName().toString();
+				String tDate = tObject.getDate().toString();
+				
+		 		iDB.execSQL("INSERT INTO MASTER Values('"+ 
+		 				tName + "','" + tDate + "');" );
+		 	}
+			
 			c.close();
-					
-			errorCode = 0;
 		}
 		catch (SQLiteException se ) 
 		{	
 		} 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
-		return errorCode;
+		return itemList;
 	}
 	
+	public int GetListCount(Context aContext)
+	{
+		if ( !checkDbExists() ) 
+		{
+			return 0;
+		}
+		
+		int listCount = 0;
+		
+		try 
+		{
+			iDB = currentContext.openOrCreateDatabase(DBName, 0, null);
+			Cursor c = iDB.rawQuery("SELECT NAME, DATE FROM MASTER", null);
+			if( c == null )
+			{
+				if (iDB != null) 
+	        		iDB.close();
+				return 0;
+			}
+			
+			listCount = c.getCount();
+		}
+		catch (SQLiteException se ) 
+		{	
+		} 
+		
+		if (iDB != null) 
+       		iDB.close();
+        
+		return listCount;
+	}
+
 	private boolean checkDbExists() 
 	{
 		SQLiteDatabase checkDB = null;
 
 		try {
-			String myPath = iDBPath + DBName;
+			String myPath = iDBPath + '/' + DBName;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
 					SQLiteDatabase.OPEN_READONLY);
 
@@ -509,7 +542,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	{
 		ArrayList<Item> ItemAndQty = new ArrayList<Item>();
 		
-		if ( checkDbExists() ) 
+		if ( !checkDbExists() ) 
 		{
 			return ItemAndQty;
 		} 
@@ -551,11 +584,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		}
 		catch (SQLiteException se ) 
 		{} 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return ItemAndQty;
 	}
@@ -564,7 +594,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	{
 		ArrayList<String> ListNames = new ArrayList<String>();
 		
-		if ( checkDbExists() ) 
+		if ( !checkDbExists() ) 
 		{
 			return ListNames;
 		} 
@@ -596,11 +626,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		{
 			
 		} 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return ListNames;
 	}
@@ -608,7 +635,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	
 	public int deleteRecord(Context aContext, String aTableName, String aRecordName, int aPos) 
 	{
-		if ( checkDbExists() ) 
+		if ( !checkDbExists() ) 
 		{
 			return 0;
 		} 
@@ -647,18 +674,15 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		}
 		catch (SQLiteException se ) 
 		{} 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return errorCode;
 	}
 	
 	public int deleteTable(Context aContext, String aTableName) 
 	{
-		if ( checkDbExists() ) 
+		if ( !checkDbExists() ) 
 		{
 			return 0;
 		} 
@@ -672,18 +696,15 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			iDB.execSQL("CREATE TABLE IF NOT EXISTS '" + aTableName +
 			   "'(row INT,item VARCHAR, quantity VARCHAR, checked VARCHAR);");
 			
-			iDB.execSQL("DELETE FROM '" + aTableName+"'");
-			iDB.execSQL("DROP TABLE '"  + aTableName+"'");
+			iDB.execSQL("DELETE FROM '" + aTableName + "'");
+			iDB.execSQL("DROP TABLE '"  + aTableName + "'");
 			
 			errorCode = 0;			
 		}
 		catch (SQLiteException se ) 
 		{} 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return errorCode;
 	}
@@ -711,18 +732,15 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		}
 		catch (SQLiteException se ) 
 		{} 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return errorCode;
 	}
 
 	public int UpdateMasterTable(Context aContext, final char aCommand, String aTableName, String aDate, String aNewName) 
 	{
-		if (checkDbExists()) 
+		if ( !checkDbExists() ) 
 		{
 			return 0;
 		} 
@@ -785,11 +803,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		}
 		catch (SQLiteException se ) 
 		{} 
-		finally 
-		{
-        	if (iDB != null) 
-        		iDB.close();
-        }
+		if (iDB != null) 
+       		iDB.close();
 		
 		return errorCode;
 	}

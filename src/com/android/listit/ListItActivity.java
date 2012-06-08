@@ -22,7 +22,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -72,6 +71,7 @@ public class ListItActivity extends TabActivity
 	public static final int DIALOG_EDIT_ITEM = 1; 
 	public static final int DIALOG_EDIT_LISTNAME = 2; 
 	public static final int DIALOG_NEW_LIST = 3; 
+	public static final int DIALOG_DELETE_LIST = 4;
 	
 	/* All the ids of the messages that the view could display on the screen */
 	public static final int DUPLICATE_LIST = 1;
@@ -156,6 +156,17 @@ public class ListItActivity extends TabActivity
         	
         	iSavedData = new SaveData();
         	iSavedData.iCurrentListName = "";
+        	
+        	// If there are saved lists, then show the list view. 
+        	// Otherwise, just open the empty list view. 
+        	if( GetListCount() > 0 )
+        	{
+        		iTabHost.setCurrentTab(TabId_SavedList);
+        	}
+        	else
+        	{
+        		iTabHost.setCurrentTab(TabId_ItemList);
+        	}
         }
         else
         {
@@ -209,14 +220,19 @@ public class ListItActivity extends TabActivity
    		super.onResume();
    		
    		SetupAddButton();
-   		SetupItemListView();
    		SetupListDrag();
-   		SetupSavedListOnClick();
-   		SetupSavedListOnLongPress();
    		SetupNewListButton();
    	}
+   	
+   	private int GetListCount()
+   	{
+   		if( iListItController == null )
+   			return 0;
+   		
+   		return iListItController.GetListCount(getApplicationContext());
+   	}
    	   
-   /*	Method:		Handles Add button click event.
+    /*	Method:		Handles Add button click event.
 					Checks for emptiness of an item edit Text and validates quantity.
 					If everything OK, updates the database.Otherwise, display toasts
 		parameter:	
@@ -272,36 +288,7 @@ public class ListItActivity extends TabActivity
         addButton.setOnClickListener(addButtonOnClickListener);
    	}
    	
-   /*	Method:		Handles click event on any item in a List View.
-					Edits an item displaying edit dialog.
-		parameter:	
-		returns :	void
-	*/
-   	private void SetupItemListView()
-   	{
-   		iItemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() 
-        {
-        	public void onItemClick( AdapterView<?> aParent, View aItem, 
-                                     int aPosition, long aId) 
-        	{
-        		Item i = iItemAdapter.getItem( aPosition );
-        		
-        		if( iSavedData != null ) 
-        		{
-	        		iSavedData.iCurrentDialogId = DIALOG_EDIT_ITEM;
-	        		iSavedData.iCurrentItemPosition = aPosition;
-	        		iSavedData.iItemDialogEditStr = i.getDesc();
-	        		iSavedData.iQuantityDialogEditStr = i.getQuantity();
-        		}
-        		
-        		showDialog(DIALOG_EDIT_ITEM);
-        	}
-        });
-   	}
-   	
-	
-   	
-   	/*	Method:		Drag and drop listener for Item list and List Set
+    /*	Method:		Drag and drop listener for Item list and List Set
 		parameter:
 		returns :	void
 	*/
@@ -316,29 +303,21 @@ public class ListItActivity extends TabActivity
 		parameter:	
 		returns :	void
 	*/
-   	private void SetupSavedListOnClick()
+   	public void onSavedListClick( int aPosition ) 
    	{
-   		iSavedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() 
-   		{
-   			public void onItemClick( AdapterView<?> aParent, View aItem, 
-   									 int aPosition,long aId ) 
-   			{
-   				if( aPosition < 0 || aPosition >= iSavedLists.size() )
-   					return;
-   				
-   				iSavedData.iCurrentListName = iSavedListAdapter.getItem(aPosition).getName();
-   											
-				ArrayList<Object> arguments = new ArrayList<Object>();
-				
-	        	arguments.add(getApplicationContext());
-	        	arguments.add(iSavedData.iCurrentListName);
-	        	
-				iListItController.handleMessage(ListItController.MESSAGE_LOAD_ITEM, 
-												arguments);				
-							
-   			}
-   		});
-   	}
+		if( aPosition < 0 || aPosition >= iSavedLists.size() )
+			return;
+		
+		iSavedData.iCurrentListName = iSavedListAdapter.getItem(aPosition).getName();
+									
+		ArrayList<Object> arguments = new ArrayList<Object>();
+	
+		arguments.add(getApplicationContext());
+		arguments.add(iSavedData.iCurrentListName);
+	
+		iListItController.handleMessage(ListItController.MESSAGE_LOAD_ITEM, 
+										arguments);	
+	}
    	
    	/*	Method:		Handles long press event on any List in a List Set.
 					Edits a list displaying dialog.
@@ -346,26 +325,44 @@ public class ListItActivity extends TabActivity
 		parameter:	
 		returns :	void
 	*/
-   	private void SetupSavedListOnLongPress()
+   	public boolean onSavedListLongClick(int aPosition) 
+	{
+		if( aPosition < 0 || aPosition >= iSavedLists.size() )
+			return false;
+		
+		SavedItem list = iSavedListAdapter.getItem(aPosition);
+		final String listName = list.getName();
+		
+		ShowEditListNameDialog(aPosition, listName);
+		
+		return true;
+	}
+   	
+   	/*	Method:		Handles click event on any item in a List.
+					Opens a dialog to edit the item.
+		parameter:	
+		returns :	void
+   	*/
+
+   	public void onItemClick( int aPosition )
    	{
-   		iSavedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() 
+   		if( aPosition < 0 || aPosition >= iItems.size() )
+   			return;
+
+   		Item i = iItemAdapter.getItem(aPosition);
+
+   		if( iSavedData != null ) 
    		{
-			public boolean onItemLongClick(AdapterView<?> aParent, View aItem,
-										   int aPosition, long aId) 
-			{
-				if( aPosition < 0 || aPosition >= iSavedLists.size() )
-   					return false;
-				
-				SavedItem list = iSavedListAdapter.getItem(aPosition);
-				final String listName = list.getName();
-   				
-				ShowEditListNameDialog(aPosition, listName);
-				return true;
-			}
-		});
+   			iSavedData.iCurrentDialogId = DIALOG_EDIT_ITEM;
+   			iSavedData.iCurrentItemPosition = aPosition;
+   			iSavedData.iItemDialogEditStr = i.getDesc();
+   			iSavedData.iQuantityDialogEditStr = i.getQuantity();
+   		}
+
+		showDialog(DIALOG_EDIT_ITEM);
    	}
    	
-   /*	Method:		Handles click event on New List button.
+    /*	Method:		Handles click event on New List button.
 					Creates a new List for adding items.
 					
 		returns :	void
@@ -394,6 +391,9 @@ public class ListItActivity extends TabActivity
 	*/
    	public void EditItemList(ArrayList<Item> aItemNames)
 	{	
+   		if( aItemNames == null || aItemNames.size() <= 0 )
+   			return;
+   		
    		Item oldItemContent = aItemNames.get(0);
    		Item newItemContent = aItemNames.get(1);
    		
@@ -526,6 +526,11 @@ public class ListItActivity extends TabActivity
    				dialog = CreateListNameEditDialog();
    				break;
    			}
+   			case DIALOG_DELETE_LIST:
+   			{
+   				dialog = CreateDeleteListDialog();
+   				break;
+   			}
 	   		default:
 	   		{
 	   	        dialog = null;
@@ -549,14 +554,17 @@ public class ListItActivity extends TabActivity
    		if( iSavedData == null )
    			return;
    		
-   		iSavedData.iCurrentDialogId = aDialogId;
-   		iSavedData.LoadDialogData( (AlertDialog) aDialog ); 
-		
-		if( aDialogId == DIALOG_EDIT_ITEM )
+   		if( aDialogId == DIALOG_EDIT_ITEM )
 		{
 			final AutoCompleteTextView inputItem = (AutoCompleteTextView) aDialog.findViewById(R.id.itemEditText);
 			inputItem.setAdapter(iSuggestedItemAdapter);
+			
+			EditText qtyTextView = (EditText) aDialog.findViewById(R.id.qtyEditText);
+			qtyTextView.addTextChangedListener(this);
 		}
+   		
+   		iSavedData.iCurrentDialogId = aDialogId;
+   		iSavedData.LoadDialogData( (AlertDialog) aDialog );
    	}
 	
 	/*	Method:		Invokes custom dialog for editing an Item.
@@ -805,6 +813,33 @@ public class ListItActivity extends TabActivity
 	    .create();
 	}
 	
+	private Dialog CreateDeleteListDialog()
+	{
+		// Builder will create the dialog with all custom settings and returns. 
+   		
+   	    return new AlertDialog.Builder(ListItActivity.this)
+	    .setTitle(getString(R.string.delete)) 
+	    .setMessage(getString(R.string.sure))
+        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() 
+        { 
+        	public void onClick(DialogInterface dialog, int whichButton) 
+        	{
+        		Context c = getApplicationContext();
+        		DeleteList(iSavedData.iCurrentItemPosition);   	
+        		Toast.makeText(c, getString(R.string.deleted), Toast.LENGTH_SHORT).show(); 
+        		iSavedData.ClearDialogData();
+        	}	 
+        }) 
+	    .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() 
+	    { 
+	        public void onClick(DialogInterface dialog, int whichButton) 
+	        { 
+	        	iSavedData.ClearDialogData();
+	        } 
+	    })
+	    .create();
+	}
+	
 	/*	Method:		Drop listener for an Item or a list.
 					Updates the database with new position of an item / list
 	*/
@@ -836,10 +871,7 @@ public class ListItActivity extends TabActivity
 					arguments.add(to);
 					
 					iListItController.handleMessage(ListItController.MESSAGE_UPDATE_LIST_POS, 
-							arguments);	
-								
-					iSavedListAdapter.remove(List);
-					iSavedListAdapter.insert(List, to);
+							arguments);
 				}	
 			}
 		}
@@ -868,23 +900,23 @@ public class ListItActivity extends TabActivity
 		parameter:	String
 		returns :	void
 	*/
-	public void DeleteList(String aList)
+	public void DeleteList(int aListPosition)
 	{
 		if( iTabHost.getCurrentTab() ==  TabId_SavedList)
 		{
 			ArrayList<Object> arguments = new ArrayList<Object>();
 			
         	arguments.add(getApplicationContext());
-        	arguments.add(aList);
+        	arguments.add(aListPosition);
+        	arguments.add(iSavedLists.get(iSavedData.iCurrentItemPosition).getName());
         	
 			iListItController.handleMessage(ListItController.MESSAGE_DELETE_LIST, 
-													arguments);
+											arguments);
 		}
-		
 	}
 	
 	/*	Method:		Deletes an item from database.
-					Called when delete buton of an item is pressed.
+					Called when delete button of an item is pressed.
 					Called from view adapter class since the click event belongs to a particular item.
 		parameter:	String, Item to be deleted
 					int, position of the item
@@ -907,6 +939,20 @@ public class ListItActivity extends TabActivity
 		}
 	}
 	
+	/*	Method:		Deletes an item from database.
+					Called when delete button of an item is pressed.
+					Called from view adapter class since the click event belongs to a particular item.
+		parameter:	String, Item to be deleted
+					int, position of the item
+		returns :	void
+	*/
+	
+	public void deleteListConfirmDialog(int aListNamePosition)
+	{
+		iSavedData.iCurrentItemPosition = aListNamePosition;
+		showDialog(DIALOG_DELETE_LIST);
+	}
+	
 	/*	Method:		Updates the title Depending on the list created
 		parameter:	String
 		returns :	void
@@ -924,6 +970,7 @@ public class ListItActivity extends TabActivity
 		parameter:	int, messageId.
 		returns :	void
 	*/
+	@SuppressWarnings("unchecked")
 	public void ModelCallback(final int aMessageId, final Object aMessageData) 
    	{
 		// NOTE: All the callback messages from the model are
@@ -944,6 +991,8 @@ public class ListItActivity extends TabActivity
 			}
 			case ListItModel.MESSAGE_LIST_POS_UPDATED:
 			{
+				if(aMessageData != null)
+					HandleLists((ArrayList<SavedItem>) aMessageData);
 				break;
 			}
 		}
@@ -1119,30 +1168,38 @@ public class ListItActivity extends TabActivity
 		parameter:	String
 		returns :	void
 	*/
-	public void DeleteSavedList(String aListName)
+	public void DeleteSavedList(ArrayList<Object> aData)
 	{
-		if(!TextUtils.isEmpty(aListName))
+		if( aData == null || aData.isEmpty() )
+			return;
+		
+		String aListName  = (String) aData.get(0);
+		int aListPosition = (Integer) aData.get(1);
+		
+		if( TextUtils.isEmpty(aListName) || 
+			aListPosition < 0 || aListPosition >= iSavedLists.size() )
 		{	
-			for(int i=0;i<iSavedLists.size();i++)
-			{	
-				SavedItem lName = iSavedLists.get(i);	
-				String listName = lName.getName();
-								
-				if(listName.contentEquals(aListName))
-				{
-					iSavedLists.remove(i);
-					iSavedListAdapter.notifyDataSetChanged();
-				}
-			}
-			//list is deleted which is open in first tab 
-			if(iSavedData.iCurrentListName.contentEquals(aListName)) 
-			{
-				iItems.clear();
-				iItemAdapter.notifyDataSetChanged();
-				
-				iSavedData.iCurrentListName = "";
-				updateTitle(iSavedData.iCurrentListName);
-			}
+			return;
+		}
+		
+		SavedItem lName = iSavedLists.get(aListPosition);
+		String listName = lName.getName();
+		
+		if( listName.contentEquals(aListName) )
+		{
+			iSavedLists.remove(aListPosition);
+			iSavedListAdapter.notifyDataSetChanged();
+		}
+		
+		// If the list is deleted which is open in first tab 
+		
+		if(iSavedData.iCurrentListName.contentEquals(aListName)) 
+		{
+			iItems.clear();
+			iItemAdapter.notifyDataSetChanged();
+			
+			iSavedData.iCurrentListName = "";
+			updateTitle(iSavedData.iCurrentListName);
 		}
 	}
 
@@ -1336,16 +1393,32 @@ public class ListItActivity extends TabActivity
 		// This implementation is done to avoid the truncation of digits
 		// when specified number to digits are allowed in an edit text.
 		
-		if(iQuantityText.isFocused())
-		{
-			if(s.charAt(start) =='.' && count==1 )
-			{				
-				iQuantityText.setText("0.");
-				count = count + 1;
-				iQuantityText.setSelection(count);
-			}
-		}
+		EditText textView = null;
 		
+		if( iQuantityText.isFocused() )
+		{
+			textView = iQuantityText;
+		}
+		else if( iSavedData.iCurrentDialog != null && 
+				 iSavedData.iCurrentDialogId == DIALOG_EDIT_ITEM )
+		{
+			AlertDialog d = iSavedData.iCurrentDialog;
+			textView = (EditText) d.findViewById(R.id.qtyEditText);
+		}
+		else
+		{
+			return;
+		}			
+		
+		if( textView == null || s.length() == 0 ||
+			start < 0 || start >= textView.getText().length())
+			return;
+		
+		if(textView.isFocused() && start == 0 && s.charAt(start) =='.' )
+		{				
+			textView.setText("0.");
+			textView.setSelection(count+1);
+		}
 	}
 	
 	/*	Nested class for Next editor action listener for landscape mode of an item	 */
@@ -1367,7 +1440,7 @@ public class ListItActivity extends TabActivity
 	    }
 	}
 
-/*	Nested class for Done editor action listener for landscape mode of an item */
+	/*	Nested class for Done editor action listener for landscape mode of an item */
 
 	class DoneOnEditorActionListener implements OnEditorActionListener {
 		   
