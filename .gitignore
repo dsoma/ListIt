@@ -4,3 +4,4 @@ default.properties
 .classpath
 .project
 project.properties
+lint.xml
