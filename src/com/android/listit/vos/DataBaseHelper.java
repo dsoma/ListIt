@@ -507,6 +507,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			}
 			
 			listCount = c.getCount();
+			c.close();
 		}
 		catch (SQLiteException se ) 
 		{	
