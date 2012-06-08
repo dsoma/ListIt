@@ -11,7 +11,6 @@ import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -81,6 +80,7 @@ public class ListItActivity extends TabActivity
 	public static final int INVALID_QUANTITY = 4;
 	public static final int NAME_A_LIST = 5;
 	public static final int LIST_NAME = 6;
+	public static final int NONE = 7;
 	
 	/*	Method:		onCreate method of an activity
 		parameter:	
@@ -609,23 +609,16 @@ public class ListItActivity extends TabActivity
 					      	iListItController.handleMessage(ListItController.MESSAGE_EDIT_ITEM, 
 															arguments);	
 					      	iSavedData.ClearDialogData();
+					      	
+					      	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					      	imm.hideSoftInputFromWindow(inputItem.getWindowToken(), 0);
+					      	
 					      	return;
 					 	}
 		 	
 					 	// Invalid case.
-					 	
-					 	if( !validItem )
-					 	{
-					 		//message = getString(R.string.add_button_toast);
-					 		  DisplayMessage(ENTER_ITEM);
-					 	}
-					 	else if( !validQty )
-					 	{
-					 		//message = getString(R.string.invalid_qty_toast);
-					 		DisplayMessage(INVALID_QUANTITY);
-					 	}
-			
-					 	//Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+					 	int messageId = (!validItem) ? ENTER_ITEM : (( !validQty ) ? INVALID_QUANTITY : NONE);
+					 	DisplayMessage(messageId);
 					 	
 					 	removeDialog(DIALOG_EDIT_ITEM);
 					 	showDialog(DIALOG_EDIT_ITEM);
@@ -636,6 +629,12 @@ public class ListItActivity extends TabActivity
 					public void onClick(DialogInterface dialog, int whichButton) 
 					{ 
 						iSavedData.ClearDialogData();
+						
+						AlertDialog alertDialog = (AlertDialog) dialog;
+						final AutoCompleteTextView inputItem = (AutoCompleteTextView) alertDialog.findViewById(R.id.itemEditText);
+						
+						InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				      	imm.hideSoftInputFromWindow(inputItem.getWindowToken(), 0);
 					}
 				})
 				.create();
@@ -711,13 +710,22 @@ public class ListItActivity extends TabActivity
 	        		removeDialog(DIALOG_NEW_LIST);
 	        		showDialog(DIALOG_NEW_LIST);
 	        	}
+	        	
+	        	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		      	imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
 	        } 
 	    })
    	    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() 
    	    { 
    		   public void onClick(DialogInterface dialog, int whichButton) 
    		   { 
-   			   iSavedData.ClearDialogData();
+   			    iSavedData.ClearDialogData();
+   			   
+	   			AlertDialog alertDialog = (AlertDialog) dialog;
+	        	final EditText input = (EditText) alertDialog.findViewById(R.id.saveEditText);
+        	
+	   		    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		        imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
    		   } 
    	    })
 	    .create();
@@ -772,11 +780,13 @@ public class ListItActivity extends TabActivity
 	        	{
 	        		// Empty string is input; so re-display the dialog. 
 	        		DisplayMessage(LIST_NAME);
-	        		//Toast.makeText(getApplicationContext(), getString(R.string.new_list_toast), Toast.LENGTH_SHORT).show();
 	        		
 	        		removeDialog(DIALOG_EDIT_LISTNAME);
 	        		showDialog(DIALOG_EDIT_LISTNAME);
 	        	}
+	        	
+	        	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		        imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
 	        } 
 	    })
    	    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() 
@@ -784,6 +794,12 @@ public class ListItActivity extends TabActivity
    		    public void onClick(DialogInterface dialog, int whichButton) 
    		    { 
    			    iSavedData.ClearDialogData();
+   			    
+   			    AlertDialog alertDialog = (AlertDialog) dialog;
+	        	final EditText input = (EditText) alertDialog.findViewById(R.id.saveEditText);
+     	
+	   		    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		        imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
    		    } 
    	    })
 	    .create();
@@ -1317,11 +1333,12 @@ public class ListItActivity extends TabActivity
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) 
 	{
-		// This implementaion is done to avoid the truncation of digits
-		//	when specified number to digits are allowed in an edit text.
+		// This implementation is done to avoid the truncation of digits
+		// when specified number to digits are allowed in an edit text.
+		
 		if(iQuantityText.isFocused())
 		{
-			if(s.charAt(start)=='.' && count==1)
+			if(s.charAt(start) =='.' && count==1 )
 			{				
 				iQuantityText.setText("0.");
 				count = count + 1;

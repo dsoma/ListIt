@@ -26,6 +26,7 @@
     <string name="edit_item">Edit Item</string>
     <string name="edit_list">Edit List</string> 
    	<string name="invalid_qty_toast">Invalid quantity</string>    
+   	<string name="check_box">Check box</string>
     <string name="copyright">Copyright Ramya Machina, 2012. All rights Reserved. </string>
     
     <!-- Hints -->

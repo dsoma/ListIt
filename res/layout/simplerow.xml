@@ -11,6 +11,7 @@
         android:layout_alignBottom="@+id/checkBox"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/checkBox"
+        android:contentDescription="@string/check_box"
         android:src="@drawable/grabber" />
   
    <CheckBox
