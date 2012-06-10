@@ -64,8 +64,8 @@
       android:focusable="false"
       android:padding="10dp" 
       android:layout_marginTop="10dip"
-      android:layout_marginRight="9dip"
-      android:layout_marginLeft="5dip">
+      android:layout_marginRight="8dip"
+      android:layout_marginLeft="8dip">
 
   </Button> 
   
