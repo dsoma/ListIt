@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class ItemListAdapter 
+ * 				Custom adapter for displaying an array of objects.
+ * 
+ */
 package com.android.listit;
 
 import java.util.List;
@@ -12,7 +19,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-/** Custom adapter for displaying an array of objects. */
 public class ItemListAdapter extends ArrayAdapter<Item> 
 { 
 	private LayoutInflater inflater;

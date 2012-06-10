@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class ListItModel (Model of MVC)
+ * 				Model class containing all the data management (communicates with DB)
+ */
+
 package com.android.listit.vos;
 
 import java.text.SimpleDateFormat;

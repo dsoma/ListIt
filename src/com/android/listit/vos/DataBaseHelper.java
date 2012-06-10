@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class DataBaseHelper.
+ * 				An adapter (wrapper) class to communicate with the app database.  
+ */
+
 package com.android.listit.vos;
 
 import java.util.ArrayList;

@@ -1,6 +1,11 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class Item.
+ * 				This class acts as a data structure to hold the Items in the list. 
+ * 
+ */
 package com.android.listit;
-
-/* This class acts as a data structure to hold the Item List Tab*/
 
 public class Item 
 {

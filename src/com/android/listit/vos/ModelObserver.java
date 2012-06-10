@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class ModelObserver 
+ * 				Observer Interface to observe the model for data changes. 
+ */
+
 package com.android.listit.vos;
 
 import java.util.ArrayList;

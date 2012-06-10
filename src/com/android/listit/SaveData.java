@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class SaveData 
+ * 				Persistent storage of app data for the during the runtime of the app. 
+ * 				Data is not stored if app is exited. 
+ */
 package com.android.listit;
 
 import android.app.AlertDialog;

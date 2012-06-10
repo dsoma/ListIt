@@ -1,10 +1,15 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class ItemListRowView 
+ * 				Holds child views for one row in ItemList View. 
+ * 
+ */
 package com.android.listit;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-/** Holds child views for one row. */
 
 public class ItemListRowView 
 {

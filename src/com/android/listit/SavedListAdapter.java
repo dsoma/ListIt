@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class SavedListAdapter 
+ * 				Custom adapter for displaying an array of saved list objects. 
+ */
+
 package com.android.listit;
 
 import java.util.ArrayList;
@@ -10,8 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-/** Custom adapter for displaying an array of objects. */
 public class SavedListAdapter extends ArrayAdapter<SavedItem> 
 {
 	private LayoutInflater 	iInflater;

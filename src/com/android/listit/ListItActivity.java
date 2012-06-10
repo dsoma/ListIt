@@ -1,6 +1,9 @@
-// File: ListItActivity.java
-// Author: Ramya Machina
-// App: ListIt
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class ListItActivity (View of MVC)
+ * 
+ */
 
 package com.android.listit;
 

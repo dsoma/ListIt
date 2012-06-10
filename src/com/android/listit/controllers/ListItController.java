@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class ListItController (Controller of MVC)
+ * 				Contains the business logic flow of the app. 
+ */
+
 package com.android.listit.controllers;
 
 import java.util.ArrayList;

@@ -1,9 +1,14 @@
+/*
+ * Copyright (c) 2012 Ramya Machina. (ramya dot machina at gmail dot com)
+ * 
+ * Description: Implementation of class SavedListRowView 
+ * 				Holds child views for one row in Saved Lists View. . 
+ */
+
 package com.android.listit;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-/** Holds child views for one row. */
 
 public class SavedListRowView 
 {
