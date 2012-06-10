@@ -62,8 +62,8 @@ public class SavedListAdapter extends ArrayAdapter<SavedItem>
 	    			Button deleteButton = (Button) v;
 	    			if( deleteButton != null && deleteButton.getTag() != null )
 	    			{
-	    				int itemPosition = ((SavedItem) deleteButton.getTag()).getId();
-	    				iActivity.deleteListConfirmDialog( itemPosition );
+	    				String name = ((SavedItem) deleteButton.getTag()).getName();
+	    				iActivity.deleteListConfirmDialog( name );
 	    			}
 	    		}      	
 	    	}); 
@@ -77,8 +77,8 @@ public class SavedListAdapter extends ArrayAdapter<SavedItem>
 					TextView listNameView = (TextView) v;
 	    			if( listNameView != null && listNameView.getTag() != null )
 	    			{
-	    				int itemPosition = ((SavedItem) listNameView.getTag()).getId();
-	    				return iActivity.onSavedListLongClick(itemPosition);
+	    				String name = ((SavedItem) listNameView.getTag()).getName();
+	    				return iActivity.onSavedListLongClick(name);
 	    			}
 					return false;
 				}
@@ -92,8 +92,8 @@ public class SavedListAdapter extends ArrayAdapter<SavedItem>
 					TextView dateView = (TextView) v;
 	    			if( dateView != null && dateView.getTag() != null )
 	    			{
-	    				int itemPosition = ((SavedItem) dateView.getTag()).getId();
-	    				return iActivity.onSavedListLongClick(itemPosition);
+	    				String name = ((SavedItem) dateView.getTag()).getName();
+	    				return iActivity.onSavedListLongClick(name);
 	    			}
 					return false;
 				}
@@ -108,8 +108,8 @@ public class SavedListAdapter extends ArrayAdapter<SavedItem>
 					TextView listNameView = (TextView) v;
 	    			if( listNameView != null && listNameView.getTag() != null )
 	    			{
-	    				int itemPosition = ((SavedItem) listNameView.getTag()).getId();
-	    				iActivity.onSavedListClick(itemPosition);
+	    				String name = ((SavedItem) listNameView.getTag()).getName();
+	    				iActivity.onSavedListClick(name);
 	    			}
 				}
 			});
@@ -122,8 +122,8 @@ public class SavedListAdapter extends ArrayAdapter<SavedItem>
 					TextView dateView = (TextView) v;
 	    			if( dateView != null && dateView.getTag() != null )
 	    			{
-	    				int itemPosition = ((SavedItem) dateView.getTag()).getId();
-	    				iActivity.onSavedListClick(itemPosition);
+	    				String name = ((SavedItem) dateView.getTag()).getName();
+	    				iActivity.onSavedListClick(name);
 	    			}
 				}
 			});

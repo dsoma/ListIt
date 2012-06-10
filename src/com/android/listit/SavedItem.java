@@ -4,7 +4,7 @@ public class SavedItem
 {
     private String iItemDesc = "";
     private String iDate = "";
-    private int    iId = -1; 
+    //private int    iId = -1; 
     
     public SavedItem() 
     {	 
@@ -13,14 +13,14 @@ public class SavedItem
     public SavedItem( int aId, String aItemDesc ) 
     {
     	iItemDesc = aItemDesc;
-    	iId = aId;
+    	//iId = aId;
     }
     
     public SavedItem( int aId, String aItemDesc, String aDate ) 
     {
 	      iItemDesc = aItemDesc;
 	      iDate = aDate;
-	      iId = aId;
+	      //iId = aId;
 	}
        
     
@@ -43,8 +43,8 @@ public class SavedItem
 	      return iDate;
 	}  
     
-    public int getId()
+    /*public int getId()
     {
     	return iId;
-    }
+    }*/
 }

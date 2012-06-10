@@ -146,7 +146,7 @@ public class ListItController extends Controller
 				
 				iModel.DeleteList((Context) arguments.get(0), 
 						 		  (Integer) arguments.get(1),
-						          (String) arguments.get(2));
+						          (String)  arguments.get(2));
 				
 				break;
 			}

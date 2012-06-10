@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
+//import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +86,7 @@ public class ListItActivity extends TabActivity
 	/* I know, we shouldn't create it here. I have a replica of this in strings.xml. 
 	 * However, specifying such a big list in strings.xml is not working on some old phones. 
 	 * Hence going for this option. We are not supporting any other languages other than English. 
-	 * So it should be ok as of now. 
+	 * So it should be okay as of now. 
 	 */
 	public static final String[] iSuggestedWordList = 
 	{
@@ -856,12 +856,22 @@ public class ListItActivity extends TabActivity
 		parameter:	
 		returns :	void
 	*/
-   	public void onSavedListClick( int aPosition ) 
+   	public void onSavedListClick( String aName )
    	{
-		if( aPosition < 0 || aPosition >= iSavedLists.size() )
+   		if( TextUtils.isEmpty(aName) || 
+   	   		iSavedLists == null || iSavedLists.isEmpty() )
+   		{
+   			return;
+   		}
+   		
+   		int position = getListPosition(aName);
+   		
+		if( position < 0 || position >= iSavedLists.size() || iSavedData == null )
+		{
 			return;
+		}
 		
-		iSavedData.iCurrentListName = iSavedListAdapter.getItem(aPosition).getName();
+		iSavedData.iCurrentListName = iSavedLists.get(position).getName();
 									
 		ArrayList<Object> arguments = new ArrayList<Object>();
 	
@@ -878,15 +888,27 @@ public class ListItActivity extends TabActivity
 		parameter:	
 		returns :	void
 	*/
-   	public boolean onSavedListLongClick(int aPosition) 
+   	public boolean onSavedListLongClick(String aName) 
 	{
-		if( aPosition < 0 || aPosition >= iSavedLists.size() )
+   		if( TextUtils.isEmpty(aName) || 
+   			iSavedLists == null || iSavedLists.isEmpty() )
+   		{
+   			return false;
+   		}
+   		
+   		int position = getListPosition(aName);
+   		
+		if( position < 0 || position >= iSavedLists.size() )
 			return false;
 		
-		SavedItem list = iSavedListAdapter.getItem(aPosition);
+		SavedItem list = iSavedLists.get(position);
+		
+		if( list == null )
+			return false;
+		
 		final String listName = list.getName();
 		
-		ShowEditListNameDialog(aPosition, listName);
+		ShowEditListNameDialog(position, listName);
 		
 		return true;
 	}
@@ -973,7 +995,7 @@ public class ListItActivity extends TabActivity
 	*/
    public void EditListNames(ArrayList<String> aListNames)
    {
-	   if( aListNames.size() <= 0 )
+	   if( aListNames.size() <= 0 || iSavedData == null )
 	   {
 		   return;
 	   }
@@ -986,13 +1008,13 @@ public class ListItActivity extends TabActivity
 		
 		if( !TextUtils.isEmpty(oldListName) && 
 			!TextUtils.isEmpty(newListName) && 
+			iSavedLists != null &&
 			position >= 0 && position < iSavedLists.size() )
 		{	
 			SavedItem listName = iSavedLists.get( position );
 			listName.setName(newListName.toString());
 			listName.setDate(date);
 			iSavedLists.set(position, listName);
-				
 		}
 		if(oldListName.contentEquals(iSavedData.iCurrentListName))
 		{
@@ -1015,7 +1037,7 @@ public class ListItActivity extends TabActivity
             imm.hideSoftInputFromWindow(iTabHost.getApplicationWindowToken(), 0);
 
 			iListItController.handleMessage(ListItController.MESSAGE_LOAD_LIST, 
-					 							  getApplicationContext());
+					 						getApplicationContext());
 		}
 	}
 	
@@ -1455,13 +1477,21 @@ public class ListItActivity extends TabActivity
 	*/
 	public void DeleteList(int aListPosition)
 	{
+		if( iSavedData == null || 
+			aListPosition == -1 || 
+			aListPosition >= iSavedLists.size() || 
+			iSavedLists.get(aListPosition) == null )
+		{
+			return;
+		}
+		
 		if( iTabHost.getCurrentTab() ==  TabId_SavedList)
 		{
 			ArrayList<Object> arguments = new ArrayList<Object>();
 			
         	arguments.add(getApplicationContext());
         	arguments.add(aListPosition);
-        	arguments.add(iSavedLists.get(iSavedData.iCurrentItemPosition).getName());
+        	arguments.add(iSavedLists.get(aListPosition).getName());
         	
 			iListItController.handleMessage(ListItController.MESSAGE_DELETE_LIST, 
 											arguments);
@@ -1500,10 +1530,27 @@ public class ListItActivity extends TabActivity
 		returns :	void
 	*/
 	
-	public void deleteListConfirmDialog(int aListNamePosition)
-	{
-		iSavedData.iCurrentItemPosition = aListNamePosition;
+	public void deleteListConfirmDialog(String aListName)
+	{	
+		iSavedData.iCurrentItemPosition = getListPosition( aListName );
 		showDialog(DIALOG_DELETE_LIST);
+	}
+	
+	private int getListPosition(String aListName)
+	{
+		if( TextUtils.isEmpty(aListName) )
+			return -1; 
+		
+		for(int i = 0; i < iSavedLists.size(); i++)
+		{
+			SavedItem listItem = iSavedLists.get(i);
+			if( listItem != null && listItem.getName() == aListName )
+			{
+				return i;
+			}
+		}
+		
+		return -1;
 	}
 	
 	/*	Method:		Updates the title Depending on the list created
@@ -1736,6 +1783,10 @@ public class ListItActivity extends TabActivity
 		}
 		
 		SavedItem lName = iSavedLists.get(aListPosition);
+		
+		if( lName == null )
+			return;
+		
 		String listName = lName.getName();
 		
 		if( listName.contentEquals(aListName) )
