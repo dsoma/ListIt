@@ -5,7 +5,7 @@
  * 				An adapter (wrapper) class to communicate with the app database.  
  */
 
-package com.android.listit.vos;
+package com.listit.vos;
 
 import java.util.ArrayList;
 
@@ -15,8 +15,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.android.listit.Item;
-import com.android.listit.SavedItem;
+import com.listit.Item;
+import com.listit.SavedItem;
 
 public class DataBaseHelper extends SQLiteOpenHelper 
 {

@@ -5,7 +5,7 @@
  * 
  */
 
-package com.android.listit;
+package com.listit;
 
 import java.util.ArrayList;
 
@@ -37,10 +37,11 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.android.listit.controllers.ListItController;
-import com.android.listit.controllers.OnControllerObserver;
-import com.android.listit.vos.ListItModel;
-import com.android.listit.vos.ModelObserver;
+import com.listit.R;
+import com.listit.controllers.ListItController;
+import com.listit.controllers.OnControllerObserver;
+import com.listit.vos.ListItModel;
+import com.listit.vos.ModelObserver;
 
 public class ListItActivity extends TabActivity 
  						    implements OnTabChangeListener,

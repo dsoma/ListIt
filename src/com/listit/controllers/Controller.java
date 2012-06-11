@@ -1,6 +1,6 @@
-package com.android.listit.controllers;
+package com.listit.controllers;
 
-import com.android.listit.controllers.OnControllerObserver;
+import com.listit.controllers.OnControllerObserver;
 
 import java.util.ArrayList;
 import java.util.List;

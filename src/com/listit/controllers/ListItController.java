@@ -5,14 +5,14 @@
  * 				Contains the business logic flow of the app. 
  */
 
-package com.android.listit.controllers;
+package com.listit.controllers;
 
 import java.util.ArrayList;
 
 import android.content.Context;
 
-import com.android.listit.Item;
-import com.android.listit.vos.ListItModel;
+import com.listit.Item;
+import com.listit.vos.ListItModel;
 
 public class ListItController extends Controller
 {

@@ -195,8 +195,8 @@
             
             <!-- Touchlist view for grabber icon -->
             
-            <com.android.listit.TouchListView
-            	xmlns:tlv="http://schemas.android.com/apk/res/com.android.listit"
+            <com.listit.TouchListView
+            	xmlns:tlv="http://schemas.android.com/apk/res/com.listit"
                 android:id="@+id/itemListView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -239,8 +239,8 @@
 
             <!-- Touchlist view for grabber icon -->
             
-            <com.android.listit.TouchListView
-				xmlns:tlv="http://schemas.android.com/apk/res/com.android.listit"
+            <com.listit.TouchListView
+				xmlns:tlv="http://schemas.android.com/apk/res/com.listit"
 				android:id="@+id/savedListView"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"

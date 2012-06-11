@@ -5,7 +5,7 @@
  * 				Holds child views for one row in ItemList View. 
  * 
  */
-package com.android.listit;
+package com.listit;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;

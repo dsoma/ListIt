@@ -19,7 +19,9 @@
  * NOTE: Some portions of the file are modified by Ramya Machina. 
  */
 
-package com.android.listit;
+package com.listit;
+
+import com.listit.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;

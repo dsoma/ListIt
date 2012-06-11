@@ -5,7 +5,7 @@
  * 				Model class containing all the data management (communicates with DB)
  */
 
-package com.android.listit.vos;
+package com.listit.vos;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 
-import com.android.listit.Item;
-import com.android.listit.SavedItem;
+import com.listit.Item;
+import com.listit.SavedItem;
 
 public class ListItModel extends SimpleObservable<ListItModel>
 {

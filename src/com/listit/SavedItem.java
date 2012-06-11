@@ -5,7 +5,7 @@
  * 				This class acts as a data structure to hold the List Items in the database.  
  */
 
-package com.android.listit;
+package com.listit;
 
 public class SavedItem 
 {

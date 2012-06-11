@@ -5,7 +5,9 @@
  * 				Persistent storage of app data for the during the runtime of the app. 
  * 				Data is not stored if app is exited. 
  */
-package com.android.listit;
+package com.listit;
+
+import com.listit.R;
 
 import android.app.AlertDialog;
 import android.widget.AutoCompleteTextView;

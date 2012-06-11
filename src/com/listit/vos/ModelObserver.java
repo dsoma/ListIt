@@ -5,12 +5,12 @@
  * 				Observer Interface to observe the model for data changes. 
  */
 
-package com.android.listit.vos;
+package com.listit.vos;
 
 import java.util.ArrayList;
 
-import com.android.listit.Item;
-import com.android.listit.SavedItem;
+import com.listit.Item;
+import com.listit.SavedItem;
 
 public interface ModelObserver<T> 
 {

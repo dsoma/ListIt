@@ -1,4 +1,4 @@
-package com.android.listit.controllers;
+package com.listit.controllers;
 
 public interface OnControllerObserver 
 {

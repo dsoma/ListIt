@@ -1,4 +1,4 @@
-package com.android.listit.vos;
+package com.listit.vos;
 
 
 public interface EasyObservable<T> {

@@ -5,7 +5,7 @@
  * 				This class acts as a data structure to hold the Items in the list. 
  * 
  */
-package com.android.listit;
+package com.listit;
 
 public class Item 
 {

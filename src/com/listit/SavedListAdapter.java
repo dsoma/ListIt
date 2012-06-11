@@ -5,9 +5,11 @@
  * 				Custom adapter for displaying an array of saved list objects. 
  */
 
-package com.android.listit;
+package com.listit;
 
 import java.util.ArrayList;
+
+import com.listit.R;
 
 import android.view.LayoutInflater;
 import android.view.View;

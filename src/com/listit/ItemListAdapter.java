@@ -5,9 +5,11 @@
  * 				Custom adapter for displaying an array of objects.
  * 
  */
-package com.android.listit;
+package com.listit;
 
 import java.util.List;
+
+import com.listit.R;
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;
