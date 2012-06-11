@@ -63,6 +63,7 @@ public class ListItActivity extends TabActivity
 	private ArrayAdapter<String> 		iSuggestedItemAdapter;
 	private ArrayAdapter<Item> 			iItemAdapter;
 	private ArrayList<Item> 			iItems; 
+	private Toast						iToast;
 	
 	public  DialogInterface.OnClickListener	iListNameDialogListener;
 	
@@ -84,7 +85,9 @@ public class ListItActivity extends TabActivity
 	public static final int INVALID_QUANTITY = 4;
 	public static final int NAME_A_LIST = 5;
 	public static final int LIST_NAME = 6;
-	public static final int NONE = 7;
+	public static final int DELETE_LIST = 7;
+	public static final int NONE = 8;
+	
 	
 	/* I know, we shouldn't create it here. I have a replica of this in strings.xml. 
 	 * However, specifying such a big list in strings.xml is not working on some old phones. 
@@ -811,14 +814,11 @@ public class ListItActivity extends TabActivity
 	        	if( !ValidateItem(itemString) )
 	        	{
 	        		DisplayMessage(ENTER_ITEM);
-	        		//Toast.makeText(getApplicationContext(), getString(R.string.add_button_toast), Toast.LENGTH_SHORT).show();
 	        	}
 	        	else if( !ValidateQuantity(qtyString) )
         		{
 	        		DisplayMessage(INVALID_QUANTITY);
-        			//Toast.makeText(getApplicationContext(),getString(R.string.invalid_qty_toast), 
-        			//			   Toast.LENGTH_SHORT).show();
-    				iQuantityText.requestFocus();
+        			iQuantityText.requestFocus();
     				return;
         		}
         		else
@@ -1289,7 +1289,6 @@ public class ListItActivity extends TabActivity
 	        	{
 	        		// Empty string is input; so re-display the dialog. 
 	        		DisplayMessage(NAME_A_LIST);
-	        		//Toast.makeText(getApplicationContext(), getString(R.string.give_name), Toast.LENGTH_SHORT).show();
 	        		
 	        		removeDialog(DIALOG_NEW_LIST);
 	        		showDialog(DIALOG_NEW_LIST);
@@ -1400,9 +1399,8 @@ public class ListItActivity extends TabActivity
         { 
         	public void onClick(DialogInterface dialog, int whichButton) 
         	{
-        		Context c = getApplicationContext();
-        		DeleteList(iSavedData.iCurrentItemPosition);   	
-        		Toast.makeText(c, getString(R.string.deleted), Toast.LENGTH_SHORT).show(); 
+        		DeleteList(iSavedData.iCurrentItemPosition);
+        		DisplayMessage(DELETE_LIST);
         		iSavedData.ClearDialogData();
         	}	 
         }) 
@@ -1672,36 +1670,48 @@ public class ListItActivity extends TabActivity
 		{
 			case DUPLICATE_LIST:
 			{
-				Toast.makeText(getApplicationContext(), getString(R.string.duplicate_list), 
-						       Toast.LENGTH_SHORT).show();
+				iToast = Toast.makeText(getApplicationContext(), getString(R.string.duplicate_list), 
+						       Toast.LENGTH_SHORT);
+				iToast.show();
 				break;
 			}
 			case ENTER_ITEM:
 			{
-				Toast.makeText(getApplicationContext(), getString(R.string.itemname), 
-					       Toast.LENGTH_SHORT).show();
+				iToast = Toast.makeText(getApplicationContext(), getString(R.string.itemname), 
+					       Toast.LENGTH_SHORT);
+				iToast.show();
 				break;
 			}
 			case ADD_TO_LIST:
 			{
-				Toast.makeText(getApplicationContext(), getString(R.string.added_to_list) /*+" "+ iSavedData.iCurrentListName*/, 
-				           Toast.LENGTH_SHORT).show();
+				iToast = Toast.makeText(getApplicationContext(), getString(R.string.added_to_list), 
+				           Toast.LENGTH_SHORT);
+				iToast.show();
 				break;
 			}
 			case INVALID_QUANTITY:
 			{
-				Toast.makeText(getApplicationContext(),getString(R.string.invalid_qty_toast), 
-						   Toast.LENGTH_SHORT).show();
+				iToast = Toast.makeText(getApplicationContext(),getString(R.string.invalid_qty_toast), 
+						   Toast.LENGTH_SHORT);
+				iToast.show();
 				break;
 			}
 			case NAME_A_LIST:
 			{
-				Toast.makeText(getApplicationContext(), getString(R.string.give_name), Toast.LENGTH_SHORT).show();
+				iToast = Toast.makeText(getApplicationContext(), getString(R.string.give_name), Toast.LENGTH_SHORT);
+				iToast.show();
 				break;
 			}
 			case LIST_NAME:
 			{
-				Toast.makeText(getApplicationContext(), getString(R.string.new_list_toast), Toast.LENGTH_SHORT).show();
+				iToast = Toast.makeText(getApplicationContext(), getString(R.string.new_list_toast), Toast.LENGTH_SHORT);
+				iToast.show();
+				break;
+			}
+			case DELETE_LIST:
+			{
+				iToast = Toast.makeText(getApplicationContext(), getString(R.string.deleted), Toast.LENGTH_SHORT); 
+				iToast.show();
 				break;
 			}
 		}
@@ -1818,8 +1828,6 @@ public class ListItActivity extends TabActivity
 		iItems.add(aNewItem);
 		iItemAdapter.notifyDataSetChanged();
 		DisplayMessage(ADD_TO_LIST);
-		//Toast.makeText(getApplicationContext(), getString(R.string.added_to_list) /*+" "+ iSavedData.iCurrentListName*/, 
-			          // Toast.LENGTH_SHORT).show();
 		
 		// Now reset the editors
 		iItemText.setText("");
@@ -2071,6 +2079,8 @@ public class ListItActivity extends TabActivity
    	public void onPause()
    	{
    		super.onPause();
+   		
+   		KillToast();
    	}
 	
 	/*	Method:		onStop method of an activity
@@ -2082,6 +2092,8 @@ public class ListItActivity extends TabActivity
    	public void onStop()
    	{
    		super.onStop();
+   		
+   		KillToast();
    	}
 	
 	/*	Method:		onDestroy method of an activity
@@ -2093,6 +2105,14 @@ public class ListItActivity extends TabActivity
    	public void onDestroy()
    	{
    		super.onDestroy();
+   		
+   		KillToast();
+   	}
+   	
+   	private void KillToast()
+   	{
+   		if( iToast != null )
+   			iToast.cancel();
    	}
 
 }
