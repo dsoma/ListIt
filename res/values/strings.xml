@@ -30,7 +30,7 @@
     <string name="copyright">Copyright Ramya Machina, 2012. All rights Reserved. </string>
     
     <!-- Hints -->
-    <string name="itemEditHint">Add item</string>
+    <string name="itemEditHint">Item Name</string>
     <string name="qtyEditHint">Qty</string>
     <string name="saveListHint">Example: Grocery list</string>
     
