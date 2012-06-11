@@ -53,6 +53,7 @@ public class ListItModel extends SimpleObservable<ListItModel>
 		}
 		
 		int errorCode1 = -1, errorCode2 = -1;
+		
 		if( iDBHelper != null )
 		{				
 			errorCode1 = iDBHelper.createTable( aListName );

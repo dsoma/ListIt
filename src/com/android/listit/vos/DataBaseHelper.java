@@ -143,7 +143,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	
 	public int createTable(String aTableName) 
 	{
-		if (checkDbExists()) 
+		if ( !checkDbExists() ) 
 		{
 			return 0;
 		} 
@@ -530,10 +530,11 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	{
 		SQLiteDatabase checkDB = null;
 
-		try {
+		try 
+		{
 			String myPath = iDBPath + '/' + DBName;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
-					SQLiteDatabase.OPEN_READONLY);
+					  SQLiteDatabase.OPEN_READONLY);
 
 		} catch (SQLiteException e) {
 			// database does't exist yet.
@@ -717,16 +718,12 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		return errorCode;
 	}
 	
-	
-	
-	
 	//----------------MASTER TABLE----------------------------------------
+	
 	public int createMasterTable() 
 	{
-		if (checkDbExists()) 
-		{
-			return 0;
-		} 
+		// NOTE: This function creates the database. So this must be called only once. 
+		// This is called from the DBHelper constructor. 
 		
 		int errorCode = -1;
 		
