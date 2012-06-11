@@ -745,8 +745,6 @@ public class ListItActivity extends TabActivity
         
         /*DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);*/
-        
-        return;
     }
 
 	
